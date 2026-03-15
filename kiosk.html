@@ -400,8 +400,10 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
   <img src="images/logo.jpg?v=1" alt="Logo Trung tâm Phục vụ hành chính công" style="width:40px;height:40px;object-fit:cover;border-radius:6px;display:block" />
       </div>
       <div class="k-brand-txt">
-        <strong id="brand-name">Trung tâm Phục vụ hành chính công</strong>
-        <span id="brand-sub">Bộ phận Một cửa</span>
+        <strong class="brand-name">Trung tâm Phục vụ hành chính công</strong>
+        <span class="brand-sub">Bộ phận Một cửa</span>
+        <!-- hidden breadcrumb placeholder used when loading a TTHC into chat -->
+        <span id="chat-crumb" style="display:none"></span>
       </div>
     </div>
     <div class="k-top-right">
@@ -505,8 +507,8 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
   <img src="images/logo.jpg?v=1" alt="Logo Trung tâm Phục vụ hành chính công" style="width:40px;height:40px;object-fit:cover;border-radius:6px;display:block" />
       </div>
       <div class="k-brand-txt">
-        <strong id="cat-brand">Trung tâm Phục vụ hành chính công</strong>
-        <span id="cat-step">Bộ phận Một cửa</span>
+        <strong class="brand-name">Trung tâm Phục vụ hành chính công</strong>
+        <span class="brand-sub">Bộ phận Một cửa</span>
       </div>
     </div>
     <div class="k-top-right">
@@ -617,22 +619,37 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
   <img src="images/logo.jpg?v=1" alt="Logo Trung tâm Phục vụ hành chính công" style="width:40px;height:40px;object-fit:cover;border-radius:6px;display:block" />
       </div>
       <div class="k-brand-txt">
-        <strong>Trung tâm Phục vụ hành chính công</strong>
-        <span id="tthc-list-crumb">Bộ phận Một cửa</span>
+        <strong class="brand-name">Trung tâm Phục vụ hành chính công</strong>
+        <span class="brand-sub">Bộ phận Một cửa</span>
       </div>
     </div>
     <div class="k-top-right">
-      <button class="k-home-btn" onclick="goScreen('s-category')">← Lĩnh vực</button>
-      <button class="k-home-btn" onclick="goScreen('s-idle')"><svg width="15" height="15"><use href="#ic-home"/></svg> Trang chủ</button>
+      <div class="ctrl-group">
+        <button class="ctrl-btn" onclick="changeFontSize(-1)" title="Chữ nhỏ">A−</button>
+        <button class="ctrl-btn" onclick="changeFontSize(1)" title="Chữ lớn">A+</button>
+        <div class="ctrl-sep"></div>
+        <button class="ctrl-btn" id="tts-btn" onclick="toggleTTS()" title="Đọc to"><svg width="16" height="16"><use href="#ic-volume"/></svg></button>
+      </div>
+      <div class="lang-group">
+        <button class="lang-pill on" id="lang-vi" onclick="setLang('vi')">VI</button>
+        <button class="lang-pill" id="lang-en" onclick="setLang('en')">EN</button>
+        <button class="lang-pill" id="lang-zh" onclick="setLang('zh')">中文</button>
+      </div>
       <div class="k-time"><div class="k-time-val">08:42</div></div>
     </div>
   </div>
-  <div class="k-content">
+    <div class="k-content">
     <div style="margin-bottom:22px">
       <div style="font-size:13px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px">Bước 2 — Chọn thủ tục</div>
+      <!-- breadcrumb for goCategory (kept for JS) -->
+      <div id="tthc-list-crumb" style="display:none"></div>
       <div style="font-size:26px;font-weight:900;color:var(--navy)" id="tthc-list-title">Thủ tục Hộ tịch</div>
     </div>
     <div class="tthc-list" id="tthc-list-items"></div>
+    <div style="margin-top:12px;display:flex;gap:8px">
+      <button class="k-home-btn" onclick="goScreen('s-category')">← Lĩnh vực</button>
+      <button class="k-home-btn" onclick="goScreen('s-idle')"><svg width="15" height="15"><use href="#ic-home"/></svg> Trang chủ</button>
+    </div>
   </div>
   <div class="k-bottom">
     <div class="k-bottom-item"><span class="k-bottom-dot"></span>Bước 2/3 — Chọn thủ tục</div>
@@ -649,8 +666,8 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
   <img src="images/logo.jpg?v=1" alt="Logo Trung tâm Phục vụ hành chính công" style="width:40px;height:40px;object-fit:cover;border-radius:6px;display:block" />
       </div>
       <div class="k-brand-txt">
-        <strong>Trung tâm Phục vụ hành chính công</strong>
-        <span id="chat-crumb">Bộ phận Một cửa</span>
+        <strong class="brand-name">Trung tâm Phục vụ hành chính công</strong>
+        <span class="brand-sub">Bộ phận Một cửa</span>
       </div>
     </div>
     <div class="k-top-right">
@@ -659,6 +676,11 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
         <button class="ctrl-btn" onclick="changeFontSize(1)">A+</button>
         <div class="ctrl-sep"></div>
         <button class="ctrl-btn" onclick="toggleTTS()"><svg width="16" height="16"><use href="#ic-volume"/></svg></button>
+      </div>
+      <div class="lang-group">
+        <button class="lang-pill on" id="cat-lang-vi" onclick="setLang('vi')">VI</button>
+        <button class="lang-pill" id="cat-lang-en" onclick="setLang('en')">EN</button>
+        <button class="lang-pill" id="cat-lang-zh" onclick="setLang('zh')">中文</button>
       </div>
       <button class="k-home-btn" onclick="goScreen('s-idle')"><svg width="15" height="15"><use href="#ic-home"/></svg> Trang chủ</button>
       <div class="k-time"><div class="k-time-val">08:42</div></div>
@@ -740,18 +762,27 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
   <img src="images/logo.jpg?v=1" alt="Logo Trung tâm Phục vụ hành chính công" style="width:40px;height:40px;object-fit:cover;border-radius:6px;display:block" />
       </div>
       <div class="k-brand-txt">
-        <strong>Phiếu thứ tự — Bước 3/3</strong>
-        <span>Sẵn sàng phục vụ</span>
+        <strong class="brand-name">Trung tâm Phục vụ hành chính công</strong>
+        <span class="brand-sub">Bộ phận Một cửa</span>
       </div>
     </div>
     <div class="k-top-right">
-      <button class="k-home-btn" onclick="goScreen('s-chat')">← Quay lại</button>
-      <button class="k-home-btn" onclick="goScreen('s-idle')"><svg width="15" height="15"><use href="#ic-home"/></svg> Trang chủ</button>
+      <div class="ctrl-group">
+        <button class="ctrl-btn" onclick="changeFontSize(-1)" title="Chữ nhỏ">A−</button>
+        <button class="ctrl-btn" onclick="changeFontSize(1)" title="Chữ lớn">A+</button>
+        <div class="ctrl-sep"></div>
+        <button class="ctrl-btn" id="tts-btn" onclick="toggleTTS()" title="Đọc to"><svg width="16" height="16"><use href="#ic-volume"/></svg></button>
+      </div>
+      <div class="lang-group">
+        <button class="lang-pill on" id="lang-vi" onclick="setLang('vi')">VI</button>
+        <button class="lang-pill" id="lang-en" onclick="setLang('en')">EN</button>
+        <button class="lang-pill" id="lang-zh" onclick="setLang('zh')">中文</button>
+      </div>
       <div class="k-time"><div class="k-time-val">08:43</div></div>
     </div>
   </div>
   <div class="ticket-shell">
-    <div class="ticket-wrap">
+  <div class="ticket-wrap">
       <div class="ticket-card">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
           <div style="font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.07em">PHIẾU THỨ TỰ</div>
@@ -805,6 +836,10 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
             <div style="display:flex;justify-content:space-between"><span>Chủ nhật</span><span style="color:var(--red);font-weight:700">Nghỉ</span></div>
           </div>
         </div>
+      </div>
+      <div style="margin-top:12px;display:flex;gap:8px">
+        <button class="k-home-btn" onclick="goScreen('s-chat')">← Quay lại</button>
+        <button class="k-home-btn" onclick="goScreen('s-idle')"><svg width="15" height="15"><use href="#ic-home"/></svg> Trang chủ</button>
       </div>
     </div>
   </div>
@@ -938,6 +973,12 @@ function setLang(lang){
   document.querySelectorAll('[data-'+lang+']').forEach(el=>{el.textContent=el.getAttribute('data-'+lang);});
   document.getElementById('send-btn-lbl').innerHTML=`<svg width="16" height="16" style="display:inline-block;vertical-align:middle;margin-right:5px"><use href="#ic-send"/></svg>${t.send}`;
   document.getElementById('chat-input').placeholder=t.placeholder;
+  // Update header brand text across all topbars
+  document.querySelectorAll('.brand-name').forEach(el=>el.textContent=t.brand);
+  document.querySelectorAll('.brand-sub').forEach(el=>el.textContent=t.sub);
+  // Chat header strings
+  const ct=document.getElementById('chat-title'); if(ct) ct.textContent = t.cat_ai_strong;
+  const cs=document.getElementById('chat-subtitle'); if(cs) cs.textContent = t.cat_ai_span;
   showToast('🌐 '+{vi:'Tiếng Việt',en:'English',zh:'中文'}[lang]);
 }
 
@@ -1083,10 +1124,30 @@ function sendChatInput(){
 }
 
 // ── LOAD TTHC (inline checklist in chat) ──
-function loadTTHC(idx){currentTTHC=tthcData[idx];checkedItems=new Array(currentTTHC.giay_to.length).fill(false);goScreen('s-chat');
-  document.getElementById('chat-crumb').textContent=`${currentTTHC.ten} — Hướng dẫn chi tiết`;
+function loadTTHC(idx){
+  // Prepare selected TTHC and reset checklist state
+  currentTTHC=tthcData[idx];
+  checkedItems=new Array(currentTTHC.giay_to.length).fill(false);
+
+  // Ensure chat is shown and start from a clean chat state so the
+  // selected procedure message appears prominently (no stale greeting).
+  // Mark chatInited=true so initChat invoked by goScreen won't inject the
+  // default greeting — we'll inject the procedure message instead.
+  chatInited = true;
+  const msgsEl = document.getElementById('chat-msgs');
+  if(msgsEl) msgsEl.innerHTML = '';
+  goScreen('s-chat');
+
+  // Update hidden crumb (used by other flows) and the chat header so user
+  // immediately sees which procedure they're viewing
+  document.getElementById('chat-crumb').textContent = `${currentTTHC.ten} — Hướng dẫn chi tiết`;
+  const chatTitle = document.getElementById('chat-title'); if(chatTitle) chatTitle.textContent = currentTTHC.ten;
+  const chatSub = document.getElementById('chat-subtitle'); if(chatSub) chatSub.textContent = `${currentTTHC.co_quan} · ${currentTTHC.thoi_han}`;
+
   const t=currentTTHC;
-  const ans=`Tôi tìm thấy thủ tục <strong>${t.ten}</strong> phù hợp!<br><br>📍 <strong>${t.co_quan}</strong><br>💰 Lệ phí: <strong style="color:${t.le_phi==='Miễn phí'?'var(--green)':'var(--amber)'}">${t.le_phi}</strong> &nbsp;·&nbsp; ⏱ Thời hạn: <strong>${t.thoi_han}</strong><br><br>Tôi đã chuẩn bị checklist giấy tờ bên dưới. Hãy tích vào từng mục khi đã chuẩn bị xong rồi nhấn <strong>Bốc số</strong> nhé!`;
+  const ans = `Tôi tìm thấy thủ tục <strong>${t.ten}</strong> phù hợp!<br><br>📍 <strong>${t.co_quan}</strong><br>💰 Lệ phí: <strong style="color:${t.le_phi==='Miễn phí'?'var(--green)':'var(--amber)'}">${t.le_phi}</strong> &nbsp;·&nbsp; ⏱ Thời hạn: <strong>${t.thoi_han}</strong><br><br>Tôi đã chuẩn bị checklist giấy tờ bên dưới. Hãy tích vào từng mục khi đã chuẩn bị xong rồi nhấn <strong>Bốc số</strong> nhé!`;
+
+  // Add assistant message and checklist inline
   addMsg(ans,true,`${t.route} · ${t.latency} · ${t.can_cu}`);
   renderChecklistInChat();
   setBocso(true);
