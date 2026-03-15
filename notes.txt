@@ -1,0 +1,2 @@
+===========run kiosk
+cd 'D:\Projects\kiosk-code'; npx live-server --port=3001 --open=kiosk.html

@@ -1,0 +1,13 @@
+{
+  "name": "kiosk-code",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=14"
+  },
+  "scripts": {
+    "start": "npx live-server --port=3000 --open=admin-cms.html",
+    "kiosk": "npx live-server --port=3000 --open=kiosk.html",
+    "dev": "npx live-server --port=3000"
+  }
+}

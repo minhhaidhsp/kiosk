@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kiosk AI · Trung tâm Phục vụ hành chính công TP.HCM</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#C8102E;--red2:#a00d24;--rl:#FEE2E2;--rb:#FECACA;
+  --green:#16a34a;--lime:#22c55e;--amber:#d97706;
+  --navy:#111827;--blue:#2563eb;
+  --bg:#F5F5F7;--white:#fff;--card:#F1F1F3;--border:#E4E4E7;
+  --text:#111827;--text2:#374151;--muted:#6B7280;--dim:#9CA3AF;
+  --shc:0 1px 4px rgba(0,0,0,.05),0 2px 12px rgba(0,0,0,.04);
+  --shl:0 8px 32px rgba(0,0,0,.12);
+  --fs:1;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--text);font-size:calc(19px * var(--fs));line-height:1.55;user-select:none}
+
+/* ── SHELL ── */
+.kiosk-shell{width:100vw;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+.screen{display:none;width:100%;height:100%;flex-direction:column}
+.screen.on{display:flex;animation:fadeIn .2s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* ── TOPBAR ── */
+.k-top{height:68px;background:#fff;display:flex;align-items:center;padding:0 24px;gap:14px;flex-shrink:0;border-bottom:3px solid var(--red)}
+.k-brand{display:flex;align-items:center;gap:11px}
+/* Logo: sử dụng SVG ngôi sao 5 bàn tay thay emoji */
+.k-logo-wrap{width:40px;height:40px;flex-shrink:0}
+.k-logo-wrap svg{width:40px;height:40px}
+.k-brand-txt strong{display:block;font-size:15px;font-weight:800;color:#111827;line-height:1.25}
+.k-brand-txt span{font-size:12px;color:#6B7280;font-weight:500}
+.k-top-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+.k-time-val{font-size:22px;font-weight:700;color:#111827;font-family:'JetBrains Mono',monospace;line-height:1}
+.k-time-date{font-size:11px;color:#9CA3AF;text-align:right}
+.k-status-dot{width:8px;height:8px;background:var(--lime);border-radius:50%;display:inline-block;margin-right:5px;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.k-status-txt{font-size:12px;font-weight:600;color:#374151}
+
+/* Controls group */
+.ctrl-group{display:flex;align-items:center;gap:4px;padding:4px 8px;background:var(--card);border:1px solid var(--border);border-radius:20px}
+.ctrl-btn{width:34px;height:34px;border:none;border-radius:12px;background:transparent;cursor:pointer;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;color:var(--text2);transition:all .15s;font-family:'Be Vietnam Pro',sans-serif}
+.ctrl-btn:hover,.ctrl-btn.on{background:var(--rl);color:var(--red)}
+.ctrl-sep{width:1px;height:18px;background:var(--border);margin:0 2px}
+
+/* Lang switcher — compact pills */
+.lang-group{display:flex;gap:3px;padding:3px;background:var(--card);border:1px solid var(--border);border-radius:20px}
+.lang-pill{padding:5px 10px;border-radius:14px;border:none;background:none;cursor:pointer;font-size:12px;font-weight:700;color:var(--muted);transition:all .15s;font-family:'Be Vietnam Pro',sans-serif;white-space:nowrap}
+.lang-pill.on{background:var(--red);color:#fff}
+.lang-pill:hover:not(.on){background:var(--rl);color:var(--red)}
+
+/* Home btn */
+.k-home-btn{padding:7px 16px;background:#fff;border:1.5px solid var(--border);border-radius:10px;color:#374151;font-size:13px;font-weight:700;cursor:pointer;font-family:'Be Vietnam Pro',sans-serif;transition:all .15s;display:flex;align-items:center;gap:6px}
+.k-home-btn:hover{background:var(--rl);border-color:var(--rb);color:var(--red)}
+
+/* ── CONTENT ── */
+.k-content{flex:1;overflow-y:auto;overflow-x:hidden;padding:28px 36px;scrollbar-width:thin;scrollbar-color:var(--dim) transparent}
+
+/* ── IDLE SCREEN ── */
+.idle-shell{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fff;position:relative;overflow:hidden;border-top:3px solid var(--red)}
+.idle-label{font-size:13px;color:var(--dim);letter-spacing:.14em;text-transform:uppercase;margin-bottom:14px;z-index:1}
+.idle-ai-icon{width:88px;height:88px;margin-bottom:22px;z-index:1;animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.idle-title{font-size:38px;font-weight:900;color:#111827;text-align:center;line-height:1.2;margin-bottom:10px;z-index:1}
+.idle-sub{font-size:17px;color:var(--muted);text-align:center;margin-bottom:36px;z-index:1}
+.idle-tap-btn{padding:18px 60px;background:var(--red);color:#fff;border:none;border-radius:16px;font-size:21px;font-weight:800;cursor:pointer;font-family:'Be Vietnam Pro',sans-serif;box-shadow:0 6px 24px rgba(200,16,46,.3);transition:all .2s;z-index:1;letter-spacing:.01em}
+.idle-tap-btn:hover{transform:scale(1.03);box-shadow:0 10px 32px rgba(200,16,46,.4)}
+.idle-quick{display:flex;gap:12px;margin-top:24px;flex-wrap:wrap;justify-content:center;z-index:1}
+.idle-q-btn{padding:12px 20px;background:var(--card);border:1.5px solid var(--border);border-radius:12px;color:#374151;font-size:15px;font-weight:600;cursor:pointer;font-family:'Be Vietnam Pro',sans-serif;transition:all .15s;display:flex;align-items:center;gap:8px}
+.idle-q-btn:hover{background:var(--rl);border-color:var(--rb);color:var(--red)}
+.idle-chat-hint{z-index:1;margin-top:20px;display:flex;align-items:center;gap:10px;padding:12px 20px;background:var(--rl);border:1.5px solid var(--rb);border-radius:14px;cursor:pointer;transition:all .15s;max-width:480px;width:100%}
+.idle-chat-hint:hover{background:#ffd5d5;border-color:var(--red)}
+.idle-chat-hint-txt{font-size:14px;color:#991b1b}
+
+/* ── CATEGORY SCREEN ── */
+.cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:4px 0}
+.cat-btn{background:#fff;border:1.5px solid var(--border);border-radius:16px;padding:30px 20px 24px;cursor:pointer;text-align:center;transition:all .2s;font-family:'Be Vietnam Pro',sans-serif}
+.cat-btn:hover{border-color:var(--red);transform:translateY(-2px);box-shadow:var(--shl)}
+.cat-icon{font-size:44px;margin-bottom:14px;display:flex;align-items:center;justify-content:center}
+.cat-name{font-size:20px;font-weight:800;color:var(--text);margin-bottom:3px}
+.cat-count{font-size:14px;color:var(--muted)}
+/* no cat-bar */
+.cat-ai-entry{background:linear-gradient(135deg,var(--rl),#fff5f5);border:1.5px solid var(--rb);border-radius:16px;padding:20px 24px;cursor:pointer;display:flex;align-items:center;gap:16px;transition:all .2s;font-family:'Be Vietnam Pro',sans-serif;grid-column:1/-1}
+.cat-ai-entry:hover{border-color:var(--red);transform:translateY(-2px);box-shadow:var(--shl)}
+.cat-ai-orb{width:48px;height:48px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.cat-ai-txt strong{display:block;font-size:18px;font-weight:800;color:var(--red);margin-bottom:2px}
+.cat-ai-txt span{font-size:14px;color:var(--muted)}
+.cat-ai-arrow{margin-left:auto;font-size:24px;color:var(--red)}
+
+/* TTHC list */
+.tthc-list{display:flex;flex-direction:column;gap:10px}
+.tthc-btn{background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:16px 20px;cursor:pointer;display:flex;align-items:center;gap:14px;transition:all .2s;font-family:'Be Vietnam Pro',sans-serif;text-align:left;width:100%}
+.tthc-btn:hover{border-color:var(--red);box-shadow:var(--shl)}
+.tthc-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+.tthc-name{font-size:17px;font-weight:800;color:var(--text);margin-bottom:3px}
+.tthc-meta{font-size:13px;color:var(--muted)}
+
+/* ── CHAT SCREEN ── */
+.k-body{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.k-chat-area{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.k-chat-hd{padding:12px 24px;border-bottom:1px solid var(--border);background:#fff;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.k-chat-hd-icon{width:36px;height:36px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.k-chat-title{font-size:16px;font-weight:800;color:#111827}
+.ai-tag{display:inline-flex;align-items:center;gap:5px;background:#f0fdf4;border:1px solid #86efac;color:var(--green);font-size:12px;font-weight:700;padding:3px 10px;border-radius:20px}
+.k-chat-msgs{flex:1;overflow-y:auto;padding:20px 24px;display:flex;flex-direction:column;gap:16px;scrollbar-width:thin;scrollbar-color:var(--dim) transparent}
+
+/* Chat bubbles */
+.msg{display:flex;gap:10px;align-items:flex-end;max-width:85%}
+.msg.user-msg{align-self:flex-end;flex-direction:row-reverse}
+.msg.ai-msg{align-self:flex-start}
+.msg-av{width:36px;height:36px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px}
+.ai-av{background:transparent;flex-shrink:0}
+.usr-av{background:#fef9c3;flex-shrink:0}
+.msg-bubble{padding:12px 16px;border-radius:16px;font-size:15px;line-height:1.7;max-width:100%}
+.ai-bubble{background:#fff;border:1px solid var(--border);border-bottom-left-radius:4px;box-shadow:var(--shc)}
+.user-bubble{background:#FEE2E2;color:#7f1d1d;border-bottom-right-radius:4px}
+.msg-time{font-size:11px;color:var(--dim);margin-top:4px}
+.source-box{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-size:12.5px;color:#374151;margin-top:10px;line-height:1.6}
+.route-badge{display:inline-flex;align-items:center;gap:4px;background:var(--rl);border:1px solid var(--rb);color:#991b1b;font-size:11px;font-weight:700;padding:2px 8px;border-radius:5px;margin-top:5px}
+
+/* Typing dots */
+.typing-dots{display:flex;gap:4px;padding:12px 16px;background:#fff;border:1px solid var(--border);border-radius:16px;border-bottom-left-radius:4px;width:fit-content}
+.typing-dots span{width:7px;height:7px;background:var(--dim);border-radius:50%;animation:bounce .8s ease-in-out infinite}
+.typing-dots span:nth-child(2){animation-delay:.15s}
+.typing-dots span:nth-child(3){animation-delay:.3s}
+@keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-7px)}}
+
+/* Checklist inline (dưới chat) */
+.checklist-inline{background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:16px 18px;margin:4px 0 4px 46px}
+.cl-title{font-size:13px;font-weight:800;color:#111827;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.cl-title::before{content:'';width:3px;height:13px;background:var(--red);border-radius:2px}
+.cl-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);cursor:pointer}
+.cl-item:last-child{border:none}
+.cl-box{width:22px;height:22px;border-radius:6px;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s;margin-top:1px}
+.cl-box.chk{background:var(--red);border-color:var(--red)}
+.cl-lbl{font-size:14px;font-weight:600;line-height:1.5}
+.cl-lbl.done{text-decoration:line-through;color:var(--dim)}
+.cl-req{font-size:11px;font-weight:700;padding:1px 7px;border-radius:4px;margin-top:2px;width:fit-content}
+.req-yes{background:var(--rl);color:#991b1b}
+.req-opt{background:#fef3c7;color:#92400e}
+.cl-progress-bar{height:4px;background:var(--border);border-radius:10px;overflow:hidden;margin-bottom:10px}
+.cl-progress-fill{height:100%;background:var(--red);border-radius:10px;transition:width .4s}
+
+/* Input area */
+.k-input-area{padding:14px 24px;border-top:1px solid var(--border);background:#fff;flex-shrink:0}
+.k-input-chips{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px}
+.k-chip{padding:7px 14px;background:var(--card);border:1.5px solid var(--border);border-radius:20px;font-size:13px;font-weight:600;color:var(--text2);cursor:pointer;transition:all .15s;font-family:'Be Vietnam Pro',sans-serif;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.k-chip:hover{background:var(--rl);border-color:var(--rb);color:var(--red)}
+.k-input-row{display:flex;gap:8px;align-items:center}
+.k-text-input{flex:1;padding:13px 16px;border:1.5px solid var(--border);border-radius:12px;font-size:16px;font-family:'Be Vietnam Pro',sans-serif;outline:none;transition:border-color .15s;color:var(--text);background:#fff}
+.k-text-input:focus{border-color:var(--red)}
+.k-send-btn{padding:13px 22px;background:var(--red);color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer;font-family:'Be Vietnam Pro',sans-serif;transition:all .15s;white-space:nowrap}
+.k-send-btn:hover{background:var(--red2)}
+
+/* Voice btn — mic icon SVG */
+.k-voice-btn{width:48px;height:48px;background:var(--card);border:1.5px solid var(--border);border-radius:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}
+.k-voice-btn:hover{background:#fef3c7;border-color:var(--amber)}
+.k-voice-btn.listening{background:var(--rl);border-color:var(--red);animation:ripple .8s ease-in-out infinite}
+@keyframes ripple{0%,100%{box-shadow:0 0 0 0 rgba(200,16,46,.3)}50%{box-shadow:0 0 0 8px rgba(200,16,46,0)}}
+
+/* Bốc số button — nằm cuối input area */
+.bocso-row{padding:10px 24px;border-top:1px solid var(--border);background:#fff;flex-shrink:0}
+.bocso-btn{width:100%;padding:14px;background:var(--red);color:#fff;border:none;border-radius:12px;font-size:17px;font-weight:800;cursor:pointer;font-family:'Be Vietnam Pro',sans-serif;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:8px}
+.bocso-btn:hover:not(:disabled){background:var(--red2)}
+.bocso-btn:disabled{opacity:.38;cursor:default}
+
+/* ── TICKET SCREEN ── */
+.ticket-shell{flex:1;display:flex;align-items:center;justify-content:center;padding:32px;background:var(--bg)}
+.ticket-wrap{display:grid;grid-template-columns:380px 1fr;gap:24px;width:100%;max-width:940px;align-items:start}
+.ticket-card{background:#fff;border:1px solid var(--border);border-radius:20px;padding:32px;box-shadow:0 12px 40px rgba(0,0,0,.08);text-align:center}
+.ticket-num{font-size:80px;font-weight:900;color:var(--red);line-height:1;font-family:'JetBrains Mono',monospace;margin-bottom:6px}
+.ticket-tthc{font-size:18px;color:var(--text2);margin-bottom:22px;font-weight:600}
+.ticket-meta-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;padding:16px 0;border-top:1.5px solid var(--border);border-bottom:1.5px solid var(--border);margin-bottom:18px}
+.ticket-meta-val{font-size:28px;font-weight:800;font-family:'JetBrains Mono',monospace;line-height:1;margin-bottom:3px}
+.ticket-meta-lbl{font-size:12px;color:var(--muted)}
+.t-btn{flex:1;padding:13px;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;border:none;font-family:'Be Vietnam Pro',sans-serif;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:7px}
+.t-btn-primary{background:var(--red);color:#fff}.t-btn-primary:hover{background:var(--red2)}
+.t-btn-outline{background:var(--card);color:var(--text2);border:1.5px solid var(--border)}
+.ticket-right{display:flex;flex-direction:column;gap:14px}
+.ticket-right-section{background:#fff;border:1px solid var(--border);border-radius:14px;padding:16px 20px}
+.t-sec-title{font-size:14px;font-weight:800;color:#111827;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.t-sec-title::before{content:'';width:3px;height:13px;background:var(--red);border-radius:2px}
+.t-doc-item{display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px}
+.t-doc-item:last-child{border:none}
+.t-doc-dot{width:6px;height:6px;border-radius:50%;background:var(--red);flex-shrink:0}
+
+/* ── BOTTOM BAR ── */
+.k-bottom{height:44px;background:var(--red);display:flex;align-items:center;padding:0 24px;gap:18px;flex-shrink:0}
+.k-bottom-item{display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,.85)}
+.k-bottom-dot{width:6px;height:6px;border-radius:50%;background:#fff}
+
+/* ── TOAST ── */
+.k-toast{position:fixed;bottom:58px;left:50%;transform:translateX(-50%);background:#111827;color:#fff;padding:12px 24px;border-radius:12px;font-size:14px;font-weight:700;box-shadow:var(--shl);z-index:999;display:none;white-space:nowrap;animation:tUp .2s ease}
+@keyframes tUp{from{transform:translateX(-50%) translateY(12px);opacity:0}to{transform:translateX(-50%) translateY(0);opacity:1}}
+
+/* ── MODAL ── */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.modal-bg.open{display:flex;animation:mfIn .15s ease}
+@keyframes mfIn{from{opacity:0}to{opacity:1}}
+.modal{background:#fff;border-radius:18px;box-shadow:0 24px 64px rgba(0,0,0,.18);max-height:88vh;display:flex;flex-direction:column;animation:mUp .2s ease}
+@keyframes mUp{from{transform:translateY(22px);opacity:0}to{transform:none;opacity:1}}
+.modal-hd{padding:20px 24px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.modal-title{font-size:17px;font-weight:800;flex:1}
+.modal-close{width:32px;height:32px;border-radius:8px;border:1.5px solid var(--border);background:var(--card);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px}
+.modal-close:hover{background:var(--rl)}
+.modal-body{padding:20px 24px;overflow-y:auto;flex:1;font-size:15px}
+.modal-footer{padding:14px 24px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end}
+.m-btn{padding:11px 20px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;border:none;transition:all .15s;font-family:'Be Vietnam Pro',sans-serif;display:flex;align-items:center;gap:6px}
+.m-btn-primary{background:var(--red);color:#fff}.m-btn-primary:hover{background:var(--red2)}
+.m-btn-outline{background:var(--card);color:var(--text2);border:1.5px solid var(--border)}
+
+
+/* ── LEGAL POPUP ── */
+.legal-popup-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2000;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.legal-popup-bg.open{display:flex;animation:mfIn .15s ease}
+.legal-popup{background:#fff;border-radius:18px;box-shadow:0 24px 64px rgba(0,0,0,.2);width:720px;max-height:82vh;display:flex;flex-direction:column;animation:mUp .2s ease}
+.legal-popup-hd{padding:18px 24px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0}
+.legal-popup-title{font-size:15px;font-weight:800;flex:1;color:#111827}
+.legal-popup-close{width:30px;height:30px;border-radius:8px;border:1.5px solid var(--border);background:var(--card);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.legal-popup-close:hover{background:var(--rl)}
+.legal-popup-body{padding:20px 24px;overflow-y:auto;flex:1}
+.legal-doc-section{margin-bottom:20px}
+.legal-doc-num{font-size:13px;font-weight:800;color:var(--red);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
+.legal-doc-title{font-size:15px;font-weight:700;color:#111827;margin-bottom:10px}
+.legal-doc-body{font-size:14px;line-height:1.85;color:#374151;border-left:3px solid var(--border);padding-left:14px}
+.legal-doc-body strong{color:#111827}
+.legal-doc-divider{height:1px;background:var(--border);margin:16px 0}
+.legal-highlight{background:#FEF9C3;border-radius:3px;padding:0 3px}
+
+/* ── PRINT ── */
+@media print{
+  @page{size:80mm auto;margin:4mm}
+  body *{visibility:hidden}
+  #print-zone,#print-zone *{visibility:visible}
+  #print-zone{position:fixed;top:0;left:0;width:80mm;font-family:'Be Vietnam Pro',sans-serif;font-size:12px;color:#000;background:#fff}
+  .print-logo{text-align:center;font-weight:900;font-size:13px;border-bottom:1px dashed #999;padding-bottom:6px;margin-bottom:6px}
+  .print-num{text-align:center;font-size:52px;font-weight:900;margin:8px 0;font-family:monospace}
+  .print-tthc{text-align:center;font-size:13px;font-weight:700;margin-bottom:8px}
+  .print-meta{font-size:11px;line-height:1.8;border-top:1px dashed #999;padding-top:6px}
+  .print-docs{font-size:11px;margin-top:6px;border-top:1px dashed #999;padding-top:6px}
+  .print-footer{text-align:center;font-size:10px;margin-top:8px;border-top:1px dashed #999;padding-top:6px;color:#555}
+}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--dim);border-radius:10px}
+
+/* SVG icons inline */
+.icon-mic,.icon-send,.icon-ai,.icon-user,.icon-home,.icon-volume{display:inline-flex;align-items:center;justify-content:center}
+</style>
+</head>
+<body>
+
+<!-- Print zone -->
+<div id="print-zone" style="display:none">
+  <div class="print-logo">Trung tâm Phục vụ hành chính công<br>Bộ phận Một cửa</div>
+  <div class="print-num" id="pz-num">B047</div>
+  <div class="print-tthc" id="pz-tthc">Đăng ký khai sinh</div>
+  <div class="print-meta">Quầy: <strong id="pz-quy">2 — Hộ tịch</strong><br>Người chờ: <strong id="pz-wait">6</strong> · Ước tính: <strong>~18 phút</strong><br>Thời gian: <strong id="pz-time"></strong></div>
+  <div class="print-docs"><strong>Giấy tờ cần mang:</strong><br><div id="pz-docs"></div></div>
+  <div class="print-footer">Giữ phiếu · Chú ý màn hình gọi số<br>Quá 5 phút không đến sẽ bị bỏ qua</div>
+</div>
+
+<!-- SVG sprite for icons (hidden) -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <symbol id="ic-mic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/>
+  </symbol>
+  <symbol id="ic-send" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+  </symbol>
+  <symbol id="ic-volume" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+  </symbol>
+  <symbol id="ic-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+  </symbol>
+  <symbol id="ic-ticket" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z"/>
+  </symbol>
+  <symbol id="ic-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+  </symbol>
+  <symbol id="ic-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="20 6 9 17 4 12"/>
+  </symbol>
+  <symbol id="ic-ai" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/>
+  </symbol>
+  <symbol id="ic-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+  </symbol>
+  <symbol id="ic-print" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>
+  </symbol>
+  <!-- Reusable small logo symbol copied from template#logo-tpl -->
+  <symbol id="logo-small" viewBox="0 0 120 120">
+    <!-- No white background: intended to render inside red avatar -->
+    <g transform="translate(60,60)">
+      <g transform="rotate(0)">
+        <ellipse cx="0" cy="-30" rx="11" ry="22" fill="#FFFFFF" transform="rotate(-36,0,-30)"/>
+        <ellipse cx="0" cy="-30" rx="3.5" ry="14" fill="#FFFFFF" opacity="0.6" transform="rotate(-36,0,-30) translate(-8,-4)"/>
+      </g>
+      <g transform="rotate(72)">
+        <ellipse cx="0" cy="-30" rx="11" ry="22" fill="#FFFFFF" transform="rotate(-36,0,-30)"/>
+        <ellipse cx="0" cy="-30" rx="3.5" ry="14" fill="#FFFFFF" opacity="0.6" transform="rotate(-36,0,-30) translate(-8,-4)"/>
+      </g>
+      <g transform="rotate(144)">
+        <ellipse cx="0" cy="-30" rx="11" ry="22" fill="#FFFFFF" transform="rotate(-36,0,-30)"/>
+        <ellipse cx="0" cy="-30" rx="3.5" ry="14" fill="#FFFFFF" opacity="0.6" transform="rotate(-36,0,-30) translate(-8,-4)"/>
+      </g>
+      <g transform="rotate(216)">
+        <ellipse cx="0" cy="-30" rx="11" ry="22" fill="#FFFFFF" transform="rotate(-36,0,-30)"/>
+        <ellipse cx="0" cy="-30" rx="3.5" ry="14" fill="#FFFFFF" opacity="0.6" transform="rotate(-36,0,-30) translate(-8,-4)"/>
+      </g>
+      <g transform="rotate(288)">
+        <ellipse cx="0" cy="-30" rx="11" ry="22" fill="#FFFFFF" transform="rotate(-36,0,-30)"/>
+        <ellipse cx="0" cy="-30" rx="3.5" ry="14" fill="#FFFFFF" opacity="0.6" transform="rotate(-36,0,-30) translate(-8,-4)"/>
+      </g>
+      <polygon points="0,-18 5,-6 18,-6 8,2 11,14 0,7 -11,14 -8,2 -18,-6 -5,-6" fill="#FCD34D"/>
+    </g>
+    <circle cx="60" cy="60" r="56" fill="none" stroke="#FFFFFF" stroke-width="3"/>
+  </symbol>
+  <!-- Reusable robot icon (88x88) for chat avatar -->
+  <symbol id="robot-icon" viewBox="0 0 88 88">
+    <!-- Background removed: only robot shapes remain -->
+    <rect x="22" y="20" width="44" height="34" rx="10" fill="#C8102E"></rect>
+    <circle cx="34" cy="37" r="5" fill="white"></circle>
+    <circle cx="54" cy="37" r="5" fill="white"></circle>
+    <circle cx="34" cy="37" r="2.5" fill="#1a1a1a"></circle>
+    <circle cx="54" cy="37" r="2.5" fill="#1a1a1a"></circle>
+    <line x1="44" y1="20" x2="44" y2="13" stroke="#C8102E" stroke-width="3" stroke-linecap="round"></line>
+    <circle cx="44" cy="11" r="3" fill="#C8102E"></circle>
+    <rect x="32" y="46" width="24" height="4" rx="2" fill="white" opacity="0.7"></rect>
+    <rect x="28" y="57" width="32" height="22" rx="8" fill="#C8102E"></rect>
+    <rect x="36" y="63" width="16" height="10" rx="3" fill="white" opacity="0.2"></rect>
+    <line x1="40" y1="68" x2="48" y2="68" stroke="white" stroke-width="1.5" opacity="0.5"></line>
+    <line x1="44" y1="65" x2="44" y2="71" stroke="white" stroke-width="1.5" opacity="0.5"></line>
+    <rect x="14" y="58" width="12" height="18" rx="6" fill="#C8102E"></rect>
+    <rect x="62" y="58" width="12" height="18" rx="6" fill="#C8102E"></rect>
+  </symbol>
+</svg>
+
+<!-- Logo SVG Trung tâm Dịch vụ công (5 bàn tay hình ngôi sao) -->
+<template id="logo-tpl">
+<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="60" cy="60" r="58" fill="white"/>
+  <!-- 5 hands forming a star shape - inspired by official logo -->
+  <!-- Center star shape -->
+  <g transform="translate(60,60)">
+    <!-- Hand 1: top pointing right-down -->
+    <g transform="rotate(0)">
+      <ellipse cx="0" cy="-30" rx="11" ry="22" fill="#C8102E" transform="rotate(-36,0,-30)"/>
+      <ellipse cx="0" cy="-30" rx="3.5" ry="14" fill="#C8102E" opacity="0.6" transform="rotate(-36,0,-30) translate(-8,-4)"/>
+    </g>
+    <!-- Hand 2 -->
+    <g transform="rotate(72)">
+      <ellipse cx="0" cy="-30" rx="11" ry="22" fill="#C8102E" transform="rotate(-36,0,-30)"/>
+      <ellipse cx="0" cy="-30" rx="3.5" ry="14" fill="#C8102E" opacity="0.6" transform="rotate(-36,0,-30) translate(-8,-4)"/>
+    </g>
+    <!-- Hand 3 -->
+    <g transform="rotate(144)">
+      <ellipse cx="0" cy="-30" rx="11" ry="22" fill="#C8102E" transform="rotate(-36,0,-30)"/>
+      <ellipse cx="0" cy="-30" rx="3.5" ry="14" fill="#C8102E" opacity="0.6" transform="rotate(-36,0,-30) translate(-8,-4)"/>
+    </g>
+    <!-- Hand 4 -->
+    <g transform="rotate(216)">
+      <ellipse cx="0" cy="-30" rx="11" ry="22" fill="#C8102E" transform="rotate(-36,0,-30)"/>
+      <ellipse cx="0" cy="-30" rx="3.5" ry="14" fill="#C8102E" opacity="0.6" transform="rotate(-36,0,-30) translate(-8,-4)"/>
+    </g>
+    <!-- Hand 5 -->
+    <g transform="rotate(288)">
+      <ellipse cx="0" cy="-30" rx="11" ry="22" fill="#C8102E" transform="rotate(-36,0,-30)"/>
+      <ellipse cx="0" cy="-30" rx="3.5" ry="14" fill="#C8102E" opacity="0.6" transform="rotate(-36,0,-30) translate(-8,-4)"/>
+    </g>
+    <!-- Center star gold -->
+    <polygon points="0,-18 5,-6 18,-6 8,2 11,14 0,7 -11,14 -8,2 -18,-6 -5,-6" fill="#FCD34D"/>
+  </g>
+  <!-- Red outer ring -->
+  <circle cx="60" cy="60" r="56" fill="none" stroke="#C8102E" stroke-width="3"/>
+</svg>
+</template>
+
+<div class="kiosk-shell">
+
+<!-- ══════════════════════════════
+     SCREEN 1: IDLE
+══════════════════════════════ -->
+<div class="screen on" id="s-idle">
+  <div class="k-top">
+    <div class="k-brand">
+      <div class="k-logo-wrap" id="logo-idle">
+  <img src="images/logo.jpg?v=1" alt="Logo Trung tâm Phục vụ hành chính công" style="width:40px;height:40px;object-fit:cover;border-radius:6px;display:block" />
+      </div>
+      <div class="k-brand-txt">
+        <strong id="brand-name">Trung tâm Phục vụ hành chính công</strong>
+        <span id="brand-sub">Bộ phận Một cửa</span>
+      </div>
+    </div>
+    <div class="k-top-right">
+      <!-- Font size: 2 nút thôi -->
+      <div class="ctrl-group">
+        <button class="ctrl-btn" onclick="changeFontSize(-1)" title="Chữ nhỏ">A−</button>
+        <button class="ctrl-btn" onclick="changeFontSize(1)" title="Chữ lớn">A+</button>
+        <div class="ctrl-sep"></div>
+        <button class="ctrl-btn" id="tts-btn" onclick="toggleTTS()" title="Đọc to">
+          <svg width="16" height="16"><use href="#ic-volume"/></svg>
+        </button>
+      </div>
+      <!-- Lang: compact pills -->
+      <div class="lang-group">
+        <button class="lang-pill on" id="lang-vi" onclick="setLang('vi')">VI</button>
+        <button class="lang-pill" id="lang-en" onclick="setLang('en')">EN</button>
+        <button class="lang-pill" id="lang-zh" onclick="setLang('zh')">中文</button>
+      </div>
+      <div class="k-time">
+        <div class="k-time-val" id="clock">08:42</div>
+        <div class="k-time-date" id="clock-date">Thứ Tư, 11/03/2026</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="idle-shell">
+    <div class="idle-label" id="idle-label">Kiosk AI · Phường Bàn Cờ · Quận 3 · TP.HCM</div>
+    <!-- AI robot SVG icon -->
+    <div class="idle-ai-icon">
+      <svg width="88" height="88" viewBox="0 0 88 88" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="2" width="84" height="84" rx="22" fill="#FEE2E2"/>
+        <rect x="2" y="2" width="84" height="84" rx="22" stroke="#FECACA" stroke-width="2"/>
+        <!-- Robot head -->
+        <rect x="22" y="20" width="44" height="34" rx="10" fill="#C8102E"/>
+        <!-- Eyes -->
+        <circle cx="34" cy="37" r="5" fill="white"/>
+        <circle cx="54" cy="37" r="5" fill="white"/>
+        <circle cx="34" cy="37" r="2.5" fill="#1a1a1a"/>
+        <circle cx="54" cy="37" r="2.5" fill="#1a1a1a"/>
+        <!-- Antenna -->
+        <line x1="44" y1="20" x2="44" y2="13" stroke="#C8102E" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="44" cy="11" r="3" fill="#C8102E"/>
+        <!-- Mouth -->
+        <rect x="32" y="46" width="24" height="4" rx="2" fill="white" opacity=".7"/>
+        <!-- Body -->
+        <rect x="28" y="57" width="32" height="22" rx="8" fill="#C8102E"/>
+        <!-- Chest icon: small circuit -->
+        <rect x="36" y="63" width="16" height="10" rx="3" fill="white" opacity=".2"/>
+        <line x1="40" y1="68" x2="48" y2="68" stroke="white" stroke-width="1.5" opacity=".5"/>
+        <line x1="44" y1="65" x2="44" y2="71" stroke="white" stroke-width="1.5" opacity=".5"/>
+        <!-- Arms -->
+        <rect x="14" y="58" width="12" height="18" rx="6" fill="#C8102E"/>
+        <rect x="62" y="58" width="12" height="18" rx="6" fill="#C8102E"/>
+      </svg>
+    </div>
+    <div class="idle-title" id="idle-title">Xin chào!<br>Tôi có thể giúp gì cho bạn?</div>
+    <div class="idle-sub" id="idle-sub">Hãy chạm vào màn hình để bắt đầu tra cứu thủ tục hành chính</div>
+    <button class="idle-tap-btn" id="idle-tap" onclick="goScreen('s-category')">CHẠM ĐỂ BẮT ĐẦU &nbsp;→</button>
+    <div class="idle-quick">
+      <div class="idle-q-btn" onclick="goCategory('Hộ tịch')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span data-vi="Hộ tịch" data-en="Civil Records" data-zh="户籍">Hộ tịch</span>
+      </div>
+      <div class="idle-q-btn" onclick="goCategory('Cư trú')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span data-vi="Cư trú" data-en="Residence" data-zh="居住">Cư trú</span>
+      </div>
+      <div class="idle-q-btn" onclick="goCategory('Tư pháp')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 8 22 16"/><line x1="18" y1="8" x2="18" y2="16"/><line x1="14" y1="11" x2="14" y2="22"/><line x1="10" y1="11" x2="10" y2="22"/><line x1="6" y1="8" x2="6" y2="22"/><path d="M2 8l10-6 10 6"/></svg>
+        <span data-vi="Tư pháp" data-en="Legal" data-zh="司法">Tư pháp</span>
+      </div>
+    </div>
+    <div class="idle-chat-hint" onclick="goScreen('s-chat');focusInput()">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C8102E" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <div class="idle-chat-hint-txt" id="idle-chat-hint-txt">Hoặc <strong>nhấn đây để hỏi AI trực tiếp</strong> — nói hoặc gõ câu hỏi của bạn</div>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8102E" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </div>
+  </div>
+
+  <div class="k-bottom">
+    <div class="k-bottom-item"><span class="k-bottom-dot"></span>Hệ thống online</div>
+    <div class="k-bottom-item">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+      Máy in sẵn sàng
+    </div>
+    <div class="k-bottom-item">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2" stroke-linecap="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>
+      Nhận dạng giọng nói bật
+    </div>
+    <div style="margin-left:auto" class="k-bottom-item">📍 Tầng 1 · Phòng Một cửa · Trung tâm PVHCC TP.HCM</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     SCREEN 2: CHỌN LĨNH VỰC
+══════════════════════════════ -->
+<div class="screen" id="s-category">
+  <div class="k-top">
+    <div class="k-brand">
+      <div class="k-logo-wrap" id="logo-cat">
+  <img src="images/logo.jpg?v=1" alt="Logo Trung tâm Phục vụ hành chính công" style="width:40px;height:40px;object-fit:cover;border-radius:6px;display:block" />
+      </div>
+      <div class="k-brand-txt">
+        <strong id="cat-brand">Trung tâm Phục vụ HCCC</strong>
+        <span id="cat-step">Bước 1 — Chọn lĩnh vực</span>
+      </div>
+    </div>
+    <div class="k-top-right">
+      <div class="ctrl-group">
+        <button class="ctrl-btn" onclick="changeFontSize(-1)">A−</button>
+        <button class="ctrl-btn" onclick="changeFontSize(1)">A+</button>
+        <div class="ctrl-sep"></div>
+        <button class="ctrl-btn" onclick="toggleTTS()"><svg width="16" height="16"><use href="#ic-volume"/></svg></button>
+      </div>
+      <div class="lang-group">
+        <button class="lang-pill" id="cat-lang-vi" onclick="setLang('vi')">VI</button>
+        <button class="lang-pill" id="cat-lang-en" onclick="setLang('en')">EN</button>
+        <button class="lang-pill" id="cat-lang-zh" onclick="setLang('zh')">中文</button>
+      </div>
+      <button class="k-home-btn" onclick="goScreen('s-idle')">
+        <svg width="15" height="15"><use href="#ic-home"/></svg>
+        <span id="cat-home-lbl">Màn hình chính</span>
+      </button>
+      <div class="k-time"><div class="k-time-val" id="clock2">08:42</div></div>
+    </div>
+  </div>
+
+  <div class="k-content">
+    <div style="text-align:center;margin-bottom:24px">
+      <div style="font-size:13px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px" id="cat-step-lbl">Bước 1 — Chọn lĩnh vực</div>
+      <div style="font-size:28px;font-weight:900;color:var(--navy);margin-bottom:6px" id="cat-heading">Bạn cần hỗ trợ lĩnh vực nào?</div>
+      <div style="font-size:16px;color:var(--muted)" id="cat-sub">Chạm vào lĩnh vực phù hợp — hoặc hỏi AI bằng giọng nói bên dưới</div>
+    </div>
+
+    <div class="cat-grid">
+      <!-- Hộ tịch: người dùng SVG inline -->
+      <div class="cat-btn" onclick="goCategory('Hộ tịch')">
+        <span class="cat-icon">
+          <svg width="52" height="52" viewBox="0 0 44 44" fill="none"><rect width="44" height="44" rx="12" fill="#FEE2E2"/><path d="M22 14a4 4 0 1 1 0 8 4 4 0 0 1 0-8z" fill="#C8102E"/><path d="M13 30c0-5 4-8 9-8s9 3 9 8" stroke="#C8102E" stroke-width="2.2" stroke-linecap="round"/></svg>
+        </span>
+        <div class="cat-name" data-vi="Hộ tịch" data-en="Civil Records" data-zh="户籍登记">Hộ tịch</div>
+        <div class="cat-count" data-vi="48 thủ tục" data-en="48 procedures" data-zh="48项手续">48 thủ tục</div>
+      </div>
+      <!-- Cư trú: nhà -->
+      <div class="cat-btn" onclick="goCategory('Cư trú')">
+        <span class="cat-icon">
+          <svg width="52" height="52" viewBox="0 0 44 44" fill="none"><rect width="44" height="44" rx="12" fill="#DCFCE7"/><path d="M9 22L22 11l13 11" stroke="#16a34a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 22v10a1 1 0 0 0 1 1h5v-6h4v6h5a1 1 0 0 0 1-1V22" stroke="#16a34a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <div class="cat-name" data-vi="Cư trú" data-en="Residence" data-zh="居住登记">Cư trú</div>
+        <div class="cat-count" data-vi="32 thủ tục" data-en="32 procedures" data-zh="32项手续">32 thủ tục</div>
+      </div>
+      <!-- Tư pháp: cân -->
+      <div class="cat-btn" onclick="goCategory('Tư pháp')">
+        <span class="cat-icon">
+          <svg width="52" height="52" viewBox="0 0 44 44" fill="none"><rect width="44" height="44" rx="12" fill="#FEF3C7"/><line x1="22" y1="10" x2="22" y2="34" stroke="#d97706" stroke-width="2.2" stroke-linecap="round"/><line x1="14" y1="12" x2="30" y2="12" stroke="#d97706" stroke-width="2.2" stroke-linecap="round"/><path d="M15 12l-4 9a4 4 0 0 0 8 0l-4-9z" stroke="#d97706" stroke-width="2" stroke-linejoin="round"/><path d="M29 12l-4 9a4 4 0 0 0 8 0l-4-9z" stroke="#d97706" stroke-width="2" stroke-linejoin="round"/><line x1="17" y1="34" x2="27" y2="34" stroke="#d97706" stroke-width="2.2" stroke-linecap="round"/></svg>
+        </span>
+        <div class="cat-name" data-vi="Tư pháp" data-en="Legal Affairs" data-zh="司法事务">Tư pháp</div>
+        <div class="cat-count" data-vi="41 thủ tục" data-en="41 procedures" data-zh="41项手续">41 thủ tục</div>
+      </div>
+      <!-- Xây dựng: tòa nhà -->
+      <div class="cat-btn" onclick="goCategory('Xây dựng')">
+        <span class="cat-icon">
+          <svg width="52" height="52" viewBox="0 0 44 44" fill="none"><rect width="44" height="44" rx="12" fill="#EDE9FE"/><rect x="12" y="18" width="10" height="16" stroke="#7c3aed" stroke-width="2" stroke-linejoin="round"/><rect x="22" y="12" width="10" height="22" stroke="#7c3aed" stroke-width="2" stroke-linejoin="round"/><line x1="10" y1="34" x2="34" y2="34" stroke="#7c3aed" stroke-width="2.2" stroke-linecap="round"/><rect x="15" y="22" width="4" height="4" fill="#7c3aed" opacity=".4"/><rect x="25" y="16" width="4" height="4" fill="#7c3aed" opacity=".4"/><rect x="25" y="24" width="4" height="4" fill="#7c3aed" opacity=".4"/></svg>
+        </span>
+        <div class="cat-name" data-vi="Xây dựng" data-en="Construction" data-zh="建设许可">Xây dựng</div>
+        <div class="cat-count" data-vi="27 thủ tục" data-en="27 procedures" data-zh="27项手续">27 thủ tục</div>
+      </div>
+      <!-- Lao động: briefcase -->
+      <div class="cat-btn" onclick="goCategory('Lao động')">
+        <span class="cat-icon">
+          <svg width="52" height="52" viewBox="0 0 44 44" fill="none"><rect width="44" height="44" rx="12" fill="#DBEAFE"/><rect x="10" y="18" width="24" height="16" rx="3" stroke="#2563eb" stroke-width="2" stroke-linejoin="round"/><path d="M17 18v-2a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2" stroke="#2563eb" stroke-width="2" stroke-linecap="round"/><line x1="10" y1="26" x2="34" y2="26" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="3"/><line x1="22" y1="23" x2="22" y2="29" stroke="#2563eb" stroke-width="2" stroke-linecap="round"/></svg>
+        </span>
+        <div class="cat-name" data-vi="Lao động" data-en="Labour" data-zh="劳动就业">Lao động</div>
+        <div class="cat-count" data-vi="35 thủ tục" data-en="35 procedures" data-zh="35项手续">35 thủ tục</div>
+      </div>
+      <!-- Giáo dục: sách -->
+      <div class="cat-btn" onclick="goCategory('Giáo dục')">
+        <span class="cat-icon">
+          <svg width="52" height="52" viewBox="0 0 44 44" fill="none"><rect width="44" height="44" rx="12" fill="#CCFBF1"/><path d="M22 11L10 17v10l12 6 12-6V17L22 11z" stroke="#0f766e" stroke-width="2" stroke-linejoin="round"/><path d="M10 17l12 6 12-6" stroke="#0f766e" stroke-width="2"/><line x1="22" y1="23" x2="22" y2="33" stroke="#0f766e" stroke-width="2" stroke-linecap="round"/></svg>
+        </span>
+        <div class="cat-name" data-vi="Giáo dục" data-en="Education" data-zh="教育">Giáo dục</div>
+        <div class="cat-count" data-vi="22 thủ tục" data-en="22 procedures" data-zh="22项手续">22 thủ tục</div>
+      </div>
+      <!-- AI entry -->
+      <div class="cat-ai-entry" onclick="goScreen('s-chat');focusInput()">
+        <div class="cat-ai-orb">
+          <svg width="44" height="44" viewBox="0 0 44 44" fill="none"><rect width="44" height="44" rx="22" fill="#C8102E"/><path d="M22 12a6 6 0 1 1 0 12 6 6 0 0 1 0-12z" fill="none" stroke="white" stroke-width="2"/><circle cx="19" cy="19" r="1.5" fill="white"/><circle cx="25" cy="19" r="1.5" fill="white"/><path d="M19 23s1 1.5 3 1.5 3-1.5 3-1.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/><line x1="22" y1="12" x2="22" y2="9" stroke="white" stroke-width="2" stroke-linecap="round"/><circle cx="22" cy="8" r="2" fill="white"/><path d="M14 28c0-4.4 3.6-8 8-8s8 3.6 8 8" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <div class="cat-ai-txt">
+          <strong id="cat-ai-strong">Hỏi AI trực tiếp</strong>
+          <span id="cat-ai-span">Không biết chọn lĩnh vực nào? Hãy mô tả nhu cầu của bạn — AI sẽ hướng dẫn ngay</span>
+        </div>
+        <div class="cat-ai-arrow">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="k-bottom">
+    <div class="k-bottom-item"><span class="k-bottom-dot"></span><span id="cat-bottom-step">Bước 1/3 — Chọn lĩnh vực</span></div>
+    <div style="margin-left:auto" class="k-bottom-item" id="cat-bottom-hint">Chạm vào lĩnh vực hoặc hỏi AI trực tiếp</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     SCREEN 3: CHỌN THỦ TỤC
+══════════════════════════════ -->
+<div class="screen" id="s-tthc-list">
+  <div class="k-top">
+    <div class="k-brand">
+      <div class="k-logo-wrap" id="logo-tthc">
+  <img src="images/logo.jpg?v=1" alt="Logo Trung tâm Phục vụ hành chính công" style="width:40px;height:40px;object-fit:cover;border-radius:6px;display:block" />
+      </div>
+      <div class="k-brand-txt">
+        <strong>Trung tâm Phục vụ hành chính công</strong>
+        <span id="tthc-list-crumb">Hộ tịch · Bước 2/3</span>
+      </div>
+    </div>
+    <div class="k-top-right">
+      <button class="k-home-btn" onclick="goScreen('s-category')">← Lĩnh vực</button>
+      <button class="k-home-btn" onclick="goScreen('s-idle')"><svg width="15" height="15"><use href="#ic-home"/></svg> Trang chủ</button>
+      <div class="k-time"><div class="k-time-val">08:42</div></div>
+    </div>
+  </div>
+  <div class="k-content">
+    <div style="margin-bottom:22px">
+      <div style="font-size:13px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px">Bước 2 — Chọn thủ tục</div>
+      <div style="font-size:26px;font-weight:900;color:var(--navy)" id="tthc-list-title">Thủ tục Hộ tịch</div>
+    </div>
+    <div class="tthc-list" id="tthc-list-items"></div>
+  </div>
+  <div class="k-bottom">
+    <div class="k-bottom-item"><span class="k-bottom-dot"></span>Bước 2/3 — Chọn thủ tục</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     SCREEN 4: CHAT (full width)
+══════════════════════════════ -->
+<div class="screen" id="s-chat">
+  <div class="k-top">
+    <div class="k-brand">
+      <div class="k-logo-wrap" id="logo-chat">
+  <img src="images/logo.jpg?v=1" alt="Logo Trung tâm Phục vụ hành chính công" style="width:40px;height:40px;object-fit:cover;border-radius:6px;display:block" />
+      </div>
+      <div class="k-brand-txt">
+        <strong>Trung tâm Phục vụ HCCC — Trợ lý AI</strong>
+        <span id="chat-crumb">Hỏi đáp thủ tục hành chính</span>
+      </div>
+    </div>
+    <div class="k-top-right">
+      <div class="ai-tag">
+        <svg width="10" height="10" viewBox="0 0 10 10"><circle cx="5" cy="5" r="4" fill="#22c55e"/></svg>
+        AI · Qwen2.5-7B
+      </div>
+      <div class="ctrl-group">
+        <button class="ctrl-btn" onclick="changeFontSize(-1)">A−</button>
+        <button class="ctrl-btn" onclick="changeFontSize(1)">A+</button>
+        <div class="ctrl-sep"></div>
+        <button class="ctrl-btn" onclick="toggleTTS()"><svg width="16" height="16"><use href="#ic-volume"/></svg></button>
+      </div>
+      <button class="k-home-btn" onclick="goScreen('s-idle')"><svg width="15" height="15"><use href="#ic-home"/></svg> Trang chủ</button>
+      <div class="k-time"><div class="k-time-val">08:42</div></div>
+    </div>
+  </div>
+
+  <div class="k-body">
+    <div class="k-chat-area">
+      <div class="k-chat-hd">
+        <div class="k-chat-hd-icon">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="16" fill="#C8102E"/><path d="M16 9a3 3 0 1 1 0 6 3 3 0 0 1 0-6z" fill="none" stroke="white" stroke-width="1.8"/><circle cx="14" cy="14" r="1" fill="white"/><circle cx="18" cy="14" r="1" fill="white"/><path d="M14 17.5s.8 1 2 1 2-1 2-1" stroke="white" stroke-width="1.2" stroke-linecap="round"/><path d="M10 22c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </div>
+        <div>
+          <div class="k-chat-title" id="chat-title">Hỏi AI trực tiếp</div>
+          <div style="font-size:12px;color:var(--muted)" id="chat-subtitle">Hỏi bằng giọng nói hoặc gõ câu hỏi bất kỳ</div>
+        </div>
+        <button style="margin-left:auto;padding:6px 12px;border:1.5px solid var(--border);border-radius:8px;background:#fff;color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;font-family:'Be Vietnam Pro',sans-serif;display:flex;align-items:center;gap:5px" onclick="clearChat()">
+          <svg width="13" height="13"><use href="#ic-trash"/></svg> Xóa chat
+        </button>
+      </div>
+      <div class="k-chat-msgs" id="chat-msgs"></div>
+    </div>
+  </div>
+
+  <!-- Input + Bốc số -->
+  <div class="k-input-area">
+    <div class="k-input-chips" id="demo-chips">
+      <div class="k-chip" onclick="sendDemo(0)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        Đăng ký kết hôn cần gì?
+      </div>
+      <div class="k-chip" onclick="sendDemo(1)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        Làm khai sinh cho con
+      </div>
+      <div class="k-chip" onclick="sendDemo(2)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        Đăng ký thường trú mất bao lâu?
+      </div>
+      <div class="k-chip" onclick="sendDemo(3)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        Tôi thuê nhà, cần đăng ký tạm trú?
+      </div>
+    </div>
+    <div class="k-input-row">
+      <button class="k-voice-btn" id="voice-btn" onclick="toggleVoice()" title="Nhận dạng giọng nói">
+        <svg width="20" height="20" style="color:var(--muted)"><use href="#ic-mic"/></svg>
+      </button>
+      <input class="k-text-input" id="chat-input" placeholder="Gõ câu hỏi hoặc nhấn mic để nói..." onkeydown="if(event.key==='Enter')sendChatInput()">
+      <button class="k-send-btn" id="send-btn-lbl" onclick="sendChatInput()">
+        <svg width="16" height="16" style="display:inline-block;vertical-align:middle;margin-right:5px"><use href="#ic-send"/></svg>Gửi
+      </button>
+    </div>
+  </div>
+  <!-- Bốc số riêng hàng dưới -->
+  <div class="bocso-row">
+    <button class="bocso-btn" id="bocso-btn" onclick="goTicket()" disabled>
+      <svg width="18" height="18"><use href="#ic-ticket"/></svg>
+      BỐC SỐ & IN PHIẾU
+    </button>
+  </div>
+
+  <div class="k-bottom">
+    <div class="k-bottom-item"><span class="k-bottom-dot"></span>AI đang hoạt động</div>
+    <div class="k-bottom-item">
+      <svg width="14" height="14"><use href="#ic-print"/></svg> Máy in sẵn sàng
+    </div>
+    <div style="margin-left:auto" class="k-bottom-item" id="queue-status">🎫 Đang phục vụ: B041 · 6 người chờ tại Quầy 2</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     SCREEN 5: PHIẾU BỐC SỐ
+══════════════════════════════ -->
+<div class="screen" id="s-ticket">
+  <div class="k-top">
+    <div class="k-brand">
+      <div class="k-logo-wrap" id="logo-ticket">
+  <img src="images/logo.jpg?v=1" alt="Logo Trung tâm Phục vụ hành chính công" style="width:40px;height:40px;object-fit:cover;border-radius:6px;display:block" />
+      </div>
+      <div class="k-brand-txt">
+        <strong>Phiếu thứ tự — Bước 3/3</strong>
+        <span>Sẵn sàng phục vụ</span>
+      </div>
+    </div>
+    <div class="k-top-right">
+      <button class="k-home-btn" onclick="goScreen('s-chat')">← Quay lại</button>
+      <button class="k-home-btn" onclick="goScreen('s-idle')"><svg width="15" height="15"><use href="#ic-home"/></svg> Trang chủ</button>
+      <div class="k-time"><div class="k-time-val">08:43</div></div>
+    </div>
+  </div>
+  <div class="ticket-shell">
+    <div class="ticket-wrap">
+      <div class="ticket-card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+          <div style="font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.07em">PHIẾU THỨ TỰ</div>
+          <span style="background:#dcfce7;color:#166534;font-size:12px;font-weight:700;padding:3px 10px;border-radius:20px">✓ Đã xác nhận</span>
+        </div>
+        <div class="ticket-num" id="ticket-num">B047</div>
+        <div class="ticket-tthc" id="ticket-tthc">Đăng ký khai sinh</div>
+        <div class="ticket-meta-grid">
+          <div style="text-align:center"><div class="ticket-meta-val" style="color:#111827" id="tk-quy">2</div><div class="ticket-meta-lbl" id="tk-quy-lbl">Quầy Hộ tịch</div></div>
+          <div style="text-align:center"><div class="ticket-meta-val" style="color:var(--amber)" id="waiting-count">6</div><div class="ticket-meta-lbl">Người chờ trước</div></div>
+          <div style="text-align:center"><div class="ticket-meta-val" style="color:var(--green)" id="tk-wait-time">~18'</div><div class="ticket-meta-lbl">Ước tính chờ</div></div>
+        </div>
+        <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:10px;margin-bottom:16px;font-size:13.5px;color:#166534;line-height:1.6">
+          💡 Vui lòng giữ phiếu và chú ý màn hình hiển thị số. Khi gọi số, bạn có <strong>5 phút</strong> để đến quầy.
+        </div>
+        <div style="display:flex;gap:9px">
+          <button class="t-btn t-btn-outline" onclick="showToast('📲 Đã gửi SMS thông báo khi đến lượt!')">📲 Nhận SMS</button>
+          <button class="t-btn t-btn-primary" onclick="printTicket()"><svg width="15" height="15"><use href="#ic-print"/></svg> In phiếu</button>
+        </div>
+        <div style="margin-top:9px">
+          <button class="t-btn t-btn-outline" style="width:100%;justify-content:center" onclick="goScreen('s-idle')"><svg width="14" height="14"><use href="#ic-home"/></svg> Hoàn tất · Về màn hình chính</button>
+        </div>
+      </div>
+      <div class="ticket-right">
+        <div class="ticket-right-section">
+          <div class="t-sec-title">📋 Giấy tờ cần mang theo</div>
+          <div id="ticket-docs"></div>
+        </div>
+        <div class="ticket-right-section">
+          <div class="t-sec-title">📊 Tình hình quầy</div>
+          <div style="display:flex;flex-direction:column;gap:10px" id="queue-info">
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:14px">
+              <div><div style="font-weight:700">Quầy 2 — Hộ tịch</div><div style="font-size:12px;color:var(--muted)">Đang phục vụ B041 · ~18 phút</div></div>
+              <div style="font-size:18px;font-weight:800;font-family:'JetBrains Mono',monospace;color:var(--red)">6</div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:14px">
+              <div><div style="font-weight:700">Quầy 3 — Tư pháp</div><div style="font-size:12px;color:var(--muted)">Đang phục vụ B022 · ~6 phút</div></div>
+              <div style="font-size:18px;font-weight:800;font-family:'JetBrains Mono',monospace;color:var(--green)">2</div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:14px">
+              <div><div style="font-weight:700">Quầy 4 — Cư trú</div><div style="font-size:12px;color:var(--muted)">Đang phục vụ B033 · ~12 phút</div></div>
+              <div style="font-size:18px;font-weight:800;font-family:'JetBrains Mono',monospace;color:#374151">4</div>
+            </div>
+          </div>
+        </div>
+        <div class="ticket-right-section">
+          <div class="t-sec-title">⏰ Giờ làm việc</div>
+          <div style="font-size:14px;line-height:2.1">
+            <div style="display:flex;justify-content:space-between"><span>Thứ 2 – Thứ 6</span><span style="font-weight:700">7:30 – 11:30 · 13:00 – 17:00</span></div>
+            <div style="display:flex;justify-content:space-between"><span>Thứ 7</span><span style="font-weight:700">7:30 – 11:30</span></div>
+            <div style="display:flex;justify-content:space-between"><span>Chủ nhật</span><span style="color:var(--red);font-weight:700">Nghỉ</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="k-bottom">
+    <div class="k-bottom-item"><span class="k-bottom-dot"></span><svg width="14" height="14"><use href="#ic-print"/></svg> Máy in sẵn sàng</div>
+    <div style="margin-left:auto" class="k-bottom-item">Cảm ơn bạn đã sử dụng dịch vụ · Trung tâm Phục vụ hành chính công</div>
+  </div>
+</div>
+
+
+<!-- Legal popup -->
+<div class="legal-popup-bg" id="legal-popup-bg" onclick="if(event.target===this)closeLegalPopup()">
+  <div class="legal-popup">
+    <div class="legal-popup-hd">
+      <div style="width:32px;height:32px;background:var(--rl);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">📖</div>
+      <div class="legal-popup-title" id="legal-popup-title">Căn cứ pháp lý</div>
+      <button class="legal-popup-close" onclick="closeLegalPopup()">✕</button>
+    </div>
+    <div class="legal-popup-body" id="legal-popup-body"></div>
+  </div>
+</div>
+
+</div><!-- /kiosk-shell -->
+
+<div class="k-toast" id="k-toast"></div>
+
+<script>
+// ── DATA ──
+const tthcData=[
+  {ma:'TTHC-001',ten:'Đăng ký khai sinh',linh_vuc:'Hộ tịch',le_phi:'Miễn phí',thoi_han:'3 ngày làm việc',co_quan:'UBND Phường · Quầy 2 — Hộ tịch',quy:2,quy_lbl:'Quầy Hộ tịch',icon:'👶',color:'#FEE2E2',
+    giay_to:[{ten:'Giấy chứng sinh (bản gốc)',bb:true},{ten:'CCCD cha và mẹ (bản màu, công chứng)',bb:true},{ten:'Giấy đăng ký kết hôn (bản sao)',bb:true},{ten:'Tờ khai Mẫu 01/2024',bb:true},{ten:'Sổ hộ khẩu hoặc giấy tờ cư trú',bb:false}],
+    buoc:['Chuẩn bị đầy đủ giấy tờ theo danh sách','Đến Bộ phận Một cửa (7h30 – 17h)','Lấy số và nộp hồ sơ tại Quầy 2 — Hộ tịch','Nhận phiếu hẹn trả kết quả','Đến nhận Giấy khai sinh theo ngày hẹn'],
+    can_cu:'Luật Hộ tịch 2014 · TT 01/2024/TT-BTP',route:'Loại 3 — Semantic',latency:'145ms'},
+  {ma:'TTHC-002',ten:'Đăng ký kết hôn',linh_vuc:'Hộ tịch',le_phi:'Miễn phí',thoi_han:'5 ngày làm việc',co_quan:'UBND Phường · Quầy 2 — Hộ tịch',quy:2,quy_lbl:'Quầy Hộ tịch',icon:'💍',color:'#FDF4FF',
+    giay_to:[{ten:'Tờ khai đăng ký kết hôn (Mẫu 02)',bb:true},{ten:'CCCD/CMND của hai bên (bản sao)',bb:true},{ten:'Giấy xác nhận tình trạng hôn nhân',bb:true},{ten:'Ảnh 3×4 (2 ảnh/người)',bb:false}],
+    buoc:['Chuẩn bị giấy tờ của cả hai bên','Hai bên cùng đến UBND Phường','Nộp hồ sơ và ký tên tại Quầy 2','Cán bộ kiểm tra và phê duyệt','Nhận Giấy chứng nhận kết hôn'],
+    can_cu:'Luật Hộ tịch 2014 · NĐ 123/2015/NĐ-CP',route:'Loại 2 — Full-text',latency:'72ms'},
+  {ma:'TTHC-003',ten:'Xác nhận thường trú',linh_vuc:'Cư trú',le_phi:'Miễn phí',thoi_han:'2 ngày làm việc',co_quan:'Công an Phường · Quầy 4 — Cư trú',quy:4,quy_lbl:'Quầy Cư trú',icon:'🏠',color:'#CCFBF1',
+    giay_to:[{ten:'CCCD (bản gốc để đối chiếu)',bb:true},{ten:'Đơn đề nghị xác nhận thường trú',bb:true},{ten:'Thông tin hộ khẩu điện tử (VNeID)',bb:false}],
+    buoc:['Kiểm tra thông tin thường trú trên VNeID','Điền đơn đề nghị xác nhận','Đến Công an Phường nộp hồ sơ tại Quầy 4','Nhận giấy xác nhận trong 2 ngày làm việc'],
+    can_cu:'Luật Cư trú 2020 · NĐ 62/2021/NĐ-CP',route:'Loại 2 — Full-text',latency:'67ms'},
+  {ma:'TTHC-004',ten:'Đăng ký tạm trú',linh_vuc:'Cư trú',le_phi:'Miễn phí',thoi_han:'2 ngày làm việc',co_quan:'Công an Phường · Quầy 4 — Cư trú',quy:4,quy_lbl:'Quầy Cư trú',icon:'📋',color:'#F0FDF4',
+    giay_to:[{ten:'CCCD (bản gốc)',bb:true},{ten:'Hợp đồng thuê nhà hoặc xác nhận chủ nhà',bb:true},{ten:'Tờ khai đăng ký tạm trú (CT07)',bb:true}],
+    buoc:['Liên hệ chủ nhà lấy xác nhận','Điền tờ khai CT07','Đến Công an Phường Quầy 4 đăng ký','Cập nhật VNeID sau khi hoàn tất'],
+    can_cu:'Điều 30, Luật Cư trú 2020',route:'Loại 2 — Full-text',latency:'58ms'},
+  {ma:'TTHC-005',ten:'Xác nhận tình trạng hôn nhân',linh_vuc:'Tư pháp',le_phi:'20.000đ',thoi_han:'3 ngày làm việc',co_quan:'UBND Phường · Quầy 2',quy:2,quy_lbl:'Quầy Tư pháp',icon:'📝',color:'#FAF5FF',
+    giay_to:[{ten:'CCCD (bản gốc)',bb:true},{ten:'Tờ khai xác nhận tình trạng hôn nhân (CT01)',bb:true},{ten:'Giấy tờ cư trú (nếu có)',bb:false}],
+    buoc:['Điền tờ khai CT01','Đến UBND Phường nộp hồ sơ','Nộp lệ phí 20.000đ tại quầy','Nhận kết quả sau 3 ngày làm việc'],
+    can_cu:'NĐ 123/2015/NĐ-CP · TT 04/2020/TT-BTP',route:'Loại 1 — Template',latency:'12ms'},
+];
+const categories={
+  'Hộ tịch':{items:[0,1]},
+  'Cư trú':{items:[2,3]},
+  'Tư pháp':{items:[4]},
+};
+const demoScripts=[
+  {q:'Tôi muốn đăng ký kết hôn, cần chuẩn bị những gì vậy?',typing:1200,loadIdx:1,
+    aiReply:`Để <strong>đăng ký kết hôn</strong> tại Trung tâm DVC, hai bạn cần chuẩn bị:<br><br><strong>📄 Giấy tờ cần thiết:</strong><br>1. Tờ khai đăng ký kết hôn <em>(Mẫu 02 — lấy miễn phí tại quầy)</em><br>2. CCCD/CMND của cả hai người <em>(bản sao)</em><br>3. Giấy xác nhận tình trạng hôn nhân <em>(nếu chưa cùng hộ khẩu)</em><br>4. Ảnh 3×4 — 2 ảnh mỗi người<br><br><strong>Nộp tại:</strong> Quầy 2 — Hộ tịch · 💰 <strong>Miễn phí</strong> · ⏱ <strong>5 ngày làm việc</strong>`},
+  {q:'Con tôi mới sinh 3 ngày, tôi cần làm gì để khai sinh cho bé?',typing:1400,loadIdx:0,
+    aiReply:`Bạn cần <strong>đăng ký khai sinh trong vòng 60 ngày</strong> kể từ ngày sinh. Dưới đây là những gì cần chuẩn bị:<br><br><strong>📄 Giấy tờ cần thiết:</strong><br>1. <strong>Giấy chứng sinh</strong> — bản gốc do bệnh viện cấp ✅<br>2. <strong>CCCD của bố và mẹ</strong> — bản màu, công chứng<br>3. <strong>Giấy đăng ký kết hôn</strong> — bản sao (nếu bố mẹ đã kết hôn)<br>4. <strong>Tờ khai Mẫu 01/2024</strong> — lấy miễn phí tại quầy<br><br>Nộp tại <strong>Quầy 2 — Hộ tịch</strong> · 💰 <strong>Miễn phí</strong> · ⏱ <strong>3 ngày làm việc</strong>`},
+  {q:'Đăng ký thường trú mất bao lâu? Tôi cần giấy tờ gì?',typing:1000,loadIdx:2,
+    aiReply:`<strong>Xác nhận thường trú</strong> — thời gian giải quyết:<br><br>⏱ <strong>Thời gian:</strong> Chỉ <strong>2 ngày làm việc</strong>.<br><br><strong>📄 Giấy tờ:</strong><br>1. CCCD bản gốc — để đối chiếu<br>2. Đơn đề nghị xác nhận thường trú<br>3. Thông tin hộ khẩu trên VNeID <em>(nếu đã cập nhật)</em><br><br>Nộp tại <strong>Quầy 4 — Cư trú</strong> · 💰 <strong>Miễn phí</strong>`},
+  {q:'Tôi đang thuê nhà ở đây, chủ nhà bảo phải đăng ký tạm trú. Tôi cần làm gì?',typing:1600,loadIdx:3,
+    aiReply:`Đúng rồi, theo Luật Cư trú 2020, người thuê nhà cần <strong>đăng ký tạm trú trong vòng 30 ngày</strong> kể từ khi đến ở. 📋<br><br><strong>📄 Chuẩn bị trước ở nhà:</strong><br>1. CCCD bản gốc của bạn<br>2. Hợp đồng thuê nhà <em>hoặc</em> giấy xác nhận chủ nhà<br>3. Tờ khai CT07 — tải tại <em>dichvucong.gov.vn</em> hoặc lấy tại quầy<br><br>Nộp tại <strong>Quầy 4 — Cư trú</strong> · 💰 <strong>Miễn phí</strong> · ⏱ <strong>2 ngày làm việc</strong>`},
+];
+const freeformResponses=[
+  {kw:['kết hôn','lấy vợ','lấy chồng','cưới'],idx:1},
+  {kw:['khai sinh','sinh con','con mới sinh','trẻ sơ sinh','em bé'],idx:0},
+  {kw:['thường trú','hộ khẩu'],idx:2},
+  {kw:['tạm trú','thuê nhà','trọ'],idx:3},
+  {kw:['hôn nhân','độc thân','chưa kết hôn'],idx:4},
+];
+
+// ── LANGUAGE ──
+let currentLang='vi';
+const i18n={
+  vi:{brand:'Trung tâm Phục vụ hành chính công',sub:'Bộ phận Một cửa',
+    idle_label:'Kiosk AI · Phường Bàn Cờ · Quận 3 · TP.HCM',
+    idle_title:'Xin chào!<br>Tôi có thể giúp gì cho bạn?',
+    idle_sub:'Hãy chạm vào màn hình để bắt đầu tra cứu thủ tục hành chính',
+    idle_tap:'CHẠM ĐỂ BẮT ĐẦU &nbsp;→',
+    idle_chat_hint:'Hoặc <strong>nhấn đây để hỏi AI trực tiếp</strong> — nói hoặc gõ câu hỏi của bạn',
+    cat_heading:'Bạn cần hỗ trợ lĩnh vực nào?',
+    cat_sub:'Chạm vào lĩnh vực phù hợp — hoặc hỏi AI bằng giọng nói bên dưới',
+    cat_ai_strong:'Hỏi AI trực tiếp',
+    cat_ai_span:'Không biết chọn lĩnh vực nào? Hãy mô tả nhu cầu — AI sẽ hướng dẫn ngay',
+    cat_home:'Màn hình chính',send:'Gửi',placeholder:'Gõ câu hỏi hoặc nhấn mic để nói...',
+    greeting:`Xin chào! Tôi là trợ lý AI tại <strong>Trung tâm Phục vụ hành chính công</strong>.<br><br>Bạn có thể hỏi tôi về bất kỳ thủ tục hành chính nào tại Bộ phận Một cửa — tôi sẽ hướng dẫn cụ thể giấy tờ cần chuẩn bị, nơi nộp và thời gian giải quyết.<br><br>Bạn cần hỗ trợ thủ tục nào?`},
+  en:{brand:'HCMC Administrative Service Center',sub:'One-Stop Service · Ban Co Ward',
+    idle_label:'AI Kiosk · Ban Co Ward · District 3 · HCMC',
+    idle_title:'Hello!<br>How can I help you today?',
+    idle_sub:'Tap the screen to start looking up administrative procedures',
+    idle_tap:'TAP TO START &nbsp;→',
+    idle_chat_hint:'Or <strong>tap here to chat with AI directly</strong>',
+    cat_heading:'Which service do you need?',
+    cat_sub:'Tap a category — or ask AI directly below',
+    cat_ai_strong:'Ask AI Directly',
+    cat_ai_span:"Describe your need — AI will guide you",
+    cat_home:'Home',send:'Send',placeholder:'Type your question or tap mic to speak...',
+    greeting:`Hello! I'm the AI assistant at <strong>HCMC Administrative Service Center</strong>.<br><br>Ask me about any administrative procedure — I'll guide you on required documents, submission location, and processing time.<br><br>What procedure do you need help with?`},
+  zh:{brand:'胡志明市行政服务中心',sub:'一站式服务中心 · 第3郡',
+    idle_label:'AI服务亭 · 第3郡 · 胡志明市',
+    idle_title:'您好！<br>我能为您做什么？',
+    idle_sub:'请触摸屏幕开始查询行政手续',
+    idle_tap:'触摸开始 &nbsp;→',
+    idle_chat_hint:'或者<strong>点击此处直接与AI对话</strong>',
+    cat_heading:'您需要哪方面的服务？',
+    cat_sub:'请选择服务类别 — 或直接向AI提问',
+    cat_ai_strong:'直接咨询AI',
+    cat_ai_span:'描述您的需求，AI将为您指引',
+    cat_home:'主页',send:'发送',placeholder:'输入问题或点击麦克风说话...',
+    greeting:`您好！我是<strong>胡志明市行政服务中心</strong>的AI助手。<br><br>您可以询问我任何行政手续问题 — 我将为您介绍所需文件、提交地点和办理时间。<br><br>请问您需要办理什么手续？`},
+};
+
+function setLang(lang){
+  currentLang=lang;const t=i18n[lang];
+  ['lang-vi','cat-lang-vi'].forEach(id=>{const el=document.getElementById(id);if(el)el.className='lang-pill'+(lang==='vi'?' on':'');});
+  ['lang-en','cat-lang-en'].forEach(id=>{const el=document.getElementById(id);if(el)el.className='lang-pill'+(lang==='en'?' on':'');});
+  ['lang-zh','cat-lang-zh'].forEach(id=>{const el=document.getElementById(id);if(el)el.className='lang-pill'+(lang==='zh'?' on':'');});
+  document.getElementById('idle-label').textContent=t.idle_label;
+  document.getElementById('idle-title').innerHTML=t.idle_title;
+  document.getElementById('idle-sub').textContent=t.idle_sub;
+  document.getElementById('idle-tap').innerHTML=t.idle_tap;
+  document.getElementById('idle-chat-hint-txt').innerHTML=t.idle_chat_hint;
+  document.getElementById('cat-heading').textContent=t.cat_heading;
+  document.getElementById('cat-sub').textContent=t.cat_sub;
+  document.getElementById('cat-ai-strong').textContent=t.cat_ai_strong;
+  document.getElementById('cat-ai-span').textContent=t.cat_ai_span;
+  document.getElementById('cat-home-lbl').textContent=t.cat_home;
+  document.querySelectorAll('[data-'+lang+']').forEach(el=>{el.textContent=el.getAttribute('data-'+lang);});
+  document.getElementById('send-btn-lbl').innerHTML=`<svg width="16" height="16" style="display:inline-block;vertical-align:middle;margin-right:5px"><use href="#ic-send"/></svg>${t.send}`;
+  document.getElementById('chat-input').placeholder=t.placeholder;
+  showToast('🌐 '+{vi:'Tiếng Việt',en:'English',zh:'中文'}[lang]);
+}
+
+// ── FONT SIZE ──
+let fontScale=1;
+function changeFontSize(dir){
+  fontScale=Math.max(0.9,Math.min(1.4,fontScale+dir*0.1));
+  document.body.style.fontSize=`calc(19px * ${fontScale})`;
+  showToast(dir>0?'🔠 Chữ lớn hơn':'🔡 Chữ nhỏ hơn');
+}
+
+// ── TTS ──
+let ttsEnabled=false;
+function toggleTTS(){
+  ttsEnabled=!ttsEnabled;
+  document.getElementById('tts-btn').classList.toggle('on',ttsEnabled);
+  showToast(ttsEnabled?'🔊 Đọc to bật':'🔇 Đọc to tắt');
+  if(ttsEnabled)speak('Chức năng đọc to đã bật.');
+}
+function speak(text){
+  if(!ttsEnabled||!window.speechSynthesis)return;
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text.replace(/<[^>]*>/g,''));
+  u.lang=currentLang==='zh'?'zh-CN':currentLang==='en'?'en-US':'vi-VN';
+  u.rate=0.9;window.speechSynthesis.speak(u);
+}
+
+// ── NAV ──
+function goScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  if(id==='s-chat')initChat();
+  resetIdleTimer();
+}
+function goCategory(cat){
+  const c=categories[cat];if(!c){goScreen('s-chat');return;}
+  document.getElementById('tthc-list-crumb').textContent=`${cat} · Bước 2/3`;
+  document.getElementById('tthc-list-title').textContent=`Thủ tục ${cat}`;
+  const el=document.getElementById('tthc-list-items');
+  el.innerHTML=c.items.map(i=>{
+    const t=tthcData[i];
+    return `<button class="tthc-btn" onclick="loadTTHC(${i})">
+      <div class="tthc-icon" style="background:${t.color}">${t.icon}</div>
+      <div style="flex:1">
+        <div class="tthc-name">${t.ten}</div>
+        <div class="tthc-meta">
+          <span style="background:#dcfce7;color:#166534;font-size:12px;font-weight:700;padding:2px 8px;border-radius:20px;margin-right:8px">${t.le_phi}</span>
+          ⏱ ${t.thoi_han}
+        </div>
+      </div>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </button>`;
+  }).join('');
+  goScreen('s-tthc-list');
+}
+function focusInput(){setTimeout(()=>document.getElementById('chat-input')?.focus(),300);}
+
+// ── CHAT ──
+let currentTTHC=null,checkedItems=[],chatInited=false;
+function initChat(){
+  if(chatInited)return;chatInited=true;
+  document.getElementById('chat-msgs').innerHTML='';
+  addMsg(i18n[currentLang].greeting,true,null,false);
+}
+function clearChat(){
+  chatInited=false;currentTTHC=null;checkedItems=[];
+  document.getElementById('chat-msgs').innerHTML='';
+  setBocso(false);initChat();
+}
+
+function addMsg(html,isAi,sourceTxt,doSpeak=true){
+  const msgs=document.getElementById('chat-msgs');
+  const time=new Date().toLocaleTimeString('vi',{hour:'2-digit',minute:'2-digit'});
+  const div=document.createElement('div');
+  div.style.display='flex';div.style.flexDirection='column';
+  div.style.alignItems=isAi?'flex-start':'flex-end';
+  div.style.gap='4px';
+
+  const sourceHtml=sourceTxt&&isAi?`<div class="source-box" onclick="showLegalPopup('${sourceTxt}')" style="cursor:pointer" title="Nhấn để xem văn bản pháp lý">📖 <strong>Căn cứ:</strong> ${sourceTxt} <span style="color:var(--red);font-size:11px;margin-left:4px">→ Xem toàn văn</span></div>`:'';
+  const routeMatch=sourceTxt&&sourceTxt.match(/Loại \d/);
+  const routeBadge=routeMatch&&isAi?`<div class="route-badge">⚡ ${routeMatch[0]} · Đã xác minh</div>`:'';
+
+  div.innerHTML=`
+    <div class="msg ${isAi?'ai-msg':'user-msg'}">
+      <div class="msg-av ${isAi?'ai-av':'usr-av'}">
+  ${isAi?`<svg width="36" height="36" viewBox="0 0 88 88" aria-hidden="true"><use href="#robot-icon"/></svg>`:`<svg width="18" height="18" style="color:#6B7280"><use href="#ic-user"/></svg>`}
+      </div>
+      <div class="msg-bubble ${isAi?'ai-bubble':'user-bubble'}">${html}${sourceHtml}</div>
+    </div>
+    ${routeBadge}
+    <div class="msg-time" style="${isAi?'margin-left:46px':'margin-right:46px'}">${time}${isAi?' · <span style="color:var(--lime)">✓</span>':''}</div>`;
+  msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;
+  if(isAi&&ttsEnabled&&doSpeak)speak(html);
+}
+
+function showTyping(){
+  const msgs=document.getElementById('chat-msgs');
+  const d=document.createElement('div');d.id='typing-ind';
+  d.style.display='flex';d.style.alignItems='flex-start';d.style.gap='8px';
+  d.innerHTML = '<div class="msg-av ai-av">' +
+  '<svg width="36" height="36" viewBox="0 0 88 88" aria-hidden="true"><use href="#robot-icon"/></svg>' +
+    '</div><div class="typing-dots"><span></span><span></span><span></span></div>';
+  msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;
+}
+function removeTyping(){document.getElementById('typing-ind')?.remove();}
+
+function sendDemo(idx){
+  const d=demoScripts[idx];
+  goScreen('s-chat');
+  setTimeout(()=>{
+    addMsg(d.q,false);showTyping();
+    setTimeout(()=>{
+      removeTyping();
+      addMsg(d.aiReply,true,`${tthcData[d.loadIdx].route} · ${tthcData[d.loadIdx].latency}`);
+      loadTTHCPanel(d.loadIdx);
+      if(ttsEnabled)speak(d.aiReply);
+    },d.typing);
+  },200);
+}
+
+function sendChat(text){
+  if(!text.trim())return;
+  addMsg(text,false);showTyping();
+  const lower=text.toLowerCase();
+  let found=null;
+  for(const r of freeformResponses){if(r.kw.some(k=>lower.includes(k))){found=r;break;}}
+  const delay=700+Math.random()*500;
+  setTimeout(()=>{
+    removeTyping();
+    if(found){
+      const d=demoScripts[found.idx]||null;
+      if(d&&d.aiReply){addMsg(d.aiReply,true,`${tthcData[found.idx].route} · ${tthcData[found.idx].latency}`);loadTTHCPanel(found.idx);}
+      else loadTTHC(found.idx);
+    } else {
+      addMsg(`Tôi hiểu bạn đang hỏi về "<strong>${text}</strong>".<br><br>Hãy thử: <em>"khai sinh"</em>, <em>"kết hôn"</em>, <em>"thường trú"</em>, <em>"tạm trú"</em><br>Hoặc nhấn 🎤 để nói trực tiếp!`,true);
+    }
+  },delay);
+}
+
+function sendChatInput(){
+  const inp=document.getElementById('chat-input');
+  const q=inp?.value?.trim();if(!q)return;inp.value='';sendChat(q);
+}
+
+// ── LOAD TTHC (inline checklist in chat) ──
+function loadTTHC(idx){currentTTHC=tthcData[idx];checkedItems=new Array(currentTTHC.giay_to.length).fill(false);goScreen('s-chat');
+  document.getElementById('chat-crumb').textContent=`${currentTTHC.ten} — Hướng dẫn chi tiết`;
+  const t=currentTTHC;
+  const ans=`Tôi tìm thấy thủ tục <strong>${t.ten}</strong> phù hợp!<br><br>📍 <strong>${t.co_quan}</strong><br>💰 Lệ phí: <strong style="color:${t.le_phi==='Miễn phí'?'var(--green)':'var(--amber)'}">${t.le_phi}</strong> &nbsp;·&nbsp; ⏱ Thời hạn: <strong>${t.thoi_han}</strong><br><br>Tôi đã chuẩn bị checklist giấy tờ bên dưới. Hãy tích vào từng mục khi đã chuẩn bị xong rồi nhấn <strong>Bốc số</strong> nhé!`;
+  addMsg(ans,true,`${t.route} · ${t.latency} · ${t.can_cu}`);
+  renderChecklistInChat();
+  setBocso(true);
+}
+function loadTTHCPanel(idx){currentTTHC=tthcData[idx];checkedItems=new Array(currentTTHC.giay_to.length).fill(false);setBocso(true);}
+
+function setBocso(on){
+  const btn=document.getElementById('bocso-btn');
+  btn.disabled=!on;btn.style.opacity=on?'1':'.38';
+}
+
+function renderChecklistInChat(){
+  if(!currentTTHC)return;
+  const t=currentTTHC;
+  const done=checkedItems.filter(Boolean).length;
+  const total=t.giay_to.length;
+  const msgs=document.getElementById('chat-msgs');
+  // Remove old checklist if any
+  document.getElementById('cl-inline')?.remove();
+  const div=document.createElement('div');div.id='cl-inline';div.style.alignSelf='flex-start';div.style.width='100%';
+  div.innerHTML=`
+    <div class="checklist-inline">
+      <div class="cl-title">✅ Checklist: ${t.ten}</div>
+      <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;margin-bottom:6px">
+        <span>Đã chuẩn bị: <span id="cl-done">${done}</span>/${total}</span>
+        <span style="color:${done===total?'var(--green)':'var(--amber)'}" id="cl-status">${done===total?'Đầy đủ ✓':'Còn thiếu'}</span>
+      </div>
+      <div class="cl-progress-bar"><div class="cl-progress-fill" id="cl-fill" style="width:${total>0?done/total*100:0}%"></div></div>
+      ${t.giay_to.map((g,i)=>`
+        <div class="cl-item" onclick="toggleCheck(${i})" id="cli-${i}">
+          <div class="cl-box${checkedItems[i]?' chk':''}" id="clb-${i}">${checkedItems[i]?`<svg width="13" height="13" style="color:white"><use href="#ic-check"/></svg>`:''}</div>
+          <div style="flex:1">
+            <div class="cl-lbl${checkedItems[i]?' done':''}" id="cll-${i}">${g.ten}</div>
+            <div class="${g.bb?'cl-req req-yes':'cl-req req-opt'}">${g.bb?'Bắt buộc':'Tùy chọn'}</div>
+          </div>
+        </div>`).join('')}
+      <div style="font-size:12px;color:var(--muted);margin-top:8px;padding-top:8px;border-top:1px solid var(--border)">📖 ${t.can_cu}</div>
+    </div>`;
+  msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;
+}
+
+function toggleCheck(i){
+  checkedItems[i]=!checkedItems[i];
+  const box=document.getElementById(`clb-${i}`);
+  const lbl=document.getElementById(`cll-${i}`);
+  if(box){box.className='cl-box'+(checkedItems[i]?' chk':'');box.innerHTML=checkedItems[i]?`<svg width="13" height="13" style="color:white"><use href="#ic-check"/></svg>`:'';}
+  if(lbl)lbl.className='cl-lbl'+(checkedItems[i]?' done':'');
+  const done=checkedItems.filter(Boolean).length,total=currentTTHC.giay_to.length;
+  const dc=document.getElementById('cl-done');if(dc)dc.textContent=done;
+  const st=document.getElementById('cl-status');if(st){st.textContent=done===total?'Đầy đủ ✓':'Còn thiếu';st.style.color=done===total?'var(--green)':'var(--amber)';}
+  const fill=document.getElementById('cl-fill');if(fill)fill.style.width=`${total>0?done/total*100:0}%`;
+  if(done===total)showToast('✅ Đầy đủ giấy tờ! Nhấn BỐC SỐ để tiếp tục.');
+}
+
+// ── VOICE ──
+let recognition=null,voiceOn=false;
+function toggleVoice(){
+  const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+  const btn=document.getElementById('voice-btn');
+  if(!SpeechRecognition){
+    voiceOn=!voiceOn;
+    btn.classList.toggle('listening',voiceOn);
+    btn.innerHTML=voiceOn?`<svg width="20" height="20" style="color:var(--red)"><use href="#ic-mic"/></svg>`:`<svg width="20" height="20" style="color:var(--muted)"><use href="#ic-mic"/></svg>`;
+    if(voiceOn){showToast('🎤 Đang lắng nghe (giả lập)...');
+      setTimeout(()=>{
+        const demos=['Tôi muốn đăng ký kết hôn','Khai sinh cho con mới sinh cần gì','Đăng ký tạm trú như thế nào'];
+        document.getElementById('chat-input').value=demos[Math.floor(Math.random()*demos.length)];
+        voiceOn=false;btn.classList.remove('listening');
+        btn.innerHTML=`<svg width="20" height="20" style="color:var(--muted)"><use href="#ic-mic"/></svg>`;
+        showToast('✅ Đã nhận dạng xong');
+      },2200);
+    }
+    return;
+  }
+  if(voiceOn){voiceOn=false;btn.classList.remove('listening');btn.innerHTML=`<svg width="20" height="20" style="color:var(--muted)"><use href="#ic-mic"/></svg>`;try{recognition.stop();}catch(e){}return;}
+  recognition=new SpeechRecognition();
+  recognition.lang=currentLang==='zh'?'zh-CN':currentLang==='en'?'en-US':'vi-VN';
+  recognition.continuous=false;recognition.interimResults=true;
+  recognition.onstart=()=>showToast('🎤 Đang lắng nghe...');
+  recognition.onresult=e=>{const t=Array.from(e.results).map(r=>r[0].transcript).join('');document.getElementById('chat-input').value=t;if(e.results[e.results.length-1].isFinal)showToast(`✅ Đã nhận: "${t}"`)};
+  recognition.onerror=()=>{voiceOn=false;btn.classList.remove('listening');btn.innerHTML=`<svg width="20" height="20" style="color:var(--muted)"><use href="#ic-mic"/></svg>`;showToast('⚠️ Không nhận dạng được. Hãy thử lại.');};
+  recognition.onend=()=>{voiceOn=false;btn.classList.remove('listening');btn.innerHTML=`<svg width="20" height="20" style="color:var(--muted)"><use href="#ic-mic"/></svg>`;};
+  voiceOn=true;btn.classList.add('listening');btn.innerHTML=`<svg width="20" height="20" style="color:var(--red)"><use href="#ic-mic"/></svg>`;
+  try{recognition.start();}catch(e){voiceOn=false;}
+}
+
+// ── TICKET ──
+function goTicket(){
+  if(!currentTTHC)return;const t=currentTTHC;
+  const num=['B047','B048','B049','B050','B051'][Math.floor(Math.random()*5)];
+  document.getElementById('ticket-num').textContent=num;
+  document.getElementById('ticket-tthc').textContent=t.ten;
+  document.getElementById('tk-quy').textContent=t.quy;
+  document.getElementById('tk-quy-lbl').textContent=t.quy_lbl;
+  document.getElementById('tk-wait-time').textContent=`~${3+t.giay_to.filter(g=>g.bb).length*3}'`;
+  document.getElementById('ticket-docs').innerHTML=t.giay_to.filter(g=>g.bb)
+    .map(g=>`<div class="t-doc-item"><div class="t-doc-dot"></div><div style="flex:1;font-weight:600">${g.ten}</div></div>`).join('')
+    +`<div style="margin-top:8px;padding:8px 10px;background:var(--card);border:1px solid var(--border);border-radius:7px;font-size:12.5px;color:var(--muted)">📖 ${t.can_cu}</div>`;
+  document.getElementById('pz-num').textContent=num;
+  document.getElementById('pz-tthc').textContent=t.ten;
+  document.getElementById('pz-quy').textContent=`${t.quy} — ${t.quy_lbl}`;
+  document.getElementById('pz-time').textContent=new Date().toLocaleString('vi');
+  document.getElementById('pz-docs').innerHTML=t.giay_to.filter(g=>g.bb).map(g=>`• ${g.ten}`).join('<br>');
+  goScreen('s-ticket');
+  showToast(`🎫 Đã cấp số ${num} · ${t.quy_lbl} · ${t.ten}`);
+}
+function printTicket(){
+  document.getElementById('print-zone').style.display='block';
+  window.print();
+  setTimeout(()=>document.getElementById('print-zone').style.display='none',500);
+  showToast('🖨️ Đang in phiếu nhiệt...');
+}
+
+// ── CLOCK ──
+function updateClock(){
+  const now=new Date();
+  const t=now.toLocaleTimeString('vi',{hour:'2-digit',minute:'2-digit'});
+  const d=now.toLocaleDateString('vi',{weekday:'long',day:'2-digit',month:'2-digit',year:'numeric'});
+  ['clock','clock2'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=t;});
+  const dc=document.getElementById('clock-date');if(dc)dc.textContent=d;
+}
+updateClock();setInterval(updateClock,1000);
+
+// ── IDLE TIMER ──
+let idleTimer;
+function resetIdleTimer(){
+  clearTimeout(idleTimer);
+  idleTimer=setTimeout(()=>{goScreen('s-idle');chatInited=false;showToast('⏰ Phiên làm việc đã kết thúc');},180000);
+}
+['click','keydown','touchstart'].forEach(ev=>document.addEventListener(ev,resetIdleTimer));
+resetIdleTimer();
+
+// ── TOAST ──
+function showToast(msg){
+  const t=document.getElementById('k-toast');
+  t.textContent=msg;t.style.display='block';
+  clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',3000);
+}
+
+// ── LOGO (inject SVG) ──
+// Inject SVG logo only when a wrapper does NOT already contain an <img>.
+// This preserves explicit <img> tags (e.g. images/logo.jpg) so they are not
+// overwritten by the inline SVG template.
+function injectLogo(){
+  const tpl=document.getElementById('logo-tpl').innerHTML;
+  ['logo-idle','logo-cat','logo-tthc','logo-chat','logo-ticket'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(!el) return;
+    // If an <img> is present, prefer it and skip injection.
+    if(el.querySelector && el.querySelector('img')) return;
+    // Otherwise inject the SVG template as before.
+    el.innerHTML=tpl;
+  });
+}
+injectLogo();
+
+
+// ── LEGAL POPUP DATA ──
+const legalTexts = {
+  'Luật Hộ tịch 2014 · TT 01/2024/TT-BTP': {
+    docs: [
+      {
+        num: 'Luật số 60/2014/QH13 — Luật Hộ tịch 2014',
+        title: 'Điều 15 — Đăng ký khai sinh',
+        body: `<strong>1.</strong> Trong thời hạn 60 ngày kể từ ngày sinh con, cha hoặc mẹ có trách nhiệm đăng ký khai sinh cho con; trường hợp cha, mẹ không thể đăng ký khai sinh thì ông hoặc bà hoặc người thân thích khác hoặc cá nhân, tổ chức đang nuôi dưỡng trẻ em có trách nhiệm đăng ký khai sinh cho trẻ em.<br><br><strong>2.</strong> Thẩm quyền đăng ký khai sinh tại UBND cấp xã nơi cư trú của người cha hoặc người mẹ.<br><br><strong>3.</strong> Hồ sơ đăng ký khai sinh gồm: Tờ khai đăng ký khai sinh; Giấy chứng sinh do cơ sở y tế cấp.`
+      },
+      {
+        num: 'Thông tư 01/2024/TT-BTP — Quy định biểu mẫu hộ tịch',
+        title: 'Điều 3 — Biểu mẫu đăng ký khai sinh',
+        body: `<strong>Mẫu số 01/2024:</strong> Tờ khai đăng ký khai sinh (ban hành kèm theo Thông tư 01/2024/TT-BTP ngày 01 tháng 01 năm 2024 của Bộ trưởng Bộ Tư pháp).<br><br>Tờ khai phải được điền đầy đủ thông tin theo hướng dẫn, không được tẩy xóa, sửa chữa. <span class="legal-highlight">Mẫu được cấp miễn phí tại Bộ phận Một cửa hoặc tải về tại dichvucong.gov.vn</span>`
+      }
+    ]
+  },
+  'Luật Hộ tịch 2014 · NĐ 123/2015/NĐ-CP': {
+    docs: [
+      {
+        num: 'Luật số 60/2014/QH13 — Luật Hộ tịch 2014',
+        title: 'Điều 18 — Đăng ký kết hôn',
+        body: `<strong>1.</strong> Nam nữ kết hôn với nhau phải nộp tờ khai đăng ký kết hôn theo mẫu quy định cho cơ quan đăng ký hộ tịch và cùng có mặt khi đăng ký kết hôn.<br><br><strong>2.</strong> Đăng ký kết hôn được thực hiện tại UBND cấp xã nơi cư trú của một trong hai bên kết hôn.`
+      },
+      {
+        num: 'NĐ 123/2015/NĐ-CP — Quy định chi tiết một số điều Luật Hộ tịch',
+        title: 'Điều 11 — Thủ tục đăng ký kết hôn',
+        body: `<strong>1.</strong> Hai bên kết hôn nộp tờ khai theo mẫu quy định cho UBND cấp xã. <span class="legal-highlight">Trường hợp đủ điều kiện kết hôn theo quy định của pháp luật hôn nhân và gia đình, công chức tư pháp - hộ tịch ghi vào Sổ đăng ký kết hôn và Giấy chứng nhận kết hôn</span>.<br><br><strong>2.</strong> Hai bên kết hôn ký vào Sổ đăng ký kết hôn và Giấy chứng nhận kết hôn trong ngày đăng ký kết hôn.<br><br><strong>3.</strong> Thời hạn giải quyết: <strong>05 ngày làm việc</strong> kể từ ngày nhận đủ hồ sơ.`
+      }
+    ]
+  },
+  'Luật Cư trú 2020 · NĐ 62/2021/NĐ-CP': {
+    docs: [
+      {
+        num: 'Luật Cư trú 2020 (Luật số 68/2020/QH14)',
+        title: 'Điều 26 — Điều kiện đăng ký thường trú',
+        body: `Công dân đã đăng ký tạm trú tại chỗ ở hợp pháp do thuê, mượn, ở nhờ của cá nhân, tổ chức từ đủ <strong>12 tháng trở lên</strong> thì được đăng ký thường trú tại chỗ ở đó, trừ trường hợp chủ hộ không đồng ý.<br><br><span class="legal-highlight">Thời gian giải quyết: 07 ngày làm việc kể từ ngày nhận đủ giấy tờ hợp lệ.</span>`
+      },
+      {
+        num: 'NĐ 62/2021/NĐ-CP — Quy định chi tiết Luật Cư trú',
+        title: 'Điều 10 — Trình tự, thủ tục đăng ký thường trú',
+        body: `<strong>1.</strong> Người đăng ký thường trú nộp hồ sơ đăng ký tại cơ quan đăng ký cư trú — Công an cấp xã nơi đề nghị đăng ký thường trú.<br><br><strong>2.</strong> Hồ sơ gồm: Phiếu đề nghị đăng ký cư trú; Giấy tờ, tài liệu chứng minh chỗ ở hợp pháp.`
+      }
+    ]
+  },
+  'Điều 30, Luật Cư trú 2020': {
+    docs: [
+      {
+        num: 'Luật Cư trú 2020 — Điều 30',
+        title: 'Điều 30 — Đăng ký tạm trú',
+        body: `<strong>1.</strong> Người sinh sống tại chỗ ở hợp pháp không phải nơi thường trú thì trong thời hạn <span class="legal-highlight">30 ngày kể từ ngày đến</span>, người đó hoặc người đại diện hộ gia đình phải thực hiện đăng ký tạm trú.<br><br><strong>2.</strong> Thời hạn tạm trú do công dân tự xác định nhưng không quá 2 năm và có thể gia hạn nhiều lần.<br><br><strong>3.</strong> Hồ sơ đăng ký tạm trú gồm: Tờ khai thay đổi thông tin cư trú; Giấy tờ chứng minh chỗ ở hợp pháp.<br><br><strong>4.</strong> Thời hạn giải quyết: <strong>3 ngày làm việc</strong> kể từ ngày nhận đủ hồ sơ.`
+      }
+    ]
+  },
+  'NĐ 123/2015/NĐ-CP · TT 04/2020/TT-BTP': {
+    docs: [
+      {
+        num: 'NĐ 123/2015/NĐ-CP',
+        title: 'Điều 22 — Xác nhận tình trạng hôn nhân',
+        body: `<strong>1.</strong> UBND cấp xã thực hiện xác nhận tình trạng hôn nhân cho công dân cư trú tại địa bàn.<br><br><strong>2.</strong> Người yêu cầu xác nhận tình trạng hôn nhân nộp tờ khai theo mẫu quy định và xuất trình giấy tờ tùy thân.<br><br><span class="legal-highlight">Thời hạn giải quyết: 03 ngày làm việc</span>. Trường hợp cần xác minh thêm thì không quá 07 ngày.`
+      },
+      {
+        num: 'TT 04/2020/TT-BTP',
+        title: 'Biểu mẫu Mẫu CT01',
+        body: `Mẫu CT01 — Tờ khai đề nghị cấp Giấy xác nhận tình trạng hôn nhân ban hành kèm theo Thông tư 04/2020/TT-BTP ngày 28/5/2020.<br><br>Người yêu cầu tự khai và chịu trách nhiệm về tính chính xác của các thông tin kê khai. <span class="legal-highlight">Lệ phí: 20.000 đồng/trường hợp</span> theo Thông tư 281/2016/TT-BTC.`
+      }
+    ]
+  }
+};
+
+function showLegalPopup(ref) {
+  // Try to match the ref string to our legal data
+  let data = null;
+  // Strip route/latency prefix (e.g. "Loại 3 — Semantic · 145ms · Luật Hộ tịch 2014 · TT 01/2024/TT-BTP")
+  const clean = ref.replace(/^Loại \d[^·]*·[^·]*·\s*/,'').trim();
+  for(const key of Object.keys(legalTexts)){
+    if(clean.includes(key)||key.includes(clean)){data=legalTexts[key];document.getElementById('legal-popup-title').textContent='Căn cứ: '+key;break;}
+  }
+  if(!data){
+    // Fallback: show the raw reference
+    document.getElementById('legal-popup-title').textContent='Căn cứ pháp lý';
+    document.getElementById('legal-popup-body').innerHTML=`<div class="legal-doc-body">Tham chiếu: <strong>${ref}</strong><br><br>Vui lòng tra cứu văn bản pháp luật tại: <em>dichvucong.gov.vn</em> hoặc <em>vanban.chinhphu.vn</em></div>`;
+  } else {
+    document.getElementById('legal-popup-body').innerHTML = data.docs.map((d,i)=>`
+      ${i>0?'<div class="legal-doc-divider"></div>':''}
+      <div class="legal-doc-section">
+        <div class="legal-doc-num">${d.num}</div>
+        <div class="legal-doc-title">${d.title}</div>
+        <div class="legal-doc-body">${d.body}</div>
+      </div>`).join('');
+  }
+  document.getElementById('legal-popup-bg').classList.add('open');
+}
+function closeLegalPopup(){document.getElementById('legal-popup-bg').classList.remove('open');}
+
+
+// ── INIT LANG ──
+setLang('vi');
+</script>
+</body>
+</html>

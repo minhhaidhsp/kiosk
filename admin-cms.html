@@ -1,0 +1,1482 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin CMS · Kiosk AI Hành chính công TP.HCM</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#C8102E;--red2:#a00d24;--rl:#FEE2E2;--rb:#FECACA;
+  --green:#15803d;--lime:#22c55e;--amber:#d97706;--gold:#fbbf24;
+  --blue:#2563eb;--violet:#7c3aed;--teal:#0f766e;
+  --navy:#1a1a1a;--bg:#F8F8F8;--white:#fff;--card:#F3F4F6;
+  --border:#E5E7EB;--border2:#D1D5DB;
+  --text:#1a1a1a;--text2:#374151;--muted:#6B7280;--dim:#9CA3AF;
+  --sw:236px;--th:54px;
+  --shc:0 1px 3px rgba(0,0,0,.05),0 2px 10px rgba(0,0,0,.04);
+  --shl:0 6px 24px rgba(0,0,0,.09);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100vh;overflow:hidden}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);font-size:13.5px;line-height:1.55}
+
+.shell{display:flex;height:100vh;overflow:hidden}
+
+/* ── SIDEBAR ── */
+.sb{width:var(--sw);background:var(--navy);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.1) transparent}
+.sb-brand{height:var(--th);padding:0 14px;display:flex;align-items:center;gap:10px;border-bottom:4px solid var(--red);flex-shrink:0}
+.bm{width:30px;height:30px;border-radius:8px;background:var(--red);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.bt strong{display:block;font-size:12px;font-weight:800;color:#fff;line-height:1.3}
+.bt span{font-size:10px;color:rgba(255,255,255,.35)}
+.sb-ph{padding:13px 13px 3px;font-size:9px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.25)}
+.sb-lk{display:flex;align-items:center;gap:8px;padding:7px 12px;margin:1px 5px;border-radius:7px;cursor:pointer;font-size:12.5px;font-weight:500;color:rgba(255,255,255,.5);transition:all .15s;border:none;background:none;font-family:'Plus Jakarta Sans',sans-serif;text-align:left;width:calc(100% - 10px);position:relative}
+.sb-lk:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.85)}
+.sb-lk.on{background:rgba(200,16,46,.3);color:#fff;font-weight:700}
+.sb-lk.on::before{content:'';position:absolute;left:-5px;top:50%;transform:translateY(-50%);width:3px;height:16px;background:var(--red);border-radius:0 2px 2px 0}
+.sb-ic{font-size:13px;flex-shrink:0;width:16px;text-align:center}
+.sb-bg{margin-left:auto;font-size:9px;font-weight:800;padding:1px 6px;border-radius:20px;min-width:16px;text-align:center}
+.bg-r{background:var(--red);color:#fff}.bg-a{background:var(--amber);color:#fff}.bg-g{background:var(--lime);color:#fff}
+.sb-div{height:1px;background:rgba(255,255,255,.07);margin:4px 12px}
+.sb-foot{margin-top:auto;padding:8px;border-top:1px solid rgba(255,255,255,.07)}
+.u-row{display:flex;align-items:center;gap:8px;padding:8px 9px;border-radius:7px;background:rgba(255,255,255,.06);cursor:pointer}
+.u-av{width:28px;height:28px;border-radius:7px;background:var(--red);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;flex-shrink:0}
+
+/* ── MAIN ── */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.tb{height:var(--th);background:var(--white);border-bottom:1px solid var(--border);border-top:4px solid var(--red);display:flex;align-items:center;padding:0 20px;gap:10px;flex-shrink:0}
+.tb-crumb{font-size:10px;color:var(--dim);margin-bottom:1px}
+.tb-title{font-size:15px;font-weight:800;color:var(--text)}
+.tb-right{margin-left:auto;display:flex;align-items:center;gap:7px}
+.tb-chip{padding:4px 9px;border-radius:6px;background:var(--card);border:1px solid var(--border);font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace}
+.tb-ic{width:30px;height:30px;border-radius:6px;border:1px solid var(--border);background:var(--white);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;position:relative;transition:all .15s}
+.tb-ic:hover{background:var(--rl);border-color:var(--rb)}
+.notif-dot{position:absolute;top:3px;right:3px;width:6px;height:6px;border-radius:50%;background:var(--red);border:1.5px solid #fff}
+
+.content{flex:1;overflow-y:auto;padding:18px 22px;overflow-x:hidden;scrollbar-width:thin;scrollbar-color:var(--dim) transparent}
+.page{display:none}.page.on{display:block;animation:fadeUp .16s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+
+/* ── KPI ── */
+.kpi-row{display:grid;gap:11px;margin-bottom:16px}
+.k4{grid-template-columns:repeat(4,1fr)}.k3{grid-template-columns:repeat(3,1fr)}.k2{grid-template-columns:1fr 1fr}
+.kpi{background:var(--white);border:1px solid var(--border);border-radius:11px;padding:13px 15px;box-shadow:var(--shc);position:relative;overflow:hidden}
+.kpi::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:11px 11px 0 0}
+.kpi.cr::after{background:var(--red)}.kpi.cg::after{background:var(--green)}.kpi.ca::after{background:var(--amber)}
+.kpi.cb::after{background:var(--blue)}.kpi.cv::after{background:var(--violet)}.kpi.ct::after{background:var(--teal)}
+.kpi-lbl{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.kpi-ico{position:absolute;top:11px;right:11px;font-size:20px;opacity:.1}
+.kpi-val{font-size:24px;font-weight:800;font-family:'JetBrains Mono',monospace;line-height:1;margin-bottom:3px}
+.kpi-trend{font-size:10.5px;font-weight:700;display:inline-flex;align-items:center;gap:2px;padding:1px 6px;border-radius:20px;margin-top:3px}
+.kpi-trend.up{background:#dcfce7;color:var(--green)}.kpi-trend.dn{background:var(--rl);color:var(--red)}.kpi-trend.eq{background:var(--card);color:var(--muted)}
+.kpi-sub{font-size:10.5px;color:var(--muted);margin-top:2px}
+
+/* ── SECTION HEADER ── */
+.sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.sh-t{font-size:12.5px;font-weight:800;color:var(--text);display:flex;align-items:center;gap:6px}
+.sh-t::before{content:'';width:3px;height:13px;background:var(--red);border-radius:2px}
+.sh-a{font-size:11px;font-weight:700;color:var(--red);cursor:pointer;padding:3px 10px;border-radius:6px;border:1px solid var(--border);background:var(--white);transition:all .15s;font-family:'Plus Jakarta Sans',sans-serif;display:inline-flex;align-items:center;gap:3px}
+.sh-a:hover{background:var(--rl);border-color:var(--rb)}
+
+/* ── TABLE ── */
+.tbl{background:var(--white);border:1px solid var(--border);border-radius:11px;overflow:hidden;box-shadow:var(--shc);margin-bottom:14px}
+.tbl-hd{display:grid;padding:8px 13px;background:var(--card);border-bottom:1px solid var(--border);font-size:9.5px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;align-items:center}
+.tbl-r{display:grid;padding:9px 13px;border-bottom:1px solid var(--border);align-items:center;cursor:pointer;transition:background .1s}
+.tbl-r:last-child{border-bottom:none}
+.tbl-r:hover{background:#fafafa}
+.tbl-nm{font-weight:700;font-size:13px;margin-bottom:1px}
+.tbl-sb{font-size:11px;color:var(--muted)}
+.tbl-id{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted)}
+
+/* ── PAGINATION ── */
+.pagination{display:flex;align-items:center;justify-content:space-between;padding:8px 13px;border-top:1px solid var(--border);background:var(--card);font-size:11px;color:var(--muted)}
+.pg-btns{display:flex;gap:3px}
+.pg-btn{width:26px;height:26px;border-radius:5px;border:1px solid var(--border);background:var(--white);cursor:pointer;font-size:11px;font-weight:700;color:var(--text2);display:flex;align-items:center;justify-content:center;transition:all .15s;font-family:'Plus Jakarta Sans',sans-serif}
+.pg-btn:hover{background:var(--rl);border-color:var(--rb);color:var(--red)}
+.pg-btn.on{background:var(--red);color:#fff;border-color:var(--red)}
+
+/* ── STATUS ── */
+.st{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px}
+.st::before{content:'';width:4px;height:4px;border-radius:50%;background:currentColor}
+.st-green{background:#dcfce7;color:#166534}.st-amber{background:#fef3c7;color:#92400e}
+.st-red{background:var(--rl);color:#991b1b}.st-blue{background:#dbeafe;color:#1e40af}
+.st-gray{background:var(--card);color:var(--muted)}.st-violet{background:#ede9fe;color:#5b21b6}
+
+/* ── CHIP ── */
+.chip{display:inline-flex;align-items:center;gap:2px;padding:2px 7px;border-radius:20px;font-size:10px;font-weight:700;border:1px solid}
+.chip-r{background:var(--rl);border-color:var(--rb);color:#991b1b}
+.chip-g{background:#dcfce7;border-color:#86efac;color:#166534}
+.chip-a{background:#fef3c7;border-color:#fde68a;color:#92400e}
+.chip-b{background:#dbeafe;border-color:#93c5fd;color:#1e40af}
+.chip-gray{background:var(--card);border-color:var(--border);color:var(--muted)}
+.chip-v{background:#ede9fe;border-color:#ddd6fe;color:#5b21b6}
+.chip-t{background:#ccfbf1;border-color:#99f6e4;color:var(--teal)}
+
+/* ── CARD ── */
+.card{background:var(--white);border:1px solid var(--border);border-radius:11px;box-shadow:var(--shc);overflow:hidden}
+.card-hd{padding:10px 14px;border-bottom:1px solid var(--border);background:var(--card);display:flex;align-items:center;gap:7px;font-size:12px;font-weight:800;color:var(--text)}
+.card-hd::before{content:'';width:3px;height:12px;background:var(--red);border-radius:2px}
+.card-body{padding:12px 14px}
+
+/* ── BUTTONS ── */
+.btn{padding:6px 13px;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;border:1px solid;font-family:'Plus Jakarta Sans',sans-serif;transition:all .15s;display:inline-flex;align-items:center;gap:5px}
+.btn-red{background:var(--red);color:#fff;border-color:var(--red)}.btn-red:hover{background:var(--red2)}
+.btn-outline{background:var(--white);color:var(--text2);border-color:var(--border)}.btn-outline:hover{background:var(--card)}
+.btn-green{background:#15803d;color:#fff;border-color:#15803d}.btn-green:hover{background:#166534}
+.btn-blue{background:var(--blue);color:#fff;border-color:var(--blue)}.btn-blue:hover{opacity:.9}
+.btn-amber{background:var(--amber);color:#fff;border-color:var(--amber)}
+.btn-sm{padding:4px 10px;font-size:11px;border-radius:6px}
+.btn-ghost{background:none;border:none;color:var(--muted);cursor:pointer;font-size:12.5px;padding:3px 7px;border-radius:5px;transition:all .15s;font-family:'Plus Jakarta Sans',sans-serif}
+.btn-ghost:hover{background:var(--card);color:var(--text)}
+
+/* ── FORM ── */
+.fg{margin-bottom:12px}
+.fl{font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;display:block}
+.fi{width:100%;padding:7px 10px;border:1.5px solid var(--border);border-radius:7px;font-family:'Plus Jakarta Sans',sans-serif;font-size:12.5px;outline:none;transition:border-color .15s;color:var(--text);background:#fff}
+.fi:focus{border-color:var(--red)}
+.fsel{width:100%;padding:7px 10px;border:1.5px solid var(--border);border-radius:7px;font-family:'Plus Jakarta Sans',sans-serif;font-size:12.5px;outline:none;background:#fff;color:var(--text)}
+.fsel:focus{border-color:var(--red)}
+.fta{width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:7px;font-family:'Plus Jakarta Sans',sans-serif;font-size:12.5px;outline:none;resize:vertical;min-height:72px;color:var(--text)}
+.fta:focus{border-color:var(--red)}
+
+/* ── DIFF ── */
+.diff-wrap{font-family:'JetBrains Mono',monospace;font-size:11px;border-radius:9px;overflow:hidden;border:1px solid var(--border)}
+.diff-hd{display:grid;grid-template-columns:1fr 1fr}
+.diff-col-hd{padding:7px 12px;font-size:10.5px;font-weight:700;display:flex;align-items:center;gap:5px}
+.diff-old-hd{background:#fff5f5;border-bottom:2px solid var(--rb);color:#991b1b}
+.diff-new-hd{background:#f0fdf4;border-bottom:2px solid #86efac;color:#166534;border-left:1px solid var(--border)}
+.diff-body{display:grid;grid-template-columns:1fr 1fr;max-height:260px;overflow-y:auto}
+.diff-col{padding:10px 12px;line-height:1.8;white-space:pre-wrap;word-break:break-word;font-size:11.5px}
+.diff-col-new{border-left:1px solid var(--border);background:#f9fefb}
+.diff-col-old{background:#fefafa}
+.diff-del{background:var(--rl);color:#991b1b;border-radius:2px;padding:0 2px;text-decoration:line-through}
+.diff-add{background:#dcfce7;color:#166534;border-radius:2px;padding:0 2px}
+
+/* ── TIMELINE ── */
+.tl-item{display:flex;gap:10px;padding:9px 14px;border-bottom:1px solid var(--border)}
+.tl-item:last-child{border:none}
+.tl-dot{width:30px;height:30px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px}
+.tl-title{font-size:12px;font-weight:700;margin-bottom:2px}
+.tl-sub{font-size:11px;color:var(--muted);line-height:1.5}
+.tl-time{font-size:10px;color:var(--dim);margin-top:2px;font-family:'JetBrains Mono',monospace}
+.tl-hash{font-family:'JetBrains Mono',monospace;font-size:9.5px;background:var(--card);border:1px solid var(--border);padding:1px 6px;border-radius:4px;color:var(--muted);display:inline-block;margin-top:2px}
+
+/* ── ALERT ── */
+.alert{padding:9px 12px;border-radius:8px;font-size:12px;line-height:1.6;display:flex;gap:8px;align-items:flex-start;margin-bottom:12px}
+.al-red{background:var(--rl);border:1px solid var(--rb);color:#7f1d1d}
+.al-green{background:#f0fdf4;border:1px solid #86efac;color:#14532d}
+.al-amber{background:#fffbeb;border:1px solid #fde68a;color:#78350f}
+.al-blue{background:#eff6ff;border:1px solid #bfdbfe;color:#1e3a8a}
+
+/* ── MODAL ── */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:1000;align-items:center;justify-content:center;backdrop-filter:blur(3px)}
+.modal-bg.open{display:flex;animation:mfIn .14s ease}
+@keyframes mfIn{from{opacity:0}to{opacity:1}}
+.modal{background:#fff;border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.14);max-height:90vh;display:flex;flex-direction:column;animation:mUp .18s ease}
+@keyframes mUp{from{transform:translateY(18px);opacity:0}to{transform:none;opacity:1}}
+.modal-hd{padding:16px 20px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:9px;border-top:3px solid var(--red)}
+.modal-title{font-size:14px;font-weight:800;flex:1}
+.modal-close{width:26px;height:26px;border-radius:6px;border:1px solid var(--border);background:var(--card);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px}
+.modal-close:hover{background:var(--rl)}
+.modal-body{padding:18px 20px;overflow-y:auto;flex:1;font-size:13px}
+.modal-ft{padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:20px;right:20px;background:var(--navy);color:#fff;padding:10px 18px;border-radius:9px;font-size:12.5px;font-weight:600;box-shadow:var(--shl);z-index:9999;display:none;animation:tUp .18s ease;border-left:3px solid var(--red)}
+@keyframes tUp{from{transform:translateY(6px);opacity:0}to{transform:none;opacity:1}}
+
+/* ── SEARCH ── */
+.sbox{display:flex;align-items:center;gap:7px;padding:6px 10px;border:1.5px solid var(--border);border-radius:7px;background:#fff}
+.sbox:focus-within{border-color:var(--red)}
+.sbox input{border:none;outline:none;font-family:'Plus Jakarta Sans',sans-serif;font-size:12.5px;flex:1;color:var(--text)}
+
+/* ── AI BADGE ── */
+.ai-badge{display:inline-flex;align-items:center;gap:4px;background:#eff6ff;border:1px solid #bfdbfe;color:var(--blue);font-size:10px;font-weight:700;padding:2px 7px;border-radius:5px}
+.ai-ok{background:#f0fdf4;border-color:#86efac;color:#166534}
+.ai-warn{background:#fffbeb;border-color:#fde68a;color:#92400e}
+
+/* ── PIPELINE STEP ── */
+.pipe-step{display:flex;gap:12px;align-items:flex-start;padding:11px 14px;border-radius:9px;border:1.5px solid var(--border);margin-bottom:8px;background:var(--white);transition:all .3s}
+.pipe-step.active{border-color:var(--red);background:#fffafa;box-shadow:0 0 0 3px rgba(200,16,46,.08)}
+.pipe-step.done{border-color:#86efac;background:#f9fefb}
+.pipe-step.waiting{opacity:.5}
+.pipe-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0}
+.pipe-step.active .pipe-num{background:var(--red);color:#fff}
+.pipe-step.done .pipe-num{background:var(--green);color:#fff}
+.pipe-step.waiting .pipe-num{background:var(--card);color:var(--dim)}
+.pipe-content{flex:1}
+.pipe-title{font-size:12.5px;font-weight:800;margin-bottom:2px}
+.pipe-sub{font-size:11px;color:var(--muted)}
+.pipe-status{margin-left:auto;flex-shrink:0}
+.spin{display:inline-block;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── HBAR ── */
+.hbar{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.hbar-lbl{font-size:11.5px;font-weight:600;color:var(--text2);flex-shrink:0}
+.hbar-fill{height:18px;border-radius:4px;display:flex;align-items:center;padding:0 6px;transition:width .4s;min-width:28px}
+
+/* ── GRID ── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px}
+
+/* ── REVIEW CARD ── */
+.rv-card{background:var(--white);border:1px solid var(--border);border-radius:11px;margin-bottom:12px;overflow:hidden;box-shadow:var(--shc)}
+.rv-card.urgent{border-color:var(--rb);border-left:4px solid var(--red)}
+.rv-hd{padding:10px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border)}
+.rv-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.rv-title{font-size:12.5px;font-weight:800;margin-bottom:2px}
+.rv-meta{font-size:11px;color:var(--muted)}
+.rv-actions{margin-left:auto;display:flex;gap:6px;align-items:center}
+.rv-body{padding:12px 14px}
+
+/* ── E2E DEMO ── */
+.e2e-flow{display:flex;gap:0;align-items:center;margin-bottom:20px;flex-wrap:wrap;justify-content:center}
+.e2e-node{text-align:center;padding:16px 14px;border-radius:12px;border:2px solid var(--border);background:var(--white);min-width:110px;transition:all .4s;cursor:pointer;position:relative}
+.e2e-node.active{border-color:var(--red);background:var(--rl);box-shadow:0 4px 16px rgba(200,16,46,.2)}
+.e2e-node.done{border-color:#86efac;background:#f0fdf4}
+.e2e-arrow{font-size:20px;color:var(--dim);padding:0 4px;flex-shrink:0}
+.e2e-icon{font-size:26px;margin-bottom:6px}
+.e2e-label{font-size:11px;font-weight:700;color:var(--text)}
+.e2e-sub{font-size:10px;color:var(--muted);margin-top:2px}
+.e2e-badge{position:absolute;top:-8px;right:-8px;width:18px;height:18px;border-radius:50%;background:var(--green);color:#fff;font-size:10px;font-weight:800;display:none;align-items:center;justify-content:center}
+.e2e-node.done .e2e-badge{display:flex}
+
+/* ── LOG TERMINAL ── */
+.log-terminal{background:#111;border-radius:9px;padding:14px;font-family:'JetBrains Mono',monospace;font-size:11.5px;max-height:220px;overflow-y:auto;line-height:1.7}
+.log-line{margin-bottom:1px}
+.log-ts{color:#6b7280}
+.log-ok{color:#4ade80}
+.log-info{color:#60a5fa}
+.log-warn{color:#fbbf24}
+.log-err{color:#f87171}
+.log-data{color:#c4b5fd}
+
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--dim);border-radius:10px}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- ═══════════ SIDEBAR ═══════════ -->
+<div class="sb">
+  <div class="sb-brand">
+    <div class="bm">🏛️</div>
+    <div class="bt"><strong>Admin CMS</strong><span>Kiosk AI · Hành chính công</span></div>
+  </div>
+
+  <div class="sb-ph">Tổng quan</div>
+  <button class="sb-lk on" onclick="nav('p-overview')"><span class="sb-ic">📊</span>Thống kê văn bản</button>
+  <button class="sb-lk" onclick="nav('p-demo')"><span class="sb-ic">🎬</span>Demo quy trình E2E</button>
+
+  <div class="sb-ph">Quản lý văn bản</div>
+  <button class="sb-lk" onclick="nav('p-vb-list')"><span class="sb-ic">📑</span>Danh mục văn bản<span class="sb-bg bg-g">847</span></button>
+  <button class="sb-lk" onclick="nav('p-vb-upload')"><span class="sb-ic">⬆️</span>Tải lên văn bản mới</button>
+  <button class="sb-lk" onclick="nav('p-ai-classify')"><span class="sb-ic">🤖</span>AI phân loại · Chờ duyệt<span class="sb-bg bg-a">7</span></button>
+  <button class="sb-lk" onclick="nav('p-vb-approve')"><span class="sb-ic">✅</span>Phê duyệt & Xuất bản<span class="sb-bg bg-r">5</span></button>
+  <button class="sb-lk" onclick="nav('p-vb-history')"><span class="sb-ic">🕐</span>Lịch sử cập nhật</button>
+
+  <div class="sb-ph">MLOps · Huấn luyện</div>
+  <button class="sb-lk" onclick="nav('p-mlops')"><span class="sb-ic">⚙️</span>Pipeline huấn luyện</button>
+  <button class="sb-lk" onclick="nav('p-embed-status')"><span class="sb-ic">🧮</span>Trạng thái Embedding</button>
+
+  <div class="sb-ph">Hệ thống</div>
+  <button class="sb-lk" onclick="nav('p-settings')"><span class="sb-ic">🔧</span>Cấu hình AI</button>
+
+  <div class="sb-div"></div>
+  <div style="padding:5px 12px 8px">
+    <div style="font-size:9px;color:rgba(255,255,255,.22);font-weight:700;text-transform:uppercase;letter-spacing:.09em;margin-bottom:5px">Hạ tầng AI</div>
+    <div style="display:flex;flex-direction:column;gap:4px">
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:rgba(255,255,255,.4)"><span>🟢 Qwen2.5-7B</span><span style="color:var(--lime)">Online</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:rgba(255,255,255,.4)"><span>🟢 pgvector</span><span style="color:var(--lime)">1.284 vecs</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:rgba(255,255,255,.4)"><span>🟢 Neo4j</span><span style="color:var(--lime)">Online</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:rgba(255,255,255,.4)"><span>🟢 Whisper STT</span><span style="color:var(--lime)">Ready</span></div>
+    </div>
+  </div>
+  <div class="sb-foot">
+    <div class="u-row">
+      <div class="u-av">MH</div>
+      <div><div style="font-size:11.5px;font-weight:700;color:#fff">TS. Nguyễn Minh Hải</div><div style="font-size:10px;color:rgba(255,255,255,.35)">Quản trị viên</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ MAIN ═══════════ -->
+<div class="main">
+  <div class="tb">
+    <div><div class="tb-crumb" id="tb-crumb">Tổng quan</div><div class="tb-title" id="tb-title">Thống kê văn bản</div></div>
+    <div class="tb-right">
+      <div class="tb-chip" id="tb-clock">🕐 08:47:23</div>
+      <div class="tb-chip" style="color:var(--green)">🟢 Kiosk #1 Online</div>
+      <div class="tb-ic" onclick="openModal('modal-notif')">🔔<span class="notif-dot"></span></div>
+    </div>
+  </div>
+
+  <div class="content">
+
+  <!-- ═══════════════════════════════
+       PAGE: THỐNG KÊ VĂN BẢN
+  ═══════════════════════════════ -->
+  <div class="page on" id="p-overview">
+    <div class="kpi-row k4">
+      <div class="kpi cr"><div class="kpi-lbl">Tổng văn bản</div><div class="kpi-ico">📚</div><div class="kpi-val" style="color:var(--red)">847</div><div class="kpi-trend up">↑ 23 tháng này</div></div>
+      <div class="kpi cg"><div class="kpi-lbl">Đang có hiệu lực</div><div class="kpi-ico">✅</div><div class="kpi-val" style="color:var(--green)">801</div><div class="kpi-trend up">94.6% tổng số</div></div>
+      <div class="kpi ca"><div class="kpi-lbl">Chờ duyệt</div><div class="kpi-ico">⏳</div><div class="kpi-val" style="color:var(--amber)">7</div><div class="kpi-trend dn">Cần xử lý hôm nay</div></div>
+      <div class="kpi cv"><div class="kpi-lbl">Đã nhúng pgvector</div><div class="kpi-ico">🧮</div><div class="kpi-val" style="color:var(--violet)">1.284</div><div class="kpi-sub">chunks · avg 512 tokens</div></div>
+    </div>
+
+    <div class="g2">
+      <!-- Theo loại văn bản -->
+      <div class="card">
+        <div class="card-hd">Phân loại theo loại văn bản</div>
+        <div class="card-body">
+          <div class="hbar"><div class="hbar-lbl" style="width:120px">Nghị định (NĐ)</div><div style="flex:1;background:var(--card);border-radius:4px;overflow:hidden"><div class="hbar-fill" style="width:73%;background:var(--red)"><span style="font-size:9px;font-weight:700;color:#fff">214</span></div></div><div style="font-size:11px;color:var(--muted);width:36px;text-align:right">25.3%</div></div>
+          <div class="hbar"><div class="hbar-lbl" style="width:120px">Thông tư (TT)</div><div style="flex:1;background:var(--card);border-radius:4px;overflow:hidden"><div class="hbar-fill" style="width:64%;background:#374151"><span style="font-size:9px;font-weight:700;color:#fff">187</span></div></div><div style="font-size:11px;color:var(--muted);width:36px;text-align:right">22.1%</div></div>
+          <div class="hbar"><div class="hbar-lbl" style="width:120px">Quyết định (QĐ)</div><div style="flex:1;background:var(--card);border-radius:4px;overflow:hidden"><div class="hbar-fill" style="width:53%;background:var(--amber)"><span style="font-size:9px;font-weight:700;color:#fff">156</span></div></div><div style="font-size:11px;color:var(--muted);width:36px;text-align:right">18.4%</div></div>
+          <div class="hbar"><div class="hbar-lbl" style="width:120px">Công văn (CV)</div><div style="flex:1;background:var(--card);border-radius:4px;overflow:hidden"><div class="hbar-fill" style="width:45%;background:var(--blue)"><span style="font-size:9px;font-weight:700;color:#fff">132</span></div></div><div style="font-size:11px;color:var(--muted);width:36px;text-align:right">15.6%</div></div>
+          <div class="hbar"><div class="hbar-lbl" style="width:120px">Luật / Pháp lệnh</div><div style="flex:1;background:var(--card);border-radius:4px;overflow:hidden"><div class="hbar-fill" style="width:32%;background:var(--violet)"><span style="font-size:9px;font-weight:700;color:#fff">94</span></div></div><div style="font-size:11px;color:var(--muted);width:36px;text-align:right">11.1%</div></div>
+          <div class="hbar"><div class="hbar-lbl" style="width:120px">Văn bản khác</div><div style="flex:1;background:var(--card);border-radius:4px;overflow:hidden"><div class="hbar-fill" style="width:22%;background:var(--dim)"><span style="font-size:9px;font-weight:700;color:#fff">64</span></div></div><div style="font-size:11px;color:var(--muted);width:36px;text-align:right">7.6%</div></div>
+        </div>
+      </div>
+
+      <!-- Theo lĩnh vực (từ QĐ 2650 thực tế) -->
+      <div class="card">
+        <div class="card-hd">Top 8 lĩnh vực nhiều văn bản nhất</div>
+        <div class="card-body">
+          <div id="lv-chart">
+            <div style="display:grid;grid-template-columns:20px 1fr 50px;gap:5px;font-size:9.5px;font-weight:800;color:var(--muted);text-transform:uppercase;margin-bottom:6px;padding:0 2px"><span>#</span><span>Lĩnh vực</span><span>VB</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="g2">
+      <!-- Theo nhóm Sở quản lý -->
+      <div class="card">
+        <div class="card-hd">Phân theo Sở quản lý (QĐ 2650/2025)</div>
+        <div class="card-body">
+          <div class="hbar"><div class="hbar-lbl" style="width:130px">Sở Tư pháp</div><div style="flex:1;background:var(--card);border-radius:4px;overflow:hidden"><div class="hbar-fill" style="width:72%;background:var(--red)"><span style="font-size:9px;font-weight:700;color:#fff">182</span></div></div><div style="font-size:11px;color:var(--muted);width:36px;text-align:right">21.5%</div></div>
+          <div class="hbar"><div class="hbar-lbl" style="width:130px">Sở Nội vụ</div><div style="flex:1;background:var(--card);border-radius:4px;overflow:hidden"><div class="hbar-fill" style="width:58%;background:#374151"><span style="font-size:9px;font-weight:700;color:#fff">147</span></div></div><div style="font-size:11px;color:var(--muted);width:36px;text-align:right">17.4%</div></div>
+          <div class="hbar"><div class="hbar-lbl" style="width:130px">Sở Lao động–XH</div><div style="flex:1;background:var(--card);border-radius:4px;overflow:hidden"><div class="hbar-fill" style="width:45%;background:var(--amber)"><span style="font-size:9px;font-weight:700;color:#fff">114</span></div></div><div style="font-size:11px;color:var(--muted);width:36px;text-align:right">13.5%</div></div>
+          <div class="hbar"><div class="hbar-lbl" style="width:130px">Sở Xây dựng</div><div style="flex:1;background:var(--card);border-radius:4px;overflow:hidden"><div class="hbar-fill" style="width:36%;background:var(--blue)"><span style="font-size:9px;font-weight:700;color:#fff">91</span></div></div><div style="font-size:11px;color:var(--muted);width:36px;text-align:right">10.7%</div></div>
+          <div class="hbar"><div class="hbar-lbl" style="width:130px">Sở Nông nghiệp</div><div style="flex:1;background:var(--card);border-radius:4px;overflow:hidden"><div class="hbar-fill" style="width:28%;background:var(--teal)"><span style="font-size:9px;font-weight:700;color:#fff">71</span></div></div><div style="font-size:11px;color:var(--muted);width:36px;text-align:right">8.4%</div></div>
+          <div class="hbar"><div class="hbar-lbl" style="width:130px">Sở khác (10)</div><div style="flex:1;background:var(--card);border-radius:4px;overflow:hidden"><div class="hbar-fill" style="width:60%;background:var(--dim)"><span style="font-size:9px;font-weight:700;color:#fff">242</span></div></div><div style="font-size:11px;color:var(--muted);width:36px;text-align:right">28.6%</div></div>
+        </div>
+      </div>
+
+      <!-- Cập nhật theo tháng -->
+      <div class="card">
+        <div class="card-hd">Văn bản được thêm theo tháng (2025–2026)</div>
+        <div class="card-body">
+          <div style="display:flex;align-items:flex-end;gap:5px;height:80px;margin-bottom:6px">
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px"><div style="width:100%;background:var(--card);border-radius:3px 3px 0 0;height:35%;border:1px solid var(--border)"></div><div style="font-size:8px;color:var(--dim)">T8</div></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px"><div style="width:100%;background:var(--red);opacity:.5;border-radius:3px 3px 0 0;height:50%"></div><div style="font-size:8px;color:var(--dim)">T9</div></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px"><div style="width:100%;background:var(--red);opacity:.6;border-radius:3px 3px 0 0;height:65%"></div><div style="font-size:8px;color:var(--dim)">T10</div></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px"><div style="width:100%;background:var(--red);opacity:.7;border-radius:3px 3px 0 0;height:80%"></div><div style="font-size:8px;color:var(--dim)">T11</div></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px"><div style="width:100%;background:var(--red);opacity:.8;border-radius:3px 3px 0 0;height:55%"></div><div style="font-size:8px;color:var(--dim)">T12</div></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px"><div style="width:100%;background:var(--card);border-radius:3px 3px 0 0;height:30%;border:1px solid var(--border)"></div><div style="font-size:8px;color:var(--dim)">T1</div></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px"><div style="width:100%;background:var(--red);opacity:.6;border-radius:3px 3px 0 0;height:70%"></div><div style="font-size:8px;color:var(--dim)">T2</div></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px"><div style="width:100%;background:var(--red);border-radius:3px 3px 0 0;height:100%"></div><div style="font-size:8px;color:var(--dim);font-weight:700;color:var(--red)">T3</div></div>
+          </div>
+          <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:10.5px;color:var(--muted)">
+            <span style="display:flex;align-items:center;gap:3px"><span style="width:9px;height:9px;background:var(--red);border-radius:2px;display:inline-block"></span>Văn bản mới</span>
+            <span style="margin-left:auto;color:var(--text);font-weight:700">Tháng 3/2026: <span style="color:var(--red)">+23 văn bản</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Văn bản cần rà soát -->
+    <div class="sh"><div class="sh-t">Văn bản cần rà soát</div></div>
+    <div class="tbl">
+      <div class="tbl-hd" style="grid-template-columns:1fr 2fr 1fr .8fr 1fr 100px">
+        <span>Số hiệu</span><span>Tên văn bản</span><span>Lĩnh vực</span><span>Ngày ban hành</span><span>Lý do</span><span>Hành động</span>
+      </div>
+      <div class="tbl-r" style="grid-template-columns:1fr 2fr 1fr .8fr 1fr 100px;background:#fffbeb">
+        <div class="tbl-id">NĐ 123/2015/NĐ-CP</div><div class="tbl-nm">Quy định chi tiết Luật Hộ tịch</div><div><span class="chip chip-r">Hộ tịch</span></div><div class="tbl-sb">15/11/2015</div><div><span class="st st-amber">Cần cập nhật</span><div class="tbl-sb">Có NĐ 63/2026 mới</div></div>
+        <button class="btn btn-outline btn-sm" onclick="nav('p-vb-upload')">Cập nhật</button>
+      </div>
+      <div class="tbl-r" style="grid-template-columns:1fr 2fr 1fr .8fr 1fr 100px;background:#fff5f5">
+        <div class="tbl-id">CV 421/UBND-TP</div><div class="tbl-nm">Hướng dẫn thực hiện dịch vụ công mức 3</div><div><span class="chip chip-gray">Cải cách HC</span></div><div class="tbl-sb">10/03/2024</div><div><span class="st st-red">Hết hiệu lực</span></div>
+        <button class="btn btn-outline btn-sm" style="color:var(--red)" onclick="showToast('🗑 Đã đánh dấu hết hiệu lực')">Ẩn</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════
+       PAGE: DEMO END-TO-END
+  ═══════════════════════════════ -->
+  <div class="page" id="p-demo">
+    <div class="alert al-blue" style="margin-bottom:16px">
+      🎬 <strong>Demo quy trình E2E cho Hội đồng thẩm định</strong> — Từ khi cán bộ tải văn bản mới lên đến khi Kiosk cập nhật và có thể trả lời người dân với thông tin mới nhất.
+    </div>
+
+    <!-- Flow diagram -->
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-hd">Quy trình End-to-End: Văn bản mới → Kiosk cập nhật</div>
+      <div class="card-body">
+        <div class="e2e-flow" id="e2e-flow">
+          <div class="e2e-node" id="en-0" onclick="runE2E()">
+            <div class="e2e-badge">✓</div>
+            <div class="e2e-icon">📄</div>
+            <div class="e2e-label">Tải lên</div>
+            <div class="e2e-sub">Cán bộ upload</div>
+          </div>
+          <div class="e2e-arrow">→</div>
+          <div class="e2e-node" id="en-1">
+            <div class="e2e-badge">✓</div>
+            <div class="e2e-icon">🔍</div>
+            <div class="e2e-label">OCR / Parse</div>
+            <div class="e2e-sub">Trích xuất text</div>
+          </div>
+          <div class="e2e-arrow">→</div>
+          <div class="e2e-node" id="en-2">
+            <div class="e2e-badge">✓</div>
+            <div class="e2e-icon">🤖</div>
+            <div class="e2e-label">AI Phân loại</div>
+            <div class="e2e-sub">Loại + Lĩnh vực</div>
+          </div>
+          <div class="e2e-arrow">→</div>
+          <div class="e2e-node" id="en-3">
+            <div class="e2e-badge">✓</div>
+            <div class="e2e-icon">👤</div>
+            <div class="e2e-label">Cán bộ duyệt</div>
+            <div class="e2e-sub">Xác nhận / Sửa</div>
+          </div>
+          <div class="e2e-arrow">→</div>
+          <div class="e2e-node" id="en-4">
+            <div class="e2e-badge">✓</div>
+            <div class="e2e-icon">🧮</div>
+            <div class="e2e-label">Embedding</div>
+            <div class="e2e-sub">pgvector index</div>
+          </div>
+          <div class="e2e-arrow">→</div>
+          <div class="e2e-node" id="en-5">
+            <div class="e2e-badge">✓</div>
+            <div class="e2e-icon">🕸️</div>
+            <div class="e2e-label">Neo4j Graph</div>
+            <div class="e2e-sub">Cập nhật liên kết</div>
+          </div>
+          <div class="e2e-arrow">→</div>
+          <div class="e2e-node" id="en-6">
+            <div class="e2e-badge">✓</div>
+            <div class="e2e-icon">🖥️</div>
+            <div class="e2e-label">Kiosk Live</div>
+            <div class="e2e-sub">Người dân nhận info mới</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;justify-content:center;margin-top:4px">
+          <button class="btn btn-red" onclick="runE2E()">▶ Chạy demo</button>
+          <button class="btn btn-outline" onclick="resetE2E()">↺ Reset</button>
+          <div id="e2e-time" style="font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="g2">
+      <!-- Chi tiết mỗi bước -->
+      <div class="card">
+        <div class="card-hd">Chi tiết pipeline — NĐ 63/2026/NĐ-CP</div>
+        <div class="card-body" style="padding:8px 12px">
+          <div class="pipe-step done" id="ps-0">
+            <div class="pipe-num">✓</div>
+            <div class="pipe-content"><div class="pipe-title">Tải lên văn bản</div><div class="pipe-sub">PDF · 2.4MB · 18 trang · NĐ 63/2026</div></div>
+            <div class="pipe-status"><span class="st st-green">Hoàn thành</span></div>
+          </div>
+          <div class="pipe-step waiting" id="ps-1">
+            <div class="pipe-num">2</div>
+            <div class="pipe-content"><div class="pipe-title">OCR & Trích xuất văn bản</div><div class="pipe-sub">pdfplumber → text thuần · chunk 512 tokens</div></div>
+            <div class="pipe-status" id="ps-1-st"><span class="st st-gray">Chờ</span></div>
+          </div>
+          <div class="pipe-step waiting" id="ps-2">
+            <div class="pipe-num">3</div>
+            <div class="pipe-content"><div class="pipe-title">AI phân loại (PhoBERT + Qwen)</div><div class="pipe-sub">Nhận dạng loại VB · lĩnh vực · điều khoản</div></div>
+            <div class="pipe-status" id="ps-2-st"><span class="st st-gray">Chờ</span></div>
+          </div>
+          <div class="pipe-step waiting" id="ps-3">
+            <div class="pipe-num">4</div>
+            <div class="pipe-content"><div class="pipe-title">Cán bộ xem xét & phê duyệt</div><div class="pipe-sub">Xác nhận phân loại AI hoặc chỉnh sửa</div></div>
+            <div class="pipe-status" id="ps-3-st"><span class="st st-gray">Chờ</span></div>
+          </div>
+          <div class="pipe-step waiting" id="ps-4">
+            <div class="pipe-num">5</div>
+            <div class="pipe-content"><div class="pipe-title">Tạo embedding & nạp pgvector</div><div class="pipe-sub">multilingual-e5-large · ~2-4s/chunk</div></div>
+            <div class="pipe-status" id="ps-4-st"><span class="st st-gray">Chờ</span></div>
+          </div>
+          <div class="pipe-step waiting" id="ps-5">
+            <div class="pipe-num">6</div>
+            <div class="pipe-content"><div class="pipe-title">Cập nhật Knowledge Graph Neo4j</div><div class="pipe-sub">Liên kết VB–TTHC–lĩnh vực–điều khoản</div></div>
+            <div class="pipe-status" id="ps-5-st"><span class="st st-gray">Chờ</span></div>
+          </div>
+          <div class="pipe-step waiting" id="ps-6">
+            <div class="pipe-num">7</div>
+            <div class="pipe-content"><div class="pipe-title">🖥️ Kiosk nhận tri thức mới</div><div class="pipe-sub">Hot-reload — không cần restart service</div></div>
+            <div class="pipe-status" id="ps-6-st"><span class="st st-gray">Chờ</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Log terminal -->
+      <div>
+        <div class="card" style="margin-bottom:12px">
+          <div class="card-hd">🖥️ System Log — Realtime</div>
+          <div class="card-body" style="padding:8px">
+            <div class="log-terminal" id="log-terminal">
+              <div class="log-line"><span class="log-ts">[08:32:01]</span> <span class="log-ok">INFO</span> <span style="color:#e2e8f0">Admin CMS khởi động thành công</span></div>
+              <div class="log-line"><span class="log-ts">[08:32:05]</span> <span class="log-ok">INFO</span> <span style="color:#e2e8f0">Kết nối pgvector: 1.284 vectors sẵn sàng</span></div>
+              <div class="log-line"><span class="log-ts">[08:32:06]</span> <span class="log-ok">INFO</span> <span style="color:#e2e8f0">Neo4j: 409 TTHC nodes · 847 VB nodes</span></div>
+              <div class="log-line"><span class="log-ts">[08:32:07]</span> <span class="log-ok">INFO</span> <span style="color:#e2e8f0">Qwen2.5-7B loaded · ctx 8192 tokens</span></div>
+              <div class="log-line"><span class="log-ts">[08:47:12]</span> <span class="log-info">WAIT</span> <span style="color:#e2e8f0">7 văn bản chờ duyệt trong hàng đợi</span></div>
+              <div class="log-line"><span class="log-ts">[08:47:23]</span> <span style="color:#6b7280">---</span> <span style="color:#4b5563">Nhấn "Chạy demo" để xem pipeline...</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Kiosk trả lời trước/sau -->
+        <div class="card">
+          <div class="card-hd">💬 Kiểm tra Kiosk: Trước và Sau cập nhật</div>
+          <div class="card-body">
+            <div style="font-size:11.5px;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:6px;letter-spacing:.04em">Câu hỏi: "Đăng ký khai sinh cần giấy tờ gì?"</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+              <div style="background:#fff5f5;border:1px solid var(--rb);border-radius:8px;padding:9px">
+                <div style="font-size:10px;font-weight:700;color:var(--red);text-transform:uppercase;margin-bottom:6px">❌ Trước cập nhật (v2.3)</div>
+                <div style="font-size:11.5px;color:var(--text2);line-height:1.7">CCCD cha mẹ: <span style="text-decoration:line-through;color:var(--dim)">bản photo thường</span><br>Mẫu tờ khai: <span style="text-decoration:line-through;color:var(--dim)">01/2023</span></div>
+              </div>
+              <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:9px" id="kiosk-after" style="opacity:.4">
+                <div style="font-size:10px;font-weight:700;color:var(--green);text-transform:uppercase;margin-bottom:6px">✅ Sau cập nhật (v2.4)</div>
+                <div style="font-size:11.5px;color:var(--text2);line-height:1.7">CCCD cha mẹ: <span style="color:var(--green);font-weight:700">bản màu, công chứng</span><br>Mẫu tờ khai: <span style="color:var(--green);font-weight:700">01/2024 (cập nhật)</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════
+       PAGE: DANH MỤC VĂN BẢN
+  ═══════════════════════════════ -->
+  <div class="page" id="p-vb-list">
+    <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center">
+      <div class="sbox" style="width:260px"><span style="color:var(--dim)">🔍</span><input type="text" placeholder="Tìm số hiệu, tên văn bản..." oninput="filterVB(this.value)"></div>
+      <select class="fsel" style="width:140px" id="vb-f-loai" onchange="renderVBTable()">
+        <option value="">Tất cả loại</option><option value="NĐ">Nghị định (NĐ)</option><option value="TT">Thông tư (TT)</option>
+        <option value="QĐ">Quyết định (QĐ)</option><option value="CV">Công văn (CV)</option><option value="Luật">Luật</option>
+      </select>
+      <select class="fsel" style="width:160px" id="vb-f-lv" onchange="renderVBTable()">
+        <option value="">Tất cả lĩnh vực</option>
+        <option>Hộ tịch</option><option>Chứng thực</option><option>Cư trú</option><option>Đất đai</option>
+        <option>Người có công</option><option>Bảo trợ xã hội</option><option>Xây dựng</option><option>Tôn giáo</option>
+      </select>
+      <select class="fsel" style="width:140px"><option>Còn hiệu lực</option><option>Hết hiệu lực</option><option>Tất cả</option></select>
+      <button class="btn btn-red" style="margin-left:auto" onclick="nav('p-vb-upload')">⬆️ Tải lên mới</button>
+    </div>
+    <div class="tbl" id="vb-tbl">
+      <div class="tbl-hd" style="grid-template-columns:.8fr 2fr .8fr 1fr .8fr .7fr 90px">
+        <span>Số hiệu</span><span>Tên văn bản</span><span>Loại</span><span>Lĩnh vực</span><span>Ban hành</span><span>Trạng thái</span><span>Thao tác</span>
+      </div>
+      <div id="vb-rows"></div>
+      <div class="pagination" id="vb-pg"></div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════
+       PAGE: TẢI LÊN VĂN BẢN MỚI
+  ═══════════════════════════════ -->
+  <div class="page" id="p-vb-upload">
+    <div class="g2">
+      <div>
+        <div class="card" style="margin-bottom:12px">
+          <div class="card-hd">⬆️ Tải lên văn bản mới</div>
+          <div class="card-body">
+            <div style="border:2px dashed var(--border);border-radius:10px;padding:24px;text-align:center;background:var(--card);cursor:pointer;margin-bottom:12px;transition:all .15s" onclick="simulateUpload()" onmouseover="this.style.borderColor='var(--red)';this.style.background='#fffafa'" onmouseout="this.style.borderColor='var(--border)';this.style.background='var(--card)'">
+              <div style="font-size:28px;margin-bottom:8px">📄</div>
+              <div style="font-size:13px;font-weight:700;margin-bottom:3px">Kéo thả hoặc nhấn để chọn file</div>
+              <div style="font-size:11.5px;color:var(--muted);margin-bottom:10px">PDF, DOCX, TXT · Tối đa 50 MB</div>
+              <span style="background:var(--red);color:#fff;padding:7px 18px;border-radius:7px;font-size:12px;font-weight:700">Chọn file</span>
+            </div>
+            <div class="fg"><label class="fl">Hoặc nhập URL (Cổng VBPL quốc gia)</label>
+              <div style="display:flex;gap:6px"><input class="fi" id="url-input" placeholder="https://vanban.chinhphu.vn/..."><button class="btn btn-blue btn-sm" onclick="simulateUpload()">Tải về</button></div>
+            </div>
+            <div class="fg">
+              <label class="fl">Quy tắc phát hành sau khi AI phân loại</label>
+              <select class="fsel">
+                <option>✅ Tự động duyệt nếu AI tin cậy ≥90%</option>
+                <option>👤 Luôn yêu cầu cán bộ xem xét</option>
+                <option>⚡ Tự động duyệt và deploy ngay (không qua duyệt)</option>
+              </select>
+            </div>
+            <div class="fg" style="margin-bottom:0"><label class="fl">Ghi chú</label><textarea class="fta" placeholder="Mô tả ngắn, lý do bổ sung..."></textarea></div>
+          </div>
+        </div>
+
+        <!-- Upload progress simulation -->
+        <div class="card" id="upload-progress-card" style="display:none">
+          <div class="card-hd">⚙️ Đang xử lý văn bản</div>
+          <div class="card-body" style="padding:8px 12px">
+            <div id="upload-steps"></div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="card" style="margin-bottom:12px">
+          <div class="card-hd">🤖 Quy trình AI xử lý tự động</div>
+          <div class="card-body">
+            <div style="display:flex;flex-direction:column;gap:7px">
+              <div style="display:flex;gap:9px;align-items:flex-start;padding:9px;background:var(--card);border-radius:8px;border:1px solid var(--border)">
+                <div style="width:22px;height:22px;background:var(--blue);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;flex-shrink:0">1</div>
+                <div><div style="font-size:12px;font-weight:700">OCR & Trích xuất</div><div style="font-size:11px;color:var(--muted)">pdfplumber · OCR nếu scan · Tách thành chunks 512 tokens</div></div>
+              </div>
+              <div style="display:flex;gap:9px;align-items:flex-start;padding:9px;background:var(--card);border-radius:8px;border:1px solid var(--border)">
+                <div style="width:22px;height:22px;background:var(--violet);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;flex-shrink:0">2</div>
+                <div><div style="font-size:12px;font-weight:700">Phân loại (PhoBERT NER + Qwen2.5)</div><div style="font-size:11px;color:var(--muted)">Nhận dạng: loại VB, số hiệu, ngày, lĩnh vực, cơ quan ban hành, điều khoản quan trọng</div></div>
+              </div>
+              <div style="display:flex;gap:9px;align-items:flex-start;padding:9px;background:var(--card);border-radius:8px;border:1px solid var(--border)">
+                <div style="width:22px;height:22px;background:var(--teal);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;flex-shrink:0">3</div>
+                <div><div style="font-size:12px;font-weight:700">Xác định TTHC liên quan</div><div style="font-size:11px;color:var(--muted)">So khớp với 409 TTHC trong cơ sở dữ liệu · đề xuất liên kết</div></div>
+              </div>
+              <div style="display:flex;gap:9px;align-items:flex-start;padding:9px;background:var(--card);border-radius:8px;border:1px solid var(--border)">
+                <div style="width:22px;height:22px;background:var(--amber);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;flex-shrink:0">4</div>
+                <div><div style="font-size:12px;font-weight:700">Gợi ý phân loại cho cán bộ</div><div style="font-size:11px;color:var(--muted)">Hiển thị % tin cậy · Cho phép chỉnh sửa trước khi duyệt</div></div>
+              </div>
+              <div style="display:flex;gap:9px;align-items:flex-start;padding:9px;background:#f0fdf4;border-radius:8px;border:1px solid #bbf7d0">
+                <div style="width:22px;height:22px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;flex-shrink:0">5</div>
+                <div><div style="font-size:12px;font-weight:700;color:var(--green)">MLOps: Embed + Graph + Deploy</div><div style="font-size:11px;color:var(--muted)">pgvector · Neo4j · Hot-reload Kiosk</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-hd">📊 Hiệu suất AI phân loại — 30 ngày</div>
+          <div class="card-body">
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px">
+              <div style="text-align:center;padding:9px;background:var(--card);border-radius:7px"><div style="font-size:19px;font-weight:800;color:var(--green);font-family:'JetBrains Mono',monospace">94%</div><div style="font-size:10px;color:var(--muted)">Tự động duyệt</div></div>
+              <div style="text-align:center;padding:9px;background:var(--card);border-radius:7px"><div style="font-size:19px;font-weight:800;color:var(--amber);font-family:'JetBrains Mono',monospace">4.2%</div><div style="font-size:10px;color:var(--muted)">Cần xác nhận</div></div>
+              <div style="text-align:center;padding:9px;background:var(--card);border-radius:7px"><div style="font-size:19px;font-weight:800;color:var(--red);font-family:'JetBrains Mono',monospace">1.8%</div><div style="font-size:10px;color:var(--muted)">Sai phân loại</div></div>
+            </div>
+            <div style="font-size:11px;color:var(--muted)">247 văn bản đã xử lý · Độ chính xác: <strong style="color:var(--green)">98.2%</strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════
+       PAGE: AI PHÂN LOẠI · CHỜ DUYỆT
+  ═══════════════════════════════ -->
+  <div class="page" id="p-ai-classify">
+    <div class="alert al-blue">
+      🤖 AI tự động phân loại văn bản khi tải lên. <strong>≥90%</strong> tin cậy → tự động duyệt và vào MLOps queue. <strong>70–89%</strong> → cán bộ xác nhận nhanh. <strong>&lt;70%</strong> → xem xét thủ công, AI gợi ý phân loại để chọn.
+    </div>
+
+    <!-- Nhóm 1: Tự động duyệt — chờ MLOps -->
+    <div class="sh"><div class="sh-t">✅ Đã phân loại ≥90% — Sẵn sàng deploy (3 văn bản)</div><button class="sh-a" onclick="showToast('⚙️ Đã đưa 3 văn bản vào MLOps queue...');nav('p-mlops')">Deploy tất cả →</button></div>
+
+    <div class="tbl" style="margin-bottom:16px">
+      <div class="tbl-hd" style="grid-template-columns:2fr 1fr 1fr .8fr .8fr 120px">
+        <span>Văn bản</span><span>Loại VB</span><span>Lĩnh vực AI gợi ý</span><span>Tin cậy</span><span>TTHC liên quan</span><span>Hành động</span>
+      </div>
+      <div class="tbl-r" style="grid-template-columns:2fr 1fr 1fr .8fr .8fr 120px">
+        <div><div class="tbl-nm">NĐ 63/2026/NĐ-CP — Đăng ký hộ tịch trực tuyến</div><div class="tbl-sb">PDF · 2.4MB · Tải lên 08:12</div></div>
+        <span class="chip chip-r">Nghị định</span><span class="chip chip-r">Hộ tịch</span>
+        <div style="color:var(--green);font-weight:800;font-size:13px">97.3%</div>
+        <div><span class="chip chip-g">3 TTHC</span></div>
+        <div style="display:flex;gap:4px">
+          <button class="btn btn-green btn-sm" onclick="showToast('⚙️ NĐ 63/2026 vào MLOps pipeline...');nav('p-mlops')">⚙️ Deploy</button>
+          <button class="btn btn-outline btn-sm" onclick="openModal('modal-vb-detail')">Chi tiết</button>
+        </div>
+      </div>
+      <div class="tbl-r" style="grid-template-columns:2fr 1fr 1fr .8fr .8fr 120px">
+        <div><div class="tbl-nm">TT 04/2026/TT-BTP — Chứng thực bản sao</div><div class="tbl-sb">PDF · 1.8MB · Tải lên 07:55</div></div>
+        <span class="chip chip-a">Thông tư</span><span class="chip chip-a">Chứng thực</span>
+        <div style="color:var(--green);font-weight:800;font-size:13px">94.1%</div>
+        <div><span class="chip chip-g">2 TTHC</span></div>
+        <div style="display:flex;gap:4px">
+          <button class="btn btn-green btn-sm" onclick="showToast('⚙️ TT 04/2026 vào MLOps pipeline...')">⚙️ Deploy</button>
+          <button class="btn btn-outline btn-sm">Chi tiết</button>
+        </div>
+      </div>
+      <div class="tbl-r" style="grid-template-columns:2fr 1fr 1fr .8fr .8fr 120px">
+        <div><div class="tbl-nm">QĐ 221/2026 — Người có công</div><div class="tbl-sb">PDF · 0.9MB · Sync tự động 02:00</div></div>
+        <span class="chip chip-g">Quyết định</span><span class="chip chip-b">Người có công</span>
+        <div style="color:var(--green);font-weight:800;font-size:13px">96.4%</div>
+        <div><span class="chip chip-g">1 TTHC</span></div>
+        <div style="display:flex;gap:4px">
+          <button class="btn btn-green btn-sm" onclick="showToast('⚙️ QĐ 221/2026 vào MLOps pipeline...')">⚙️ Deploy</button>
+          <button class="btn btn-outline btn-sm">Chi tiết</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nhóm 2: Cần xác nhận -->
+    <div class="sh"><div class="sh-t">⚠️ Độ tin cậy 70–89% — Cần cán bộ xác nhận nhanh (2 văn bản)</div></div>
+
+    <div class="rv-card">
+      <div class="rv-hd">
+        <div class="rv-icon" style="background:#fffbeb">📋</div>
+        <div><div class="rv-title">NĐ 18/2026/NĐ-CP — Quản lý đất đai</div><div class="rv-meta">PDF · 4.1MB · AI tin cậy: <strong style="color:var(--amber)">82.4%</strong></div></div>
+        <div class="rv-actions">
+          <div style="text-align:right"><span class="ai-badge ai-warn">⚠️ 82.4% — Cần xác nhận</span></div>
+        </div>
+      </div>
+      <div class="rv-body">
+        <div style="font-size:11.5px;color:var(--muted);margin-bottom:10px">AI gợi ý phân loại — Chọn phân loại đúng rồi nhấn Xác nhận:</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+          <label style="display:flex;align-items:center;gap:6px;padding:7px 12px;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;font-size:12.5px;font-weight:600;transition:all .15s" onmouseover="this.style.borderColor='var(--red)'" onmouseout="this.style.borderColor='var(--border)'">
+            <input type="radio" name="lv-nd18" value="dat-dai"> <span>Đất đai</span> <span style="color:var(--green);font-size:11px;font-weight:700">82%</span>
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;padding:7px 12px;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;font-size:12.5px;font-weight:600;transition:all .15s" onmouseover="this.style.borderColor='var(--red)'" onmouseout="this.style.borderColor='var(--border)'">
+            <input type="radio" name="lv-nd18" value="quy-hoach"> <span>Quy hoạch đô thị</span> <span style="color:var(--amber);font-size:11px;font-weight:700">15%</span>
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;padding:7px 12px;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;font-size:12.5px;font-weight:600;transition:all .15s" onmouseover="this.style.borderColor='var(--red)'" onmouseout="this.style.borderColor='var(--border)'">
+            <input type="radio" name="lv-nd18" value="khac"> <span>Khác...</span>
+          </label>
+        </div>
+        <button class="btn btn-red btn-sm" onclick="showToast('✅ Đã xác nhận: Đất đai · Đưa vào MLOps queue...')">✅ Xác nhận & đưa vào MLOps</button>
+      </div>
+    </div>
+
+    <!-- Nhóm 3: Không chắc -->
+    <div class="sh"><div class="sh-t">🔍 Tin cậy &lt;70% — Cần xem xét thủ công (2 văn bản)</div></div>
+    <div class="rv-card urgent">
+      <div class="rv-hd">
+        <div class="rv-icon" style="background:var(--rl)">❓</div>
+        <div><div class="rv-title">CV 1821/UBND-VP — Giải quyết TTHC</div><div class="rv-meta">DOCX · 0.3MB · AI tin cậy: <strong style="color:var(--red)">61.2%</strong></div></div>
+        <div class="rv-actions">
+          <span class="ai-badge" style="background:var(--rl);border-color:var(--rb);color:#991b1b">⚠️ 61.2% — Thủ công</span>
+          <button class="btn btn-outline btn-sm" onclick="openModal('modal-manual-classify')">🔍 Phân loại thủ công</button>
+        </div>
+      </div>
+      <div class="rv-body">
+        <div class="alert al-amber" style="margin-bottom:0">AI không chắc về lĩnh vực. Có thể là <strong>Cải cách hành chính</strong>, <strong>Phổ biến pháp luật</strong> hoặc <strong>Tổ chức bộ máy</strong>. Cán bộ cần đọc và phân loại trực tiếp.</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════
+       PAGE: PHÊ DUYỆT & XUẤT BẢN
+  ═══════════════════════════════ -->
+  <div class="page" id="p-vb-approve">
+    <div class="alert al-green">✅ Trang này dành cho cán bộ có quyền phê duyệt. Sau khi duyệt, hệ thống tự động kích hoạt MLOps pipeline để cập nhật Kiosk.</div>
+
+    <div class="rv-card urgent" style="margin-bottom:16px">
+      <div class="rv-hd">
+        <div class="rv-icon" style="background:#eff6ff">📜</div>
+        <div>
+          <div class="rv-title">NĐ 63/2026/NĐ-CP — Đăng ký hộ tịch trực tuyến</div>
+          <div class="rv-meta">
+            <span class="chip chip-r" style="margin-right:4px">Nghị định · Hộ tịch</span>
+            AI: <strong style="color:var(--green)">97.3%</strong> · 18 trang · Tải lên 08:12 bởi Lê Thị Bảo Châu
+          </div>
+        </div>
+        <div class="rv-actions">
+          <button class="btn btn-outline btn-sm" onclick="openModal('modal-vb-detail')">👁 Xem toàn văn</button>
+          <button class="btn btn-red btn-sm" onclick="openModal('modal-reject')">✕ Từ chối</button>
+          <button class="btn btn-green btn-sm" onclick="openModal('modal-confirm-deploy')">✅ Duyệt & Deploy</button>
+        </div>
+      </div>
+      <div class="rv-body">
+        <div class="g2" style="margin-bottom:12px">
+          <div>
+            <div style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:8px">AI tóm tắt nội dung chính</div>
+            <div style="background:var(--card);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--text2);line-height:1.7">
+              Bổ sung quy định đăng ký hộ tịch qua Cổng dịch vụ công trực tuyến. <strong>Thay đổi chính:</strong> yêu cầu CCCD bản màu công chứng thay photo thường. Mẫu tờ khai cập nhật sang 01/2024. Áp dụng từ <strong>01/05/2026</strong>.
+            </div>
+          </div>
+          <div>
+            <div style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:8px">TTHC bị ảnh hưởng (AI xác định)</div>
+            <div style="display:flex;gap:5px;flex-wrap:wrap">
+              <span class="chip chip-r">👶 Đăng ký khai sinh</span>
+              <span class="chip chip-r">💍 Đăng ký kết hôn</span>
+              <span class="chip chip-r">📜 Đăng ký khai tử</span>
+            </div>
+            <div style="margin-top:8px">
+              <div style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:4px">Sau khi duyệt, hệ thống sẽ</div>
+              <div style="font-size:11.5px;color:var(--text2);line-height:1.9">
+                1. Tạo 24 embedding vectors mới<br>
+                2. Cập nhật 3 nodes trong Neo4j<br>
+                3. Hot-reload Kiosk (không restart)
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Diff view -->
+        <div style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:6px">So sánh thay đổi so với phiên bản hiện tại</div>
+        <div class="diff-wrap">
+          <div class="diff-hd"><div class="diff-col-hd diff-old-hd">🔴 Hiện tại trong Kiosk</div><div class="diff-col-hd diff-new-hd">🟢 Sau khi duyệt văn bản mới</div></div>
+          <div class="diff-body">
+            <div class="diff-col diff-col-old">TTHC: Đăng ký khai sinh
+Giấy tờ:
+• Giấy chứng sinh (gốc)
+• CCCD cha mẹ: <span class="diff-del">bản photo thường</span>
+• Tờ khai: <span class="diff-del">Mẫu 01/2023</span>
+• Giấy kết hôn (sao)</div>
+            <div class="diff-col diff-col-new">TTHC: Đăng ký khai sinh
+Giấy tờ:
+• Giấy chứng sinh (gốc)
+• CCCD cha mẹ: <span class="diff-add">bản màu, công chứng</span>
+• Tờ khai: <span class="diff-add">Mẫu 01/2024 (cập nhật)</span>
+• Giấy kết hôn (sao)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Các mục còn lại dạng compact -->
+    <div class="sh"><div class="sh-t">Phê duyệt nhanh (4 văn bản khác)</div></div>
+    <div class="tbl">
+      <div class="tbl-hd" style="grid-template-columns:2fr 1fr 1fr .8fr 140px">
+        <span>Văn bản</span><span>Lĩnh vực</span><span>TTHC ảnh hưởng</span><span>AI</span><span>Hành động</span>
+      </div>
+      <div class="tbl-r" style="grid-template-columns:2fr 1fr 1fr .8fr 140px">
+        <div><div class="tbl-nm">TT 04/2026/TT-BTP — Chứng thực</div><div class="tbl-sb">Thông tư · 1.8MB</div></div>
+        <span class="chip chip-a">Chứng thực</span><span class="chip chip-g">2 TTHC</span>
+        <span style="color:var(--green);font-weight:700">94.1%</span>
+        <div style="display:flex;gap:4px"><button class="btn btn-green btn-sm" onclick="showToast('✅ Duyệt TT 04/2026 — Bắt đầu MLOps...')">✅ Duyệt</button><button class="btn btn-outline btn-sm" style="color:var(--red)">✕</button></div>
+      </div>
+      <div class="tbl-r" style="grid-template-columns:2fr 1fr 1fr .8fr 140px">
+        <div><div class="tbl-nm">QĐ 221/2026 — Người có công</div><div class="tbl-sb">Quyết định · 0.9MB</div></div>
+        <span class="chip chip-b">Người có công</span><span class="chip chip-g">1 TTHC</span>
+        <span style="color:var(--green);font-weight:700">96.4%</span>
+        <div style="display:flex;gap:4px"><button class="btn btn-green btn-sm" onclick="showToast('✅ Duyệt QĐ 221/2026...')">✅ Duyệt</button><button class="btn btn-outline btn-sm" style="color:var(--red)">✕</button></div>
+      </div>
+      <div class="tbl-r" style="grid-template-columns:2fr 1fr 1fr .8fr 140px">
+        <div><div class="tbl-nm">NĐ 18/2026 — Đất đai (đã XN lĩnh vực)</div><div class="tbl-sb">Nghị định · 4.1MB</div></div>
+        <span class="chip chip-t">Đất đai</span><span class="chip chip-g">4 TTHC</span>
+        <span style="color:var(--amber);font-weight:700">82.4%*</span>
+        <div style="display:flex;gap:4px"><button class="btn btn-green btn-sm" onclick="showToast('✅ Duyệt NĐ 18/2026...')">✅ Duyệt</button><button class="btn btn-outline btn-sm" style="color:var(--red)">✕</button></div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════
+       PAGE: MLOps PIPELINE
+  ═══════════════════════════════ -->
+  <div class="page" id="p-mlops">
+    <div class="kpi-row k4">
+      <div class="kpi cg"><div class="kpi-lbl">Đã deploy thành công</div><div class="kpi-ico">✅</div><div class="kpi-val" style="color:var(--green)">243</div><div class="kpi-sub">văn bản trong tháng</div></div>
+      <div class="kpi ca"><div class="kpi-lbl">Đang trong queue</div><div class="kpi-ico">⚙️</div><div class="kpi-val" style="color:var(--amber)">3</div><div class="kpi-sub">chờ xử lý embed</div></div>
+      <div class="kpi cv"><div class="kpi-lbl">Tổng chunks pgvector</div><div class="kpi-ico">🧮</div><div class="kpi-val" style="color:var(--violet)">1.284</div><div class="kpi-sub">avg 512 tokens/chunk</div></div>
+      <div class="kpi cr"><div class="kpi-lbl">Thời gian deploy TB</div><div class="kpi-ico">⏱</div><div class="kpi-val" style="color:var(--red)">~14s</div><div class="kpi-sub">từ lúc duyệt → Kiosk live</div></div>
+    </div>
+
+    <div class="g2">
+      <!-- Pipeline queue -->
+      <div class="card">
+        <div class="card-hd">⚙️ Hàng đợi MLOps hiện tại</div>
+        <div class="card-body" style="padding:8px 12px">
+          <!-- Job 1: đang chạy -->
+          <div style="padding:10px;background:var(--rl);border:1.5px solid var(--rb);border-radius:9px;margin-bottom:8px">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+              <span class="spin" style="font-size:14px">⚙️</span>
+              <div style="flex:1"><div style="font-size:12.5px;font-weight:800">NĐ 63/2026/NĐ-CP</div><div style="font-size:11px;color:var(--muted)">Bước 4/6 — Tạo embedding</div></div>
+              <span class="st st-amber">Đang chạy</span>
+            </div>
+            <div style="background:var(--border);height:5px;border-radius:10px;overflow:hidden"><div id="job1-bar" style="height:100%;background:var(--red);border-radius:10px;width:62%;transition:width 1s"></div></div>
+            <div style="font-size:10px;color:var(--muted);margin-top:4px">15 / 24 chunks · Còn ~8 giây</div>
+          </div>
+          <!-- Job 2,3: chờ -->
+          <div style="padding:9px 10px;background:var(--card);border:1px solid var(--border);border-radius:8px;margin-bottom:6px;display:flex;align-items:center;gap:8px">
+            <span style="font-size:13px;opacity:.5">⏳</span>
+            <div style="flex:1"><div style="font-size:12px;font-weight:700">TT 04/2026/TT-BTP</div><div style="font-size:10.5px;color:var(--muted)">Chờ trong queue · 12 chunks</div></div>
+            <span class="st st-gray">Chờ</span>
+          </div>
+          <div style="padding:9px 10px;background:var(--card);border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;gap:8px">
+            <span style="font-size:13px;opacity:.5">⏳</span>
+            <div style="flex:1"><div style="font-size:12px;font-weight:700">QĐ 221/2026</div><div style="font-size:10.5px;color:var(--muted)">Chờ trong queue · 8 chunks</div></div>
+            <span class="st st-gray">Chờ</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Log terminal -->
+      <div class="card">
+        <div class="card-hd">🖥️ MLOps Log — Realtime</div>
+        <div class="card-body" style="padding:8px">
+          <div class="log-terminal" id="mlops-log">
+            <div class="log-line"><span class="log-ts">[08:47:31]</span> <span class="log-ok">START</span> <span style="color:#e2e8f0">Bắt đầu pipeline: NĐ 63/2026</span></div>
+            <div class="log-line"><span class="log-ts">[08:47:32]</span> <span class="log-info">OCR</span>  <span style="color:#e2e8f0">pdfplumber: 18 trang → 4.218 tokens</span></div>
+            <div class="log-line"><span class="log-ts">[08:47:33]</span> <span class="log-info">CHUNK</span> <span style="color:#e2e8f0">Tách thành 24 chunks @ 512 tokens</span></div>
+            <div class="log-line"><span class="log-ts">[08:47:34]</span> <span class="log-ok">CLASS</span> <span style="color:#e2e8f0">PhoBERT: Nghị định · Hộ tịch · 97.3%</span></div>
+            <div class="log-line"><span class="log-ts">[08:47:35]</span> <span class="log-data">TTHC</span>  <span style="color:#e2e8f0">Tìm thấy 3 TTHC liên quan</span></div>
+            <div class="log-line"><span class="log-ts">[08:47:36]</span> <span class="log-ok">APPROV</span> <span style="color:#e2e8f0">Được phê duyệt bởi TS. Nguyễn Minh Hải</span></div>
+            <div class="log-line"><span class="log-ts">[08:47:37]</span> <span class="log-info">EMBED</span> <span style="color:#e2e8f0">e5-large: embedding 24 chunks...</span></div>
+            <div class="log-line"><span class="log-ts">[08:47:38]</span> <span class="log-info">EMBED</span> <span style="color:#e2e8f0">  ████████░░░░ 15/24 chunks (62%)</span></div>
+          </div>
+          <button class="btn btn-outline btn-sm" style="margin-top:8px;width:100%" onclick="simulateMLOps()">▶ Mô phỏng hoàn thành pipeline</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lịch sử deploy -->
+    <div class="sh"><div class="sh-t">Lịch sử deploy gần đây</div></div>
+    <div class="tbl">
+      <div class="tbl-hd" style="grid-template-columns:1.5fr 1fr 1fr .8fr .8fr .8fr .8fr">
+        <span>Văn bản</span><span>Lĩnh vực</span><span>Thời điểm deploy</span><span>Chunks</span><span>TTHC update</span><span>Thời gian</span><span>Trạng thái</span>
+      </div>
+      <div class="tbl-r" style="grid-template-columns:1.5fr 1fr 1fr .8fr .8fr .8fr .8fr">
+        <div class="tbl-nm">TTHC-001 Khai sinh v2.4</div><span class="chip chip-r">Hộ tịch</span>
+        <div class="tbl-sb">Hôm nay 08:32</div><div class="tbl-id">24</div><div class="tbl-id">3 TTHC</div>
+        <div class="tbl-id">13.2s</div><span class="st st-green">Thành công</span>
+      </div>
+      <div class="tbl-r" style="grid-template-columns:1.5fr 1fr 1fr .8fr .8fr .8fr .8fr">
+        <div class="tbl-nm">TT 04/2020/TT-BTP cập nhật</div><span class="chip chip-a">Chứng thực</span>
+        <div class="tbl-sb">Hôm qua 10:15</div><div class="tbl-id">18</div><div class="tbl-id">2 TTHC</div>
+        <div class="tbl-id">11.8s</div><span class="st st-green">Thành công</span>
+      </div>
+      <div class="tbl-r" style="grid-template-columns:1.5fr 1fr 1fr .8fr .8fr .8fr .8fr">
+        <div class="tbl-nm">Luật Cư trú 2020 (re-index)</div><span class="chip chip-b">Cư trú</span>
+        <div class="tbl-sb">09/03 09:00</div><div class="tbl-id">67</div><div class="tbl-id">4 TTHC</div>
+        <div class="tbl-id">28.4s</div><span class="st st-green">Thành công</span>
+      </div>
+      <div class="tbl-r" style="grid-template-columns:1.5fr 1fr 1fr .8fr .8fr .8fr .8fr">
+        <div class="tbl-nm">CV 8821 — lỗi OCR</div><span class="chip chip-gray">Không rõ</span>
+        <div class="tbl-sb">08/03 14:22</div><div class="tbl-id">—</div><div class="tbl-id">—</div>
+        <div class="tbl-id">—</div><span class="st st-red">Lỗi</span>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════
+       PAGE: TRẠNG THÁI EMBEDDING
+  ═══════════════════════════════ -->
+  <div class="page" id="p-embed-status">
+    <div class="kpi-row k3">
+      <div class="kpi cv"><div class="kpi-lbl">Tổng vectors pgvector</div><div class="kpi-ico">🔢</div><div class="kpi-val" style="color:var(--violet)">1.284</div><div class="kpi-sub">847 văn bản · avg 1.5 chunks/VB</div></div>
+      <div class="kpi cg"><div class="kpi-lbl">Khoảng cách cosine TB</div><div class="kpi-ico">📐</div><div class="kpi-val" style="color:var(--green)">0.847</div><div class="kpi-sub">Chất lượng retrieval tốt</div></div>
+      <div class="kpi cb"><div class="kpi-lbl">Độ chính xác Semantic Search</div><div class="kpi-ico">🎯</div><div class="kpi-val" style="color:var(--blue)">96.3%</div><div class="kpi-sub">Đo bằng RAGAS offline</div></div>
+    </div>
+
+    <div class="g2">
+      <div class="card">
+        <div class="card-hd">📊 Phân bố chunks theo lĩnh vực</div>
+        <div class="card-body">
+          <div class="hbar"><div class="hbar-lbl" style="width:110px">Hộ tịch</div><div style="flex:1;background:var(--card);border-radius:4px;overflow:hidden"><div class="hbar-fill" style="width:72%;background:var(--red)"><span style="font-size:9px;font-weight:700;color:#fff">247</span></div></div><div style="font-size:11px;color:var(--muted);width:36px;text-align:right">19.2%</div></div>
+          <div class="hbar"><div class="hbar-lbl" style="width:110px">Người có công</div><div style="flex:1;background:var(--card);border-radius:4px;overflow:hidden"><div class="hbar-fill" style="width:58%;background:#374151"><span style="font-size:9px;font-weight:700;color:#fff">198</span></div></div><div style="font-size:11px;color:var(--muted);width:36px;text-align:right">15.4%</div></div>
+          <div class="hbar"><div class="hbar-lbl" style="width:110px">Cư trú / Đất đai</div><div style="flex:1;background:var(--card);border-radius:4px;overflow:hidden"><div class="hbar-fill" style="width:45%;background:var(--amber)"><span style="font-size:9px;font-weight:700;color:#fff">154</span></div></div><div style="font-size:11px;color:var(--muted);width:36px;text-align:right">12.0%</div></div>
+          <div class="hbar"><div class="hbar-lbl" style="width:110px">Chứng thực</div><div style="flex:1;background:var(--card);border-radius:4px;overflow:hidden"><div class="hbar-fill" style="width:38%;background:var(--teal)"><span style="font-size:9px;font-weight:700;color:#fff">131</span></div></div><div style="font-size:11px;color:var(--muted);width:36px;text-align:right">10.2%</div></div>
+          <div class="hbar"><div class="hbar-lbl" style="width:110px">Khác (74 lv)</div><div style="flex:1;background:var(--card);border-radius:4px;overflow:hidden"><div class="hbar-fill" style="width:80%;background:var(--dim)"><span style="font-size:9px;font-weight:700;color:#fff">554</span></div></div><div style="font-size:11px;color:var(--muted);width:36px;text-align:right">43.1%</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd">🕸️ Knowledge Graph Neo4j — Thống kê</div>
+        <div class="card-body">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <div style="padding:9px;background:var(--card);border-radius:8px;text-align:center"><div style="font-size:20px;font-weight:800;color:var(--red);font-family:'JetBrains Mono',monospace">409</div><div style="font-size:10px;color:var(--muted)">TTHC Nodes</div></div>
+            <div style="padding:9px;background:var(--card);border-radius:8px;text-align:center"><div style="font-size:20px;font-weight:800;color:var(--blue);font-family:'JetBrains Mono',monospace">847</div><div style="font-size:10px;color:var(--muted)">Văn bản Nodes</div></div>
+            <div style="padding:9px;background:var(--card);border-radius:8px;text-align:center"><div style="font-size:20px;font-weight:800;color:var(--teal);font-family:'JetBrains Mono',monospace">78</div><div style="font-size:10px;color:var(--muted)">Lĩnh vực Nodes</div></div>
+            <div style="padding:9px;background:var(--card);border-radius:8px;text-align:center"><div style="font-size:20px;font-weight:800;color:var(--violet);font-family:'JetBrains Mono',monospace">3.214</div><div style="font-size:10px;color:var(--muted)">Relationships</div></div>
+          </div>
+          <div style="margin-top:10px;font-size:11px;color:var(--muted)">
+            Loại quan hệ: <span class="chip chip-r" style="margin:0 2px">THUOC_LINH_VUC</span><span class="chip chip-b" style="margin:0 2px">CAN_CU_PHAP_LY</span><span class="chip chip-g" style="margin:0 2px">LIEN_QUAN_DEN</span>
+          </div>
+          <button class="btn btn-outline btn-sm" style="margin-top:10px;width:100%" onclick="showToast('🕸️ Mở Neo4j Browser...')">🕸️ Mở Neo4j Browser</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Re-index toàn bộ -->
+    <div class="card">
+      <div class="card-hd">🔄 Tái huấn luyện / Re-index</div>
+      <div class="card-body">
+        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+          <div style="flex:1;min-width:200px">
+            <div style="font-size:12.5px;font-weight:700;margin-bottom:3px">Re-embed một lĩnh vực</div>
+            <div style="font-size:11.5px;color:var(--muted)">Cập nhật lại embedding cho toàn bộ văn bản thuộc một lĩnh vực cụ thể</div>
+          </div>
+          <select class="fsel" style="width:180px"><option>Hộ tịch (247 chunks)</option><option>Chứng thực (131 chunks)</option><option>Cư trú (154 chunks)</option></select>
+          <button class="btn btn-amber" onclick="showToast('🔄 Bắt đầu re-embed lĩnh vực Hộ tịch...')">Re-embed lĩnh vực</button>
+        </div>
+        <div style="border-top:1px solid var(--border);margin-top:12px;padding-top:12px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+          <div style="flex:1;min-width:200px">
+            <div style="font-size:12.5px;font-weight:700;margin-bottom:3px;color:var(--red)">Re-index toàn bộ hệ thống</div>
+            <div style="font-size:11.5px;color:var(--muted)">Xây dựng lại toàn bộ pgvector + Neo4j · Dự kiến ~25 phút · Kiosk vẫn dùng index cũ trong lúc chờ</div>
+          </div>
+          <button class="btn btn-red" onclick="openModal('modal-reindex')">🔄 Full Re-index</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════
+       PAGE: LỊCH SỬ CẬP NHẬT
+  ═══════════════════════════════ -->
+  <div class="page" id="p-vb-history">
+    <div style="display:flex;gap:8px;margin-bottom:14px;align-items:center">
+      <div class="sbox" style="width:240px"><span style="color:var(--dim)">🔍</span><input type="text" placeholder="Tìm văn bản, người dùng..."></div>
+      <select class="fsel" style="width:140px"><option>7 ngày qua</option><option>30 ngày</option><option>3 tháng</option></select>
+      <select class="fsel" style="width:150px"><option>Tất cả thao tác</option><option>Thêm mới</option><option>Cập nhật</option><option>Deploy</option><option>Hệ thống</option></select>
+      <div class="tb-chip" style="margin-left:auto">📦 47 thay đổi / 7 ngày</div>
+    </div>
+    <div class="tbl">
+      <div class="card-body" style="padding:0" id="history-list"></div>
+      <div class="pagination" id="hist-pg"></div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════
+       PAGE: CẤU HÌNH AI
+  ═══════════════════════════════ -->
+  <div class="page" id="p-settings">
+    <div class="g2">
+      <div>
+        <div class="card" style="margin-bottom:12px"><div class="card-hd">🤖 LLM & Embedding</div><div class="card-body">
+          <div class="fg"><label class="fl">LLM self-hosted</label><select class="fsel"><option>Qwen2.5-7B (đang dùng · ~3.2 tok/s)</option><option>Qwen2.5-14B</option><option>Llama-3.1-8B</option></select></div>
+          <div class="fg"><label class="fl">Embedding model</label><select class="fsel"><option>multilingual-e5-large v1.4 (đang dùng)</option><option>paraphrase-multilingual-mpnet</option></select></div>
+          <div class="fg"><label class="fl">Ngưỡng tự động duyệt (%)</label><input class="fi" type="number" value="90" min="70" max="100"></div>
+          <div class="fg" style="margin-bottom:0"><label class="fl">Số kết quả pgvector trả về</label><input class="fi" type="number" value="5"></div>
+        </div></div>
+        <div class="card"><div class="card-hd">🎤 Speech & TTS</div><div class="card-body">
+          <div class="fg"><label class="fl">STT Model</label><select class="fsel"><option>Whisper Small (local)</option><option>Whisper Medium</option></select></div>
+          <div class="fg" style="margin-bottom:0"><label class="fl">TTS Engine</label><select class="fsel"><option>Piper TTS — vi_VN-vivos</option><option>Piper TTS — vi_VN-info</option></select></div>
+        </div></div>
+      </div>
+      <div>
+        <div class="card" style="margin-bottom:12px"><div class="card-hd">🔒 Bảo mật & PDPA</div><div class="card-body">
+          <div class="fg"><label class="fl">Tần suất backup pgvector</label><select class="fsel"><option>Mỗi ngày lúc 02:00</option><option>Mỗi 6 giờ</option></select></div>
+          <div class="fg"><label class="fl">Tuân thủ NĐ 13/2023 PDPA</label>
+            <div style="display:flex;align-items:center;gap:8px;margin-top:5px">
+              <div style="width:34px;height:18px;background:var(--green);border-radius:20px;position:relative;cursor:pointer"><div style="width:14px;height:14px;background:#fff;border-radius:50%;position:absolute;right:2px;top:2px"></div></div>
+              <span style="font-size:12px;color:var(--green);font-weight:700">Bật — Không lưu dữ liệu cá nhân</span>
+            </div>
+          </div>
+          <div class="fg" style="margin-bottom:0"><label class="fl">Sync tự động từ VBPL quốc gia</label>
+            <div style="display:flex;align-items:center;gap:8px;margin-top:5px">
+              <div style="width:34px;height:18px;background:var(--green);border-radius:20px;position:relative;cursor:pointer"><div style="width:14px;height:14px;background:#fff;border-radius:50%;position:absolute;right:2px;top:2px"></div></div>
+              <span style="font-size:12px;color:var(--green);font-weight:700">Bật — Mỗi ngày lúc 02:00</span>
+            </div>
+          </div>
+        </div></div>
+        <div class="card"><div class="card-hd">📊 RAGAS Evaluation</div><div class="card-body">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+            <div style="padding:8px;background:var(--card);border-radius:7px;text-align:center"><div style="font-size:17px;font-weight:800;color:var(--green);font-family:'JetBrains Mono',monospace">96.3%</div><div style="font-size:10px;color:var(--muted)">Answer Relevancy</div></div>
+            <div style="padding:8px;background:var(--card);border-radius:7px;text-align:center"><div style="font-size:17px;font-weight:800;color:var(--green);font-family:'JetBrains Mono',monospace">94.8%</div><div style="font-size:10px;color:var(--muted)">Faithfulness</div></div>
+            <div style="padding:8px;background:var(--card);border-radius:7px;text-align:center"><div style="font-size:17px;font-weight:800;color:var(--blue);font-family:'JetBrains Mono',monospace">91.2%</div><div style="font-size:10px;color:var(--muted)">Context Precision</div></div>
+            <div style="padding:8px;background:var(--card);border-radius:7px;text-align:center"><div style="font-size:17px;font-weight:800;color:var(--blue);font-family:'JetBrains Mono',monospace">93.7%</div><div style="font-size:10px;color:var(--muted)">Context Recall</div></div>
+          </div>
+          <button class="btn btn-outline btn-sm" style="width:100%" onclick="showToast('🔄 Đang chạy RAGAS evaluation...')">▶ Chạy RAGAS Evaluation</button>
+        </div></div>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:flex-end;gap:8px"><button class="btn btn-outline">Hủy</button><button class="btn btn-red" onclick="showToast('✅ Đã lưu cấu hình hệ thống')">💾 Lưu cấu hình</button></div>
+  </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+</div><!-- /shell -->
+
+<!-- ═══ MODALS ═══ -->
+<div class="modal-bg" id="modal-notif">
+  <div class="modal" style="width:360px;position:fixed;top:54px;right:20px">
+    <div class="modal-hd" style="padding:11px 14px 9px"><div class="modal-title" style="font-size:13px">🔔 Thông báo</div><button class="modal-close" onclick="closeModal('modal-notif')">✕</button></div>
+    <div class="modal-body" style="padding:0;max-height:320px">
+      <div style="padding:9px 13px;background:var(--rl);border-bottom:1px solid var(--rb);display:flex;gap:7px;cursor:pointer"><span>⏳</span><div><div style="font-size:12px;font-weight:700">7 văn bản chờ duyệt</div><div style="font-size:11px;color:var(--muted)">Trong đó 1 tin cậy thấp cần xem xét</div><div style="font-size:10px;color:var(--dim)">Vừa xong</div></div></div>
+      <div style="padding:9px 13px;border-bottom:1px solid var(--border);display:flex;gap:7px;cursor:pointer"><span>✅</span><div><div style="font-size:12px;font-weight:700">Pipeline TTHC-001 Khai sinh hoàn thành</div><div style="font-size:11px;color:var(--muted)">v2.4 đã live trên Kiosk · 13.2 giây</div><div style="font-size:10px;color:var(--dim)">15 phút trước</div></div></div>
+      <div style="padding:9px 13px;display:flex;gap:7px;cursor:pointer"><span>🔄</span><div><div style="font-size:12px;font-weight:700">Sync tự động — 3 văn bản mới</div><div style="font-size:11px;color:var(--muted)">TT 04, NĐ 18, QĐ 221 từ VBPL quốc gia</div><div style="font-size:10px;color:var(--dim)">6 giờ trước</div></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal-vb-detail">
+  <div class="modal" style="width:560px">
+    <div class="modal-hd"><div style="width:32px;height:32px;background:var(--rl);border-radius:8px;display:flex;align-items:center;justify-content:center">📜</div><div class="modal-title">NĐ 63/2026/NĐ-CP — Chi tiết AI phân tích</div><button class="modal-close" onclick="closeModal('modal-vb-detail')">✕</button></div>
+    <div class="modal-body">
+      <div class="g2" style="margin-bottom:12px">
+        <div><div style="font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;margin-bottom:3px">Loại</div><span class="chip chip-r">Nghị định</span></div>
+        <div><div style="font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;margin-bottom:3px">Lĩnh vực</div><span class="chip chip-r">Hộ tịch</span></div>
+        <div><div style="font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;margin-bottom:3px">Ban hành</div><div style="font-size:13px;font-weight:700">01/03/2026</div></div>
+        <div><div style="font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;margin-bottom:3px">Hiệu lực từ</div><div style="font-size:13px;font-weight:700">01/05/2026</div></div>
+      </div>
+      <div style="background:var(--card);border-radius:8px;padding:10px 12px;font-size:12.5px;color:var(--text2);line-height:1.7;margin-bottom:12px"><strong>🤖 AI tóm tắt:</strong> Bổ sung quy định đăng ký hộ tịch trực tuyến, yêu cầu CCCD bản màu công chứng. Ảnh hưởng: khai sinh, kết hôn, khai tử, nuôi con nuôi.</div>
+      <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:5px">TTHC liên quan (AI xác định)</div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap">
+        <span class="chip chip-r">Đăng ký khai sinh</span><span class="chip chip-r">Đăng ký kết hôn</span><span class="chip chip-r">Đăng ký khai tử</span><span class="chip chip-a">Nuôi con nuôi</span>
+      </div>
+      <div style="margin-top:12px"><div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:5px">Hash xác minh</div><div class="tbl-id" style="font-size:11px">SHA-256: a3f8c12e7b4d9f2a1c8e5b3d6f9a0c2e4d7b1f3a8c5e2d9b</div></div>
+    </div>
+    <div class="modal-ft"><button class="btn btn-outline" onclick="closeModal('modal-vb-detail')">Đóng</button><button class="btn btn-red" onclick="closeModal('modal-vb-detail');showToast('✅ Duyệt NĐ 63/2026 — Bắt đầu MLOps pipeline...');nav('p-mlops')">✅ Duyệt & Deploy</button></div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal-confirm-deploy">
+  <div class="modal" style="width:460px">
+    <div class="modal-hd"><div class="modal-title">✅ Xác nhận phê duyệt & Deploy</div><button class="modal-close" onclick="closeModal('modal-confirm-deploy')">✕</button></div>
+    <div class="modal-body">
+      <div class="alert al-green">Sau khi xác nhận, hệ thống sẽ tự động chạy MLOps pipeline và cập nhật Kiosk trong ~14 giây.</div>
+      <div style="font-size:13px;line-height:1.8">
+        <strong>Văn bản:</strong> NĐ 63/2026/NĐ-CP<br>
+        <strong>Sẽ tạo:</strong> 24 embedding vectors mới<br>
+        <strong>Sẽ cập nhật:</strong> 3 TTHC trong Neo4j<br>
+        <strong>Kiosk:</strong> Hot-reload (không restart)
+      </div>
+    </div>
+    <div class="modal-ft"><button class="btn btn-outline" onclick="closeModal('modal-confirm-deploy')">Hủy</button><button class="btn btn-red" onclick="closeModal('modal-confirm-deploy');showToast('⚙️ Pipeline bắt đầu... Kiosk sẽ cập nhật trong ~14 giây');nav('p-mlops')">⚙️ Xác nhận & Bắt đầu Deploy</button></div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal-reject">
+  <div class="modal" style="width:420px">
+    <div class="modal-hd"><div class="modal-title">✕ Từ chối văn bản</div><button class="modal-close" onclick="closeModal('modal-reject')">✕</button></div>
+    <div class="modal-body">
+      <div class="fg"><label class="fl">Lý do từ chối</label><select class="fsel"><option>Không đúng phạm vi</option><option>Thiếu thông tin</option><option>Đã có văn bản thay thế</option><option>Lý do khác</option></select></div>
+      <div class="fg" style="margin-bottom:0"><label class="fl">Ghi chú</label><textarea class="fta" placeholder="Nhập lý do cụ thể để người tải lên biết cách chỉnh sửa..."></textarea></div>
+    </div>
+    <div class="modal-ft"><button class="btn btn-outline" onclick="closeModal('modal-reject')">Hủy</button><button class="btn btn-red" onclick="closeModal('modal-reject');showToast('✕ Đã từ chối — Thông báo cho cán bộ')">Xác nhận từ chối</button></div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal-manual-classify">
+  <div class="modal" style="width:460px">
+    <div class="modal-hd"><div class="modal-title">🔍 Phân loại thủ công</div><button class="modal-close" onclick="closeModal('modal-manual-classify')">✕</button></div>
+    <div class="modal-body">
+      <div class="alert al-amber">AI tin cậy <strong>61.2%</strong> — vui lòng phân loại thủ công cho văn bản này.</div>
+      <div class="fg"><label class="fl">Loại văn bản</label><select class="fsel"><option>Công văn</option><option>Nghị định</option><option>Thông tư</option><option>Quyết định</option><option>Luật</option></select></div>
+      <div class="fg"><label class="fl">Lĩnh vực chính</label><select class="fsel"><option>Cải cách hành chính</option><option>Phổ biến pháp luật</option><option>Tổ chức bộ máy</option><option>Hộ tịch</option><option>Cư trú</option><option>Đất đai</option><option>Xây dựng</option></select></div>
+      <div class="fg" style="margin-bottom:0"><label class="fl">Ghi chú lý do phân loại</label><textarea class="fta" placeholder="Giải thích tại sao chọn phân loại này..."></textarea></div>
+    </div>
+    <div class="modal-ft"><button class="btn btn-outline" onclick="closeModal('modal-manual-classify')">Hủy</button><button class="btn btn-red" onclick="closeModal('modal-manual-classify');showToast('✅ Đã phân loại thủ công — Đưa vào hàng chờ duyệt')">Xác nhận phân loại</button></div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal-reindex">
+  <div class="modal" style="width:440px">
+    <div class="modal-hd"><div class="modal-title">⚠️ Full Re-index — Xác nhận</div><button class="modal-close" onclick="closeModal('modal-reindex')">✕</button></div>
+    <div class="modal-body">
+      <div class="alert al-amber">Quá trình này sẽ xây dựng lại <strong>toàn bộ 1.284 vectors</strong> và cập nhật Neo4j. Ước tính ~25 phút. Kiosk vẫn hoạt động bình thường với index cũ trong thời gian chờ.</div>
+      <div style="font-size:13px;line-height:1.8"><strong>Nên làm khi:</strong> cập nhật embedding model mới, phát hiện lỗi index, hoặc sau khi thêm số lượng lớn văn bản.</div>
+    </div>
+    <div class="modal-ft"><button class="btn btn-outline" onclick="closeModal('modal-reindex')">Hủy</button><button class="btn btn-red" onclick="closeModal('modal-reindex');showToast('🔄 Full Re-index bắt đầu... Ước tính ~25 phút')">🔄 Bắt đầu Full Re-index</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════
+// DATA
+// ══════════════════════════════
+const vbData = [
+  {so:'NĐ 63/2026/NĐ-CP',ten:'Về đăng ký hộ tịch trực tuyến',loai:'NĐ',lv:'Hộ tịch',ngay:'01/03/2026',tt:'cho_duyet'},
+  {so:'TT 04/2026/TT-BTP',ten:'Hướng dẫn về chứng thực bản sao',loai:'TT',lv:'Chứng thực',ngay:'05/03/2026',tt:'cho_duyet'},
+  {so:'Luật Hộ tịch 2014',ten:'Luật Hộ tịch số 60/2014/QH13',loai:'Luật',lv:'Hộ tịch',ngay:'20/11/2014',tt:'hieu_luc'},
+  {so:'NĐ 123/2015/NĐ-CP',ten:'Quy định chi tiết một số điều Luật Hộ tịch',loai:'NĐ',lv:'Hộ tịch',ngay:'15/11/2015',tt:'hieu_luc'},
+  {so:'TT 01/2024/TT-BTP',ten:'Quy định biểu mẫu hộ tịch',loai:'TT',lv:'Hộ tịch',ngay:'01/01/2024',tt:'hieu_luc'},
+  {so:'Luật Cư trú 2020',ten:'Luật Cư trú số 68/2020/QH14',loai:'Luật',lv:'Cư trú',ngay:'13/11/2020',tt:'hieu_luc'},
+  {so:'NĐ 62/2021/NĐ-CP',ten:'Quy định chi tiết Luật Cư trú',loai:'NĐ',lv:'Cư trú',ngay:'29/06/2021',tt:'hieu_luc'},
+  {so:'NĐ 31/2024/NĐ-CP',ten:'Về xác nhận cư trú ngắn hạn',loai:'NĐ',lv:'Cư trú',ngay:'15/03/2024',tt:'hieu_luc'},
+  {so:'TT 04/2020/TT-BTP',ten:'Về biểu mẫu tình trạng hôn nhân',loai:'TT',lv:'Tư pháp',ngay:'28/05/2020',tt:'hieu_luc'},
+  {so:'QĐ 2650/2025/QĐ-UBND',ten:'Phê duyệt danh mục TTHC cấp xã',loai:'QĐ',lv:'Cải cách HC',ngay:'15/10/2025',tt:'hieu_luc'},
+  {so:'NĐ 22/2023/NĐ-CP',ten:'Về người có công với cách mạng',loai:'NĐ',lv:'Người có công',ngay:'12/05/2023',tt:'hieu_luc'},
+  {so:'NĐ 18/2026/NĐ-CP',ten:'Về quản lý và sử dụng đất đai',loai:'NĐ',lv:'Đất đai',ngay:'01/03/2026',tt:'cho_duyet'},
+  {so:'QĐ 221/2026',ten:'Về chế độ người có công',loai:'QĐ',lv:'Người có công',ngay:'10/03/2026',tt:'cho_duyet'},
+  {so:'CV 1821/UBND-VP',ten:'Về giải quyết TTHC tại phường xã',loai:'CV',lv:'Cải cách HC',ngay:'10/03/2026',tt:'cho_duyet'},
+  {so:'TT 01/2022/TT-BTP',ten:'Về cung cấp thông tin lý lịch tư pháp',loai:'TT',lv:'Tư pháp',ngay:'03/02/2022',tt:'hieu_luc'},
+  {so:'NĐ 13/2023/NĐ-CP',ten:'Về bảo vệ dữ liệu cá nhân (PDPA)',loai:'NĐ',lv:'An ninh mạng',ngay:'17/04/2023',tt:'hieu_luc'},
+];
+
+const lvTop = [
+  {name:'Hộ tịch', n:182, c:'var(--red)'},
+  {name:'Người có công', n:147, c:'#374151'},
+  {name:'Cư trú / Đất đai', n:138, c:'var(--amber)'},
+  {name:'Chứng thực', n:112, c:'var(--blue)'},
+  {name:'Xây dựng', n:87, c:'var(--teal)'},
+  {name:'Bảo trợ xã hội', n:74, c:'var(--violet)'},
+  {name:'Tôn giáo', n:61, c:'var(--dim)'},
+  {name:'Lao động tiền lương', n:54, c:'var(--dim)'},
+];
+
+const historyItems = [
+  {icon:'✅',bg:'#dcfce7',title:'TTHC-001 Khai sinh v2.4 — Deploy thành công',sub:'pgvector: +24 vectors · Neo4j: 3 nodes updated · Hot-reload Kiosk · 13.2s',time:'08:32 · TS. Nguyễn Minh Hải',hash:'sha: a3f8c12',chip:'Deploy',cc:'chip-g'},
+  {icon:'🤖',bg:'#eff6ff',title:'NĐ 63/2026 — AI phân loại 97.3%',sub:'Loại: Nghị định · Lĩnh vực: Hộ tịch · 3 TTHC liên quan · Chờ phê duyệt',time:'08:12 · Lê Thị Bảo Châu',hash:'ai: classify-97',chip:'AI',cc:'chip-b'},
+  {icon:'⬆️',bg:getComputedStyle(document.documentElement).getPropertyValue('--card')||'#F3F4F6',title:'NĐ 63/2026/NĐ-CP — Tải lên',sub:'PDF · 2.4MB · 18 trang · Bắt đầu pipeline tự động',time:'08:12 · Lê Thị Bảo Châu',hash:'file: nd63-2026',chip:'Upload',cc:'chip-gray'},
+  {icon:'🔄',bg:'#dbeafe',title:'Sync tự động — 3 văn bản mới từ VBPL quốc gia',sub:'TT 04/2026, NĐ 18/2026, QĐ 221/2026 · Đang chờ duyệt',time:'02:00 · Hệ thống tự động',hash:'sync: auto-20260311',chip:'Sync',cc:'chip-gray'},
+  {icon:'✅',bg:'#dcfce7',title:'TTHC-003 Thường trú v2.1 — Deploy',sub:'pgvector: +18 vectors · 2 nodes updated · 11.8s',time:'Hôm qua 10:15 · Lê T. Bảo Châu',hash:'sha: f7d2a98',chip:'Deploy',cc:'chip-g'},
+  {icon:'✏️',bg:'#fef3c7',title:'TT 01/2024/TT-BTP — Cập nhật metadata',sub:'Bổ sung: ngày hiệu lực, cơ quan ban hành. Không cần re-embed.',time:'Hôm qua 09:30 · Trần V. Phúc',hash:'meta: tt01-2024',chip:'Sửa',cc:'chip-a'},
+];
+
+// ══════════════════════════════
+// OVERVIEW CHART
+// ══════════════════════════════
+function renderLvChart() {
+  const el = document.getElementById('lv-chart');
+  if(!el) return;
+  el.innerHTML = `<div style="display:grid;grid-template-columns:20px 1fr 50px;gap:5px;font-size:9.5px;font-weight:800;color:var(--muted);text-transform:uppercase;margin-bottom:6px;padding:0 2px"><span>#</span><span>Lĩnh vực</span><span>VB</span></div>` +
+  lvTop.map((r,i)=>`
+    <div style="display:grid;grid-template-columns:20px 1fr 50px;gap:5px;align-items:center;padding:4px 2px;border-bottom:${i<7?'1px solid var(--border)':'none'}">
+      <span style="font-size:10px;font-weight:800;color:${i<3?'var(--red)':'var(--dim)'}">${i+1}</span>
+      <div style="display:flex;align-items:center;gap:6px">
+        <div style="flex:1;background:var(--card);border-radius:3px;height:14px;overflow:hidden"><div style="width:${Math.round(r.n/182*100)}%;height:100%;background:${r.c};border-radius:3px"></div></div>
+        <span style="font-size:11.5px;font-weight:600;min-width:70px">${r.name}</span>
+      </div>
+      <span style="font-size:11.5px;font-weight:800;font-family:'JetBrains Mono',monospace">${r.n}</span>
+    </div>`).join('');
+}
+
+// ══════════════════════════════
+// VB TABLE
+// ══════════════════════════════
+let vbPage=1, vbPer=8, vbFilter='';
+function renderVBTable(){
+  const loai = document.getElementById('vb-f-loai')?.value||'';
+  const lv = document.getElementById('vb-f-lv')?.value||'';
+  const filtered = vbData.filter(r=>{
+    if(vbFilter && !r.so.toLowerCase().includes(vbFilter) && !r.ten.toLowerCase().includes(vbFilter)) return false;
+    if(loai && !r.loai.startsWith(loai)) return false;
+    if(lv && r.lv!==lv) return false;
+    return true;
+  });
+  const page = filtered.slice((vbPage-1)*vbPer, vbPage*vbPer);
+  const ttMap={hieu_luc:['st-green','Còn hiệu lực'],cho_duyet:['st-amber','Chờ duyệt'],het_hl:['st-red','Hết hiệu lực']};
+  const loaiMap={NĐ:'chip-r',TT:'chip-a',QĐ:'chip-g',CV:'chip-gray',Luật:'chip-v'};
+  document.getElementById('vb-rows').innerHTML = page.map(r=>{
+    const [sc,sl]=ttMap[r.tt]||['st-gray','Không rõ'];
+    return `<div class="tbl-r" style="grid-template-columns:.8fr 2fr .8fr 1fr .8fr .7fr 90px">
+      <div class="tbl-id">${r.so}</div>
+      <div class="tbl-nm" style="font-size:12px">${r.ten}</div>
+      <span class="chip ${loaiMap[r.loai]||'chip-gray'}">${r.loai}</span>
+      <span style="font-size:12px;font-weight:600">${r.lv}</span>
+      <div class="tbl-sb">${r.ngay}</div>
+      <span class="st ${sc}">${sl}</span>
+      <div style="display:flex;gap:3px">
+        <button class="btn-ghost" onclick="openModal('modal-vb-detail')">👁</button>
+        <button class="btn-ghost">✏️</button>
+        <button class="btn-ghost" style="color:var(--dim)">🗑</button>
+      </div>
+    </div>`;
+  }).join('');
+  // pagination
+  const tp=Math.ceil(filtered.length/vbPer), s=(vbPage-1)*vbPer+1, e=Math.min(vbPage*vbPer,filtered.length);
+  let btns='';
+  for(let i=1;i<=tp;i++){
+    if(i===1||i===tp||(i>=vbPage-1&&i<=vbPage+1)) btns+=`<button class="pg-btn${i===vbPage?' on':''}" onclick="vbPage=${i};renderVBTable()">${i}</button>`;
+    else if(i===2||i===tp-1) btns+=`<span style="padding:0 3px;color:var(--dim)">…</span>`;
+  }
+  document.getElementById('vb-pg').innerHTML=`<span>Hiển thị ${s}–${e} / ${filtered.length} văn bản</span><div class="pg-btns">${btns}</div>`;
+}
+function filterVB(v){vbFilter=v.toLowerCase();vbPage=1;renderVBTable();}
+
+// ══════════════════════════════
+// HISTORY
+// ══════════════════════════════
+function renderHistory(){
+  const el=document.getElementById('history-list');
+  if(!el) return;
+  el.innerHTML=historyItems.map(h=>`
+    <div class="tl-item">
+      <div class="tl-dot" style="background:${h.bg}">${h.icon}</div>
+      <div style="flex:1">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px">
+          <div class="tl-title">${h.title}</div>
+          <span class="chip ${h.cc}">${h.chip}</span>
+        </div>
+        <div class="tl-sub">${h.sub}</div>
+        <div style="display:flex;gap:8px;align-items:center;margin-top:3px">
+          <div class="tl-time">${h.time}</div>
+          <div class="tl-hash">${h.hash}</div>
+        </div>
+      </div>
+    </div>`).join('');
+  document.getElementById('hist-pg').innerHTML=`<span>Hiển thị 1–6 / 47 bản ghi</span><div class="pg-btns"><button class="pg-btn on">1</button><button class="pg-btn" onclick="showToast('📄 Trang 2...')">2</button><button class="pg-btn" onclick="showToast('📄 Trang 3...')">3</button><span style="padding:0 3px;color:var(--dim)">…</span><button class="pg-btn" onclick="showToast('📄 Trang 8...')">8</button></div>`;
+}
+
+// ══════════════════════════════
+// E2E DEMO ANIMATION
+// ══════════════════════════════
+let e2eRunning=false;
+function resetE2E(){
+  e2eRunning=false;
+  for(let i=0;i<=6;i++){
+    const n=document.getElementById(`en-${i}`);
+    if(n){n.className='e2e-node';if(i===0)n.classList.add('done');}
+    const p=document.getElementById(`ps-${i}`);
+    if(p){p.className='pipe-step '+(i===0?'done':'waiting');}
+    const s=document.getElementById(`ps-${i}-st`);
+    if(s&&i>0) s.innerHTML='<span class="st st-gray">Chờ</span>';
+  }
+  document.getElementById('e2e-time').textContent='';
+  // Reset log
+  const log=document.getElementById('log-terminal');
+  if(log) log.innerHTML=`<div class="log-line"><span class="log-ts">[08:32:01]</span> <span class="log-ok">INFO</span> <span style="color:#e2e8f0">Admin CMS sẵn sàng</span></div><div class="log-line"><span class="log-ts">[08:47:23]</span> <span style="color:#6b7280">---</span> <span style="color:#4b5563">Nhấn "Chạy demo" để xem pipeline...</span></div>`;
+}
+
+function addLog(log, type, msg){
+  const el=document.getElementById(log); if(!el) return;
+  const ts=new Date().toLocaleTimeString('vi',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  const cls={ok:'log-ok',info:'log-info',warn:'log-warn',data:'log-data',err:'log-err'}[type]||'log-info';
+  const line=document.createElement('div'); line.className='log-line';
+  line.innerHTML=`<span class="log-ts">[${ts}]</span> <span class="${cls}">${type.toUpperCase().padEnd(5)}</span> <span style="color:#e2e8f0">${msg}</span>`;
+  el.appendChild(line); el.scrollTop=el.scrollHeight;
+}
+
+function runE2E(){
+  if(e2eRunning) return;
+  resetE2E(); e2eRunning=true;
+  const start=Date.now();
+  const steps=[
+    {delay:300, node:1, pipe:1, pst:'<span class="st st-amber"><span class="spin">⚙️</span> Đang chạy</span>', log:['OCR','info','pdfplumber: 18 trang → 4.218 tokens'], msg:'OCR & Trích xuất'},
+    {delay:1400, node:1, pipe:1, done:true, pst:'<span class="st st-green">✓ Hoàn thành</span>', log:['CHUNK','info','Tách 24 chunks @ 512 tokens'], msg:''},
+    {delay:600, node:2, pipe:2, pst:'<span class="st st-amber"><span class="spin">⚙️</span> Đang chạy</span>', log:['CLASS','info','PhoBERT + Qwen2.5 phân loại...'], msg:'AI phân loại'},
+    {delay:1600, node:2, pipe:2, done:true, pst:'<span class="st st-green">✓ 97.3% — Hộ tịch</span>', log:['CLASS','ok','Nghị định · Hộ tịch · 97.3% · 3 TTHC'], msg:''},
+    {delay:600, node:3, pipe:3, pst:'<span class="st st-amber">⏳ Chờ duyệt</span>', log:['APPROV','warn','Chờ phê duyệt từ cán bộ...'], msg:'Cán bộ duyệt'},
+    {delay:2000, node:3, pipe:3, done:true, pst:'<span class="st st-green">✓ TS. Nguyễn Minh Hải</span>', log:['APPROV','ok','Phê duyệt thành công · Bắt đầu embed'], msg:''},
+    {delay:400, node:4, pipe:4, pst:'<span class="st st-amber"><span class="spin">⚙️</span> Embedding</span>', log:['EMBED','info','e5-large: 24 chunks × 1024 dims...'], msg:'Tạo embedding'},
+    {delay:2200, node:4, pipe:4, done:true, pst:'<span class="st st-green">✓ +24 vectors</span>', log:['PGVEC','ok','Nạp vào pgvector: +24 vectors · OK'], msg:''},
+    {delay:400, node:5, pipe:5, pst:'<span class="st st-amber"><span class="spin">⚙️</span> Cập nhật</span>', log:['NEO4J','info','Cập nhật Knowledge Graph...'], msg:'Neo4j Graph'},
+    {delay:900, node:5, pipe:5, done:true, pst:'<span class="st st-green">✓ 3 nodes updated</span>', log:['NEO4J','ok','3 TTHC nodes updated · 8 relationships added'], msg:''},
+    {delay:300, node:6, pipe:6, pst:'<span class="st st-amber"><span class="spin">⚙️</span> Deploying</span>', log:['KIOSK','info','Hot-reload Kiosk service...'], msg:'Kiosk deploy'},
+    {delay:700, node:6, pipe:6, done:true, pst:'<span class="st st-green">✅ Live!</span>', log:['KIOSK','ok','🎉 Kiosk cập nhật thành công — NĐ 63/2026 live!'], msg:'Live!', final:true},
+  ];
+  let t=0;
+  steps.forEach(s=>{
+    t+=s.delay;
+    setTimeout(()=>{
+      if(!e2eRunning) return;
+      const n=document.getElementById(`en-${s.node}`);
+      if(n) n.className='e2e-node '+(s.done?'done':'active');
+      const p=document.getElementById(`ps-${s.pipe}`);
+      if(p) p.className='pipe-step '+(s.done?'done':'active');
+      const ps=document.getElementById(`ps-${s.pipe}-st`);
+      if(ps) ps.innerHTML=s.pst;
+      if(s.log) addLog('log-terminal',s.log[1],s.log[2]);
+      if(s.final){
+        const elapsed=((Date.now()-start)/1000).toFixed(1);
+        document.getElementById('e2e-time').innerHTML=`<span style="color:var(--green);font-weight:700">✅ Hoàn thành trong ${elapsed}s</span>`;
+        addLog('log-terminal','ok',`Pipeline hoàn thành trong ${elapsed}s`);
+        e2eRunning=false;
+        showToast(`✅ Demo E2E hoàn thành — ${elapsed}s. Kiosk đã cập nhật NĐ 63/2026!`);
+      }
+    }, t);
+  });
+}
+
+// ══════════════════════════════
+// MLOps simulation
+// ══════════════════════════════
+function simulateMLOps(){
+  const log=document.getElementById('mlops-log');
+  const bar=document.getElementById('job1-bar');
+  let w=62;
+  const msgs=[
+    ['info','EMBED',' ████████████░░ 19/24 chunks (79%)'],
+    ['ok','EMBED',' ████████████████ 24/24 chunks (100%)'],
+    ['ok','PGVEC','Commit pgvector: +24 vectors'],
+    ['info','NEO4J','Cập nhật 3 TTHC nodes...'],
+    ['ok','NEO4J','Knowledge Graph updated · 8 relationships'],
+    ['ok','KIOSK','Hot-reload triggered...'],
+    ['ok','DONE ','🎉 NĐ 63/2026 LIVE trên Kiosk · 13.2s'],
+  ];
+  msgs.forEach((m,i)=>setTimeout(()=>{
+    if(bar&&w<100){w=Math.min(100,w+7); bar.style.width=w+'%';}
+    addLog('mlops-log',m[0],m[1]+''+m[2]);
+    if(i===msgs.length-1) showToast('✅ Pipeline hoàn thành! NĐ 63/2026 live trên Kiosk');
+  },(i+1)*700));
+}
+
+// ══════════════════════════════
+// Upload simulation
+// ══════════════════════════════
+function simulateUpload(){
+  const card=document.getElementById('upload-progress-card');
+  const steps=document.getElementById('upload-steps');
+  if(!card||!steps) return;
+  card.style.display='block';
+  const items=[
+    {label:'Đọc file PDF',sub:'pdfplumber',t:400,ok:true},
+    {label:'OCR & Trích xuất text',sub:'18 trang → 4.218 tokens',t:1200,ok:true},
+    {label:'AI phân loại nội dung',sub:'PhoBERT NER + Qwen2.5',t:1800,ok:true},
+    {label:'Xác định TTHC liên quan',sub:'So khớp 409 TTHC',t:800,ok:true},
+    {label:'Gửi vào hàng chờ duyệt',sub:'Tin cậy: 97.3% — tự động duyệt',t:400,ok:true},
+  ];
+  steps.innerHTML='';
+  items.forEach((it,i)=>{
+    const d=document.createElement('div');
+    d.className='pipe-step waiting'; d.id=`us-${i}`;
+    d.innerHTML=`<div class="pipe-num">${i+1}</div><div class="pipe-content"><div class="pipe-title">${it.label}</div><div class="pipe-sub">${it.sub}</div></div><div class="pipe-status" id="us-st-${i}"><span class="st st-gray">Chờ</span></div>`;
+    steps.appendChild(d);
+  });
+  let t=300;
+  items.forEach((it,i)=>{
+    setTimeout(()=>{
+      document.getElementById(`us-${i}`).className='pipe-step active';
+      document.getElementById(`us-st-${i}`).innerHTML='<span class="spin">⚙️</span>';
+      setTimeout(()=>{
+        document.getElementById(`us-${i}`).className='pipe-step done';
+        document.getElementById(`us-${i}`).querySelector('.pipe-num').textContent='✓';
+        document.getElementById(`us-st-${i}`).innerHTML='<span class="st st-green">✓</span>';
+        if(i===items.length-1) showToast('✅ Tải lên thành công! Văn bản đang chờ phê duyệt.');
+      },it.t);
+    },t);
+    t+=it.t+300;
+  });
+}
+
+// ══════════════════════════════
+// NAVIGATION
+// ══════════════════════════════
+const pageConf={
+  'p-overview':['Tổng quan','Thống kê văn bản'],
+  'p-demo':['Tổng quan','Demo quy trình End-to-End'],
+  'p-vb-list':['Quản lý văn bản','Danh mục văn bản (847)'],
+  'p-vb-upload':['Quản lý văn bản','Tải lên văn bản mới'],
+  'p-ai-classify':['Quản lý văn bản','AI phân loại · Chờ duyệt (7)'],
+  'p-vb-approve':['Quản lý văn bản','Phê duyệt & Xuất bản (5)'],
+  'p-vb-history':['Quản lý văn bản','Lịch sử cập nhật'],
+  'p-mlops':['MLOps','Pipeline huấn luyện'],
+  'p-embed-status':['MLOps','Trạng thái Embedding & Graph'],
+  'p-settings':['Hệ thống','Cấu hình AI'],
+};
+function nav(pid){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.getElementById(pid)?.classList.add('on');
+  document.querySelectorAll('.sb-lk').forEach(l=>l.classList.remove('on'));
+  document.querySelector(`[onclick="nav('${pid}')"]`)?.classList.add('on');
+  const [c,t]=pageConf[pid]||['',''];
+  document.getElementById('tb-crumb').textContent=c;
+  document.getElementById('tb-title').textContent=t;
+  if(pid==='p-vb-history') renderHistory();
+  if(pid==='p-vb-list') renderVBTable();
+}
+
+// ══════════════════════════════
+// MODALS
+// ══════════════════════════════
+function openModal(id){document.getElementById(id)?.classList.add('open');}
+function closeModal(id){document.getElementById(id)?.classList.remove('open');}
+document.querySelectorAll('.modal-bg').forEach(bg=>bg.addEventListener('click',e=>{if(e.target===bg)bg.classList.remove('open');}));
+
+// ══════════════════════════════
+// TOAST
+// ══════════════════════════════
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.style.display='block';
+  clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',3200);
+}
+
+// ══════════════════════════════
+// CLOCK
+// ══════════════════════════════
+setInterval(()=>{const t=document.getElementById('tb-clock');if(t)t.textContent='🕐 '+new Date().toLocaleTimeString('vi',{hour:'2-digit',minute:'2-digit',second:'2-digit'});},1000);
+
+// ══════════════════════════════
+// INIT
+// ══════════════════════════════
+renderLvChart();
+renderVBTable();
+resetE2E();
+</script>
+</body>
+</html>
