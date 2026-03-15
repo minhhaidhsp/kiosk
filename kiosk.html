@@ -250,6 +250,124 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 .legal-doc-divider{height:1px;background:var(--border);margin:16px 0}
 .legal-highlight{background:#FEF9C3;border-radius:3px;padding:0 3px}
 
+/* ══════════════════════════════
+   MOBILE RESPONSIVE (≤ 640px)
+══════════════════════════════ */
+@media (max-width:640px){
+  /* Use dynamic viewport height on mobile (avoids iOS browser-bar issue) */
+  .kiosk-shell{height:100dvh}
+
+  /* ── TOP BAR ── */
+  .k-top{height:auto;min-height:52px;padding:8px 12px;gap:8px;flex-wrap:wrap}
+  .k-logo-wrap{width:34px;height:34px}
+  .k-logo-wrap svg,.k-logo-wrap img{width:34px!important;height:34px!important}
+  .k-brand-txt strong{font-size:14px}
+  .k-brand-txt span{font-size:12px}
+  .k-top-right{gap:5px;flex-wrap:wrap}
+  .k-time{display:none}
+  .ctrl-group{padding:3px 6px;gap:3px}
+  .ctrl-btn{width:28px;height:28px;font-size:11px}
+  .lang-pill{padding:4px 8px;font-size:11px}
+  .k-home-btn{padding:6px 10px;font-size:12px;gap:5px}
+
+  /* ── CONTENT ── */
+  .k-content{padding:14px 12px}
+
+  /* ── IDLE SCREEN ── */
+  .idle-shell{gap:0;padding:16px 12px;justify-content:center}
+  .idle-label{font-size:12px;margin-bottom:8px;letter-spacing:.08em}
+  .idle-ai-icon{width:64px;height:64px;margin-bottom:12px}
+  .idle-ai-icon svg{width:64px;height:64px}
+  .idle-title{font-size:28px;margin-bottom:8px}
+  .idle-sub{font-size:14px;margin-bottom:18px;padding:0 8px}
+  .idle-tap-btn{padding:13px 32px;font-size:19px;border-radius:14px}
+  .idle-quick{gap:8px;margin-top:16px}
+  .idle-q-btn{font-size:14px;padding:9px 13px;border-radius:10px}
+  .idle-chat-hint{max-width:100%;padding:10px 14px;gap:8px;margin-top:14px}
+  .idle-chat-hint svg{width:22px!important;height:22px!important}
+  .idle-chat-hint-txt{font-size:13px}
+
+  /* ── CATEGORY SCREEN ── */
+  .cat-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+  .cat-btn{padding:16px 10px 13px;border-radius:12px}
+  .cat-icon{font-size:40px;margin-bottom:10px}
+  .cat-name{font-size:17px}
+  .cat-count{font-size:13px}
+  .cat-ai-entry{padding:12px 14px;gap:10px;border-radius:12px}
+  .cat-ai-orb{width:36px;height:36px}
+  .cat-ai-orb svg{width:36px;height:36px}
+  .cat-ai-txt strong{font-size:16px}
+  .cat-ai-txt span{font-size:13px}
+  .cat-ai-arrow{font-size:24px}
+
+  /* ── TTHC LIST ── */
+  .tthc-btn{padding:11px 12px;gap:10px;border-radius:12px}
+  .tthc-icon{width:38px;height:38px;font-size:22px;border-radius:10px;flex-shrink:0}
+  .tthc-name{font-size:16px}
+  .tthc-meta{font-size:12px}
+
+  /* ── CHAT ── */
+  .k-chat-hd{padding:10px 12px}
+  .k-chat-hd-icon{width:34px;height:34px}
+  .k-chat-hd-icon svg{width:34px;height:34px}
+  .k-chat-title{font-size:14px}
+  .k-chat-msgs{padding:12px 10px;gap:10px}
+  .msg{max-width:92%}
+  .msg-av{width:28px;height:28px}
+  .msg-av svg{width:28px;height:28px}
+  .msg-bubble{font-size:15px;padding:9px 12px}
+  .msg-actions{margin-left:34px;margin-top:4px}
+  .msg-act-btn{width:26px;height:26px}
+  .source-box{font-size:12px}
+  .checklist-inline{margin-left:34px;padding:10px 12px}
+  .cl-lbl{font-size:13px}
+  .cl-box{width:20px;height:20px}
+
+  /* ── INPUT AREA ── */
+  .k-input-area{padding:10px 10px}
+  .k-input-chips{gap:5px;margin-bottom:7px}
+  .k-chip{font-size:13px;padding:5px 10px;border-radius:16px}
+  .k-text-input{font-size:16px;padding:10px 12px}  /* 16px prevents iOS auto-zoom */
+  .k-send-btn{font-size:14px;padding:10px 14px;border-radius:10px}
+  .k-voice-btn{width:42px;height:42px;border-radius:10px}
+  .k-ac-item{font-size:15px;padding:9px 12px}
+  .bocso-row{padding:8px 10px}
+  .bocso-btn{font-size:15px;padding:12px}
+
+  /* ── TICKET SCREEN ── */
+  .ticket-shell{padding:12px;align-items:flex-start;overflow-y:auto}
+  .ticket-wrap{grid-template-columns:1fr;gap:12px}
+  .ticket-card{padding:18px;border-radius:14px}
+  .ticket-num{font-size:52px}
+  .ticket-tthc{font-size:14px;margin-bottom:16px}
+  .ticket-meta-grid{gap:8px}
+  .ticket-meta-val{font-size:20px}
+  .ticket-meta-lbl{font-size:11px}
+  .t-btn{font-size:13px;padding:10px}
+  .ticket-right{gap:10px}
+  .ticket-right-section{padding:12px 14px}
+  .t-sec-title{font-size:13px}
+  .t-doc-item{font-size:13px}
+
+  /* ── BOTTOM BAR ── */
+  .k-bottom{height:auto;padding:6px 12px;gap:6px;flex-wrap:wrap}
+  .k-bottom-item{font-size:11px}
+  .k-bottom-brand{font-size:10px;position:static;transform:none;letter-spacing:.06em}
+
+  /* ── MODALS & POPUPS ── */
+  .modal{width:96vw;max-height:90vh}
+  .modal-hd{padding:14px 16px 10px}
+  .modal-body{padding:14px 16px;font-size:14px}
+  .modal-footer{padding:10px 16px}
+  .legal-popup{width:96vw;max-height:90vh}
+  .legal-popup-hd{padding:14px 16px 10px}
+  .legal-popup-body{padding:14px 16px}
+  .legal-doc-body{font-size:13px}
+
+  /* ── STEP LABELS & HEADINGS IN SCREENS 2/3 ── */
+  .k-content h2,.k-content .step-label{font-size:16px}
+}
+
 /* ── PRINT ── */
 @media print{
   @page{size:80mm auto;margin:4mm}
