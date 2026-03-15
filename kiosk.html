@@ -101,8 +101,43 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 .tthc-meta{font-size:19.5px;color:var(--muted)}
 
 /* ── CHAT SCREEN ── */
-.k-body{flex:1;display:flex;flex-direction:column;overflow:hidden}
-.k-chat-area{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.k-body{flex:1;display:grid;grid-template-columns:1fr 0px;overflow:hidden;transition:grid-template-columns .25s ease}
+.k-body.panel-open{grid-template-columns:1fr 380px}
+.k-left{display:flex;flex-direction:column;overflow:hidden;min-width:0}
+
+/* ── RIGHT SIDEBAR PANEL ── */
+.k-right{border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;background:var(--card);min-width:0}
+.k-right-hd{padding:12px 16px;border-bottom:1px solid var(--border);background:#fff;font-size:13.5px;font-weight:800;color:#111827;display:flex;align-items:center;gap:7px;flex-shrink:0}
+.k-right-body{flex:1;overflow-y:auto;padding:14px;scrollbar-width:thin;scrollbar-color:var(--dim) transparent;display:flex;flex-direction:column;gap:10px}
+.k-right-bocso{padding:10px 14px;border-top:1px solid var(--border);background:#fff;flex-shrink:0}
+.rp-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px 16px;box-shadow:var(--shc)}
+.rp-card-title{font-size:13px;font-weight:800;color:#111827;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.rp-card-title::before{content:'';width:3px;height:13px;background:var(--red);border-radius:2px;flex-shrink:0;display:inline-block}
+.rp-info-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px}
+.rp-info-row:last-child{border:none}
+.rp-prog-wrap{background:#fff;border:1px solid var(--border);border-radius:10px;padding:10px 14px}
+.rp-prog-hd{display:flex;justify-content:space-between;font-size:12.5px;font-weight:700;margin-bottom:7px}
+.rp-prog-track{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.rp-prog-fill{height:100%;background:linear-gradient(90deg,var(--red),#e84057);border-radius:10px;transition:width .4s}
+.rp-cl-item{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);cursor:pointer}
+.rp-cl-item:last-child{border:none}
+.rp-cl-item:hover{opacity:.8}
+.rp-cl-box{width:22px;height:22px;border-radius:6px;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s;margin-top:2px}
+.rp-cl-box.chk{background:var(--red);border-color:var(--red)}
+.rp-step{display:flex;align-items:flex-start;gap:10px;padding:9px 11px;border-radius:10px;border:1.5px solid var(--border);background:#fff;margin-bottom:7px;cursor:pointer;transition:all .15s}
+.rp-step:last-child{margin-bottom:0}
+.rp-step:hover{border-color:var(--red)}
+.rp-step.s-done{border-color:#bbf7d0;background:#f0fdf4}
+.rp-step.s-cur{border-color:var(--rb);background:#fffafa}
+.rp-step.s-wait{opacity:.55}
+.rp-step-num{width:25px;height:25px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800}
+.rp-step.s-done .rp-step-num{background:#dcfce7;color:var(--green)}
+.rp-step.s-cur .rp-step-num{background:var(--rl);color:var(--red)}
+.rp-step.s-wait .rp-step-num{background:var(--card);color:var(--dim)}
+/* Sidebar toggle button */
+.k-panel-toggle{padding:6px 11px;background:var(--card);border:1.5px solid var(--border);border-radius:9px;color:var(--text2);font-size:12px;font-weight:700;cursor:pointer;font-family:'Be Vietnam Pro',sans-serif;transition:all .15s;display:flex;align-items:center;gap:5px;white-space:nowrap}
+.k-panel-toggle:hover{background:var(--rl);border-color:var(--rb);color:var(--red)}
+.k-panel-toggle.active{background:var(--rl);border-color:var(--rb);color:var(--red)}
 .k-chat-hd{padding:14px 24px;border-bottom:1px solid var(--border);background:#fff;display:flex;align-items:center;gap:10px;flex-shrink:0}
 .k-chat-hd-icon{width:44px;height:44px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
 .k-chat-title{font-size:16px;font-weight:800;color:#111827}
@@ -328,6 +363,9 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
   /* ── MODALS & POPUPS ── */
   .legal-popup{width:90vw}
   .modal{width:90vw}
+
+  /* ── RIGHT SIDEBAR (tablet) ── */
+  .k-body.panel-open{grid-template-columns:1fr 320px}
 }
 
 /* ══════════════════════════════
@@ -446,6 +484,12 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 
   /* ── STEP LABELS & HEADINGS IN SCREENS 2/3 ── */
   .k-content h2,.k-content .step-label{font-size:16px}
+
+  /* ── RIGHT SIDEBAR (mobile: fixed overlay) ── */
+  .k-body,.k-body.panel-open{grid-template-columns:1fr!important}
+  .k-right{display:none;position:fixed;inset:0;z-index:600;width:100%;max-width:100%;border-left:none}
+  .k-body.panel-open .k-right{display:flex}
+  .k-panel-toggle{font-size:11px;padding:5px 9px}
 }
 
 /* ── PRINT ── */
@@ -930,55 +974,74 @@ function pwCancel(){history.length>1?history.back():window.close();}
         <button class="lang-pill" data-lang="en" onclick="setLang('en')">EN</button>
         <button class="lang-pill" data-lang="zh" onclick="setLang('zh')">中文</button>
       </div>
+      <button class="k-panel-toggle" id="panel-toggle-btn" onclick="toggleSidebar()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        Checklist
+      </button>
       <button class="k-home-btn" onclick="goScreen('s-idle')"><svg width="15" height="15"><use href="#ic-home"/></svg> Trang chủ</button>
       <div class="k-time"><div class="k-time-val">08:42</div></div>
     </div>
   </div>
 
-  <div class="k-body">
-    <div class="k-chat-area">
+  <div class="k-body" id="k-body">
+    <!-- LEFT: Chat messages + input -->
+    <div class="k-left">
       <div class="k-chat-msgs" id="chat-msgs"></div>
+      <div class="k-input-area">
+        <div class="k-input-chips" id="demo-chips">
+          <div class="k-chip" onclick="sendDemo(0)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+            <span data-vi="Đăng ký khai sinh cho con" data-en="Register my child's birth" data-zh="为孩子办理出生登记">Đăng ký khai sinh cho con</span>
+          </div>
+          <div class="k-chip" onclick="sendDemo(2)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            <span data-vi="Thủ tục đăng ký kết hôn" data-en="Marriage registration procedure" data-zh="结婚登记手续">Thủ tục đăng ký kết hôn</span>
+          </div>
+          <div class="k-chip" onclick="sendDemo(3)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+            <span data-vi="Đăng ký tạm trú mới" data-en="New temporary residence registration" data-zh="新办暂住登记">Đăng ký tạm trú mới</span>
+          </div>
+          <div class="k-chip" onclick="sendDemo(1)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            <span data-vi="Công chứng bản sao" data-en="Certified copy" data-zh="副本公证">Công chứng bản sao</span>
+          </div>
+        </div>
+        <div class="k-input-row">
+          <div class="k-autocomplete" id="autocomplete-list"></div>
+          <button class="k-voice-btn" id="voice-btn" onclick="toggleVoice()" title="Nhận dạng giọng nói">
+            <svg width="20" height="20" style="color:var(--muted)"><use href="#ic-mic"/></svg>
+          </button>
+          <input class="k-text-input" id="chat-input" placeholder="Gõ câu hỏi hoặc nhấn mic để nói..." autocomplete="off" onkeydown="handleChatKeydown(event)">
+          <button class="k-send-btn" id="send-btn-lbl" onclick="sendChatInput()">
+            <svg width="16" height="16" style="display:inline-block;vertical-align:middle;margin-right:5px"><use href="#ic-send"/></svg>
+            <span id="send-btn-label">Gửi</span>
+          </button>
+        </div>
+      </div>
     </div>
-  </div>
 
-  <!-- Input + Bốc số -->
-  <div class="k-input-area">
-  <div class="k-input-chips" id="demo-chips">
-      <div class="k-chip" onclick="sendDemo(0)">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-        <span data-vi="Đăng ký khai sinh cho con" data-en="Register my child's birth" data-zh="为孩子办理出生登记">Đăng ký khai sinh cho con</span>
+    <!-- RIGHT: Checklist sidebar panel -->
+    <div class="k-right" id="k-right">
+      <div class="k-right-hd">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        <span>Hướng dẫn &amp; Checklist</span>
+        <span id="progress-summary" style="margin-left:auto;font-size:11.5px;color:var(--muted);font-weight:600"></span>
+        <button onclick="toggleSidebar()" style="width:26px;height:26px;border-radius:7px;border:1.5px solid var(--border);background:var(--card);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:6px" title="Đóng panel">✕</button>
       </div>
-      <div class="k-chip" onclick="sendDemo(2)">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-        <span data-vi="Thủ tục đăng ký kết hôn" data-en="Marriage registration procedure" data-zh="结婚登记手续">Thủ tục đăng ký kết hôn</span>
+      <div class="k-right-body" id="right-panel">
+        <div style="text-align:center;padding:32px 16px;color:var(--muted)">
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="opacity:.2;margin-bottom:12px;display:block;margin-left:auto;margin-right:auto"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          <div style="font-size:14px;font-weight:700;margin-bottom:4px">Hãy hỏi AI hoặc chọn thủ tục</div>
+          <div style="font-size:12.5px">Checklist giấy tờ và quy trình sẽ hiện ở đây</div>
+        </div>
       </div>
-      <div class="k-chip" onclick="sendDemo(3)">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
-        <span data-vi="Đăng ký tạm trú mới" data-en="New temporary residence registration" data-zh="新办暂住登记">Đăng ký tạm trú mới</span>
-      </div>
-      <div class="k-chip" onclick="sendDemo(1)">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-        <span data-vi="Công chứng bản sao" data-en="Certified copy" data-zh="副本公证">Công chứng bản sao</span>
+      <div class="k-right-bocso">
+        <button class="bocso-btn" id="bocso-btn" onclick="goTicket()" disabled>
+          <svg width="18" height="18"><use href="#ic-ticket"/></svg>
+          <span id="bocso-btn-label">BỐC SỐ & IN PHIẾU</span>
+        </button>
       </div>
     </div>
-    <div class="k-input-row">
-      <div class="k-autocomplete" id="autocomplete-list"></div>
-      <button class="k-voice-btn" id="voice-btn" onclick="toggleVoice()" title="Nhận dạng giọng nói">
-        <svg width="20" height="20" style="color:var(--muted)"><use href="#ic-mic"/></svg>
-      </button>
-      <input class="k-text-input" id="chat-input" placeholder="Gõ câu hỏi hoặc nhấn mic để nói..." autocomplete="off" onkeydown="handleChatKeydown(event)">
-      <button class="k-send-btn" id="send-btn-lbl" onclick="sendChatInput()">
-        <svg width="16" height="16" style="display:inline-block;vertical-align:middle;margin-right:5px"><use href="#ic-send"/></svg>
-        <span id="send-btn-label">Gửi</span>
-      </button>
-    </div>
-  </div>
-  <!-- Bốc số riêng hàng dưới -->
-  <div class="bocso-row">
-    <button class="bocso-btn" id="bocso-btn" onclick="goTicket()" disabled>
-      <svg width="18" height="18"><use href="#ic-ticket"/></svg>
-      <span id="bocso-btn-label">BỐC SỐ & IN PHIẾU</span>
-    </button>
   </div>
 
   <div class="k-bottom">
@@ -1114,64 +1177,64 @@ const tthcData=[
       {ten:{vi:'Giấy chứng sinh (bản gốc)',en:'Birth certificate (original)',zh:'出生证明（原件）'},bb:true},
       {ten:{vi:'CCCD cha và mẹ (bản màu, công chứng)',en:"Parents' ID cards (certified copies)",zh:'父母身份证（公证复印件）'},bb:true},
       {ten:{vi:'Giấy đăng ký kết hôn (bản sao)',en:'Marriage certificate (copy)',zh:'结婚证（复印件）'},bb:true},
-      {ten:{vi:'Tờ khai Mẫu 01/2024',en:'Registration form (Form 01/2024)',zh:'登记表（表格01/2024）'},bb:true},
+      {ten:{vi:'Tờ khai đăng ký khai sinh (TT 04/2024/TT-BTP)',en:'Birth registration form (Circular 04/2024)',zh:'出生登记申请表（2024年第04号通报）'},bb:true,download:'https://csdl.dichvucong.gov.vn/web/jsp/download_file.jsp?ma=3fd5450fb2670b86'},
       {ten:{vi:'Sổ hộ khẩu hoặc giấy tờ cư trú',en:'Household book or residence document',zh:'户口簿或居住证明'},bb:false}
     ],
     buoc:{
-      vi:['Chuẩn bị đầy đủ giấy tờ theo danh sách','Đến Bộ phận Một cửa (7h30 – 17h)','Lấy số và nộp hồ sơ tại Quầy 2 — Hộ tịch','Nhận phiếu hẹn trả kết quả','Đến nhận Giấy khai sinh theo ngày hẹn'],
-      en:['Prepare documents listed above','Visit One-Stop Service counter (7:30 – 17:00)','Take a ticket and submit at Counter 2 — Civil Records','Receive receipt and collection appointment','Collect birth certificate on appointment day'],
-      zh:['准备上述材料','前往一站式服务窗口（7:30 – 17:00）','取号并在2号窗口（户籍）提交材料','领取回执并等待取证日期','在约定日期领取出生证']
+      vi:['Tải và điền Tờ khai đăng ký khai sinh (TT 04/2024/TT-BTP)','Chuẩn bị đầy đủ giấy tờ theo danh sách','Đến Bộ phận Một cửa (7h30 – 17h)','Lấy số và nộp hồ sơ tại Quầy 2 — Hộ tịch','Nhận phiếu hẹn và đến nhận Giấy khai sinh theo ngày hẹn'],
+      en:['Download and fill Birth Registration form (Circular 04/2024)','Prepare all required documents','Visit One-Stop Service counter (7:30 – 17:00)','Take a ticket and submit at Counter 2 — Civil Records','Collect birth certificate on appointment day'],
+      zh:['下载并填写出生登记申请表（2024年第04号通报）','准备所有所需材料','前往一站式服务窗口（7:30 – 17:00）','取号并在2号窗口（户籍）提交材料','在约定日期领取出生证']
     },
-    can_cu:{vi:'Luật Hộ tịch 2014 · TT 01/2024/TT-BTP',en:'Law on Civil Status 2014 · Circular 01/2024',zh:'户籍法2014 · 2024年第01号通报'},route:'Loại 3 — Semantic',latency:'145ms'},
+    can_cu:{vi:'Luật Hộ tịch 2014 · NĐ 123/2015/NĐ-CP · TT 04/2024/TT-BTP',en:'Law on Civil Status 2014 · Decree 123/2015 · Circular 04/2024',zh:'户籍法2014 · 第123/2015号法令 · 2024年第04号通报'},route:'Loại 3 — Semantic',latency:'145ms'},
   {ma:'TTHC-002',ten:{vi:'Đăng ký kết hôn',en:'Register a marriage',zh:'登记结婚'},linh_vuc:'Hộ tịch',le_phi:'Miễn phí',thoi_han:'5 ngày làm việc',co_quan:'UBND Phường · Quầy 2 — Hộ tịch',quy:2,quy_lbl:'Quầy Hộ tịch',icon:'💍',color:'#FDF4FF',
     giay_to:[
-      {ten:{vi:'Tờ khai đăng ký kết hôn (Mẫu 02)',en:'Marriage registration form (Form 02)',zh:'登记结婚表格（表格02）'},bb:true},
+      {ten:{vi:'Tờ khai đăng ký kết hôn (TT 04/2024/TT-BTP)',en:'Marriage registration form (Circular 04/2024)',zh:'结婚登记申请表（2024年第04号通报）'},bb:true,download:'https://csdl.dichvucong.gov.vn/web/jsp/download_file.jsp?ma=3fcc3a2c708e1c58'},
       {ten:{vi:'CCCD/CMND của hai bên (bản sao)',en:'ID cards of both parties (copies)',zh:'双方身份证复印件'},bb:true},
-      {ten:{vi:'Giấy xác nhận tình trạng hôn nhân',en:'Proof of marital status',zh:'婚姻状况证明'},bb:true},
+      {ten:{vi:'Giấy xác nhận tình trạng hôn nhân (nếu khác phường)',en:'Proof of marital status (if from different ward)',zh:'婚姻状况证明（如户籍不在同一坊）'},bb:false},
       {ten:{vi:'Ảnh 3×4 (2 ảnh/người)',en:'3×4 photos (2 per person)',zh:'3×4照片（每人2张）'},bb:false}
     ],
     buoc:{
-      vi:['Chuẩn bị giấy tờ của cả hai bên','Hai bên cùng đến UBND Phường','Nộp hồ sơ và ký tên tại Quầy 2','Cán bộ kiểm tra và phê duyệt','Nhận Giấy chứng nhận kết hôn'],
-      en:['Prepare documents for both parties','Both parties visit the Ward People’s Committee','Submit documents and sign at Counter 2','Officer reviews and approves','Receive marriage certificate'],
-      zh:['准备双方材料','双方前往人民委员会登记','在2号窗口提交并签字','工作人员审核并批准','领取结婚证']
+      vi:['Tải và điền Tờ khai đăng ký kết hôn (TT 04/2024/TT-BTP)','Hai bên cùng đến UBND Phường','Nộp hồ sơ và ký tên tại Quầy 2','Cán bộ tư pháp kiểm tra và phê duyệt','Nhận Giấy chứng nhận kết hôn'],
+      en:['Download and fill Marriage Registration form (Circular 04/2024)','Both parties visit Ward People\'s Committee','Submit documents and sign at Counter 2','Legal officer reviews and approves','Receive marriage certificate'],
+      zh:['下载并填写结婚登记申请表（2024年第04号通报）','双方一起前往人民委员会','在2号窗口提交并签字','法务人员审核并批准','领取结婚证']
     },
-    can_cu:{vi:'Luật Hộ tịch 2014 · NĐ 123/2015/NĐ-CP',en:'Law on Civil Status 2014 · Decree 123/2015',zh:'户籍法2014 · 第123/2015号法令'},route:'Loại 2 — Full-text',latency:'72ms'},
+    can_cu:{vi:'Luật Hộ tịch 2014 · NĐ 123/2015/NĐ-CP · TT 04/2024/TT-BTP',en:'Law on Civil Status 2014 · Decree 123/2015 · Circular 04/2024',zh:'户籍法2014 · 第123/2015号法令 · 2024年第04号通报'},route:'Loại 2 — Full-text',latency:'72ms'},
   {ma:'TTHC-003',ten:{vi:'Xác nhận thường trú',en:'Permanent residence confirmation',zh:'常住确认'},linh_vuc:'Cư trú',le_phi:'Miễn phí',thoi_han:'2 ngày làm việc',co_quan:'Công an Phường · Quầy 4 — Cư trú',quy:4,quy_lbl:'Quầy Cư trú',icon:'🏠',color:'#CCFBF1',
     giay_to:[
       {ten:{vi:'CCCD (bản gốc để đối chiếu)',en:'ID card (original for verification)',zh:'身份证（原件，用于核对）'},bb:true},
-      {ten:{vi:'Đơn đề nghị xác nhận thường trú',en:'Application for permanent residence confirmation',zh:'常住确认申请表'},bb:true},
+      {ten:{vi:'Tờ khai thay đổi thông tin cư trú (Mẫu CT01 – TT 53/2025/TT-BCA)',en:'Residence change form CT01 (Circular 53/2025)',zh:'居住信息变更申请表CT01（第53/2025号通报）'},bb:true,download:'https://vbpl.vn/TW/Lists/vbpq/Attachments/179354/1.%20M%E1%BA%ABu%20CT01%20ban%20h%C3%A0nh%20k%C3%A8m%20theo%20Th%C3%B4ng%20t%C6%B0%2053.doc'},
       {ten:{vi:'Thông tin hộ khẩu điện tử (VNeID)',en:'Household registration on VNeID',zh:'VNeID上的户籍信息'},bb:false}
     ],
     buoc:{
-      vi:['Kiểm tra thông tin thường trú trên VNeID','Điền đơn đề nghị xác nhận','Đến Công an Phường nộp hồ sơ tại Quầy 4','Nhận giấy xác nhận trong 2 ngày làm việc'],
-      en:['Check permanent residence on VNeID','Fill application form','Submit at Police Ward Counter 4','Receive confirmation within 2 working days'],
-      zh:['在VNeID上检查常住信息','填写申请表','在公安派出所4号窗口提交材料','2个工作日内领取确认书']
+      vi:['Kiểm tra thông tin thường trú trên VNeID','Tải và điền Mẫu CT01 (TT 53/2025/TT-BCA)','Đến Công an Phường nộp hồ sơ tại Quầy 4','Nhận giấy xác nhận trong 2 ngày làm việc'],
+      en:['Check permanent residence info on VNeID','Download and fill Form CT01 (Circular 53/2025)','Submit at Police Ward Counter 4','Receive confirmation within 2 working days'],
+      zh:['在VNeID上检查常住信息','下载并填写CT01表格（第53/2025号通报）','在公安派出所4号窗口提交材料','2个工作日内领取确认书']
     },
-    can_cu:{vi:'Luật Cư trú 2020 · NĐ 62/2021/NĐ-CP',en:'Law on Residence 2020 · Decree 62/2021',zh:'居住法2020 · 第62/2021号法令'},route:'Loại 2 — Full-text',latency:'67ms'},
+    can_cu:{vi:'Luật Cư trú 2020 · NĐ 62/2021/NĐ-CP · TT 53/2025/TT-BCA',en:'Law on Residence 2020 · Decree 62/2021 · Circular 53/2025',zh:'居住法2020 · 第62/2021号法令 · 第53/2025号通报'},route:'Loại 2 — Full-text',latency:'67ms'},
   {ma:'TTHC-004',ten:{vi:'Đăng ký tạm trú',en:'Register temporary residence',zh:'登记暂住'},linh_vuc:'Cư trú',le_phi:'Miễn phí',thoi_han:'2 ngày làm việc',co_quan:'Công an Phường · Quầy 4 — Cư trú',quy:4,quy_lbl:'Quầy Cư trú',icon:'📋',color:'#F0FDF4',
     giay_to:[
       {ten:{vi:'CCCD (bản gốc)',en:'ID card (original)',zh:'身份证（原件）'},bb:true},
-      {ten:{vi:'Hợp đồng thuê nhà hoặc xác nhận chủ nhà',en:'Rental contract or landlord confirmation',zh:'租赁合同或房东证明'},bb:true},
-      {ten:{vi:'Tờ khai đăng ký tạm trú (CT07)',en:'Temporary residence form (CT07)',zh:'暂住登记表（CT07）'},bb:true}
+      {ten:{vi:'Hợp đồng thuê nhà hoặc xác nhận của chủ nhà',en:'Rental contract or landlord confirmation',zh:'租赁合同或房东证明'},bb:true},
+      {ten:{vi:'Tờ khai thay đổi thông tin cư trú (Mẫu CT01 – TT 53/2025/TT-BCA)',en:'Residence change form CT01 (Circular 53/2025)',zh:'居住信息变更申请表CT01（第53/2025号通报）'},bb:true,download:'https://vbpl.vn/TW/Lists/vbpq/Attachments/179354/1.%20M%E1%BA%ABu%20CT01%20ban%20h%C3%A0nh%20k%C3%A8m%20theo%20Th%C3%B4ng%20t%C6%B0%2053.doc'}
     ],
     buoc:{
-      vi:['Liên hệ chủ nhà lấy xác nhận','Điền tờ khai CT07','Đến Công an Phường Quầy 4 đăng ký','Cập nhật VNeID sau khi hoàn tất'],
-      en:['Ask landlord for confirmation','Fill CT07 form','Register at Police Ward Counter 4','Update VNeID after completion'],
-      zh:['联系房东获取证明','填写CT07表格','在公安派出所4号窗口登记','完成后更新VNeID']
+      vi:['Liên hệ chủ nhà lấy xác nhận / ký hợp đồng thuê nhà','Tải và điền Mẫu CT01 (TT 53/2025/TT-BCA)','Đến Công an Phường Quầy 4 nộp hồ sơ','Cập nhật thông tin tạm trú trên VNeID sau khi hoàn tất'],
+      en:['Get landlord confirmation or rental contract','Download and fill Form CT01 (Circular 53/2025)','Submit at Police Ward Counter 4','Update temporary residence on VNeID after completion'],
+      zh:['获取房东证明或签订租赁合同','下载并填写CT01表格（第53/2025号通报）','在公安派出所4号窗口提交材料','完成后在VNeID上更新暂住信息']
     },
-    can_cu:{vi:'Điều 30, Luật Cư trú 2020',en:'Article 30, Law on Residence 2020',zh:'居住法2020 第30条'},route:'Loại 2 — Full-text',latency:'58ms'},
+    can_cu:{vi:'Điều 30, Luật Cư trú 2020 · TT 53/2025/TT-BCA',en:'Article 30, Law on Residence 2020 · Circular 53/2025',zh:'居住法2020 第30条 · 第53/2025号通报'},route:'Loại 2 — Full-text',latency:'58ms'},
   {ma:'TTHC-005',ten:{vi:'Xác nhận tình trạng hôn nhân',en:'Proof of marital status',zh:'婚姻状况证明'},linh_vuc:'Tư pháp',le_phi:'20.000đ',thoi_han:'3 ngày làm việc',co_quan:'UBND Phường · Quầy 2',quy:2,quy_lbl:'Quầy Tư pháp',icon:'📝',color:'#FAF5FF',
     giay_to:[
       {ten:{vi:'CCCD (bản gốc)',en:'ID card (original)',zh:'身份证（原件）'},bb:true},
-      {ten:{vi:'Tờ khai xác nhận tình trạng hôn nhân (CT01)',en:'Marital status form (CT01)',zh:'婚姻状况确认表（CT01）'},bb:true},
+      {ten:{vi:'Tờ khai cấp Giấy xác nhận tình trạng hôn nhân (TT 04/2024/TT-BTP)',en:'Marital status confirmation form (Circular 04/2024)',zh:'婚姻状况证明申请表（2024年第04号通报）'},bb:true,download:'https://csdl.dichvucong.gov.vn/web/jsp/download_file.jsp?ma=3fa6f783637ae430'},
       {ten:{vi:'Giấy tờ cư trú (nếu có)',en:'Residence documents (if any)',zh:'居住证明（如有）'},bb:false}
     ],
     buoc:{
-      vi:['Điền tờ khai CT01','Đến UBND Phường nộp hồ sơ','Nộp lệ phí 20.000đ tại quầy','Nhận kết quả sau 3 ngày làm việc'],
-      en:['Fill CT01 form','Submit at Ward People’s Committee','Pay fee 20,000 VND at counter','Receive result in 3 working days'],
-      zh:['填写CT01表格','在人民委员会提交材料','在窗口缴纳20000越南盾','3个工作日内领取结果']
+      vi:['Tải và điền Tờ khai cấp Giấy xác nhận tình trạng hôn nhân (TT 04/2024/TT-BTP)','Đến UBND Phường nộp hồ sơ tại Quầy 2','Nộp lệ phí 20.000đ tại quầy','Nhận kết quả sau 3 ngày làm việc'],
+      en:['Download and fill Marital Status Confirmation form (Circular 04/2024)','Submit at Ward People\'s Committee Counter 2','Pay fee 20,000 VND at counter','Receive result in 3 working days'],
+      zh:['下载并填写婚姻状况证明申请表（2024年第04号通报）','在人民委员会2号窗口提交材料','在窗口缴纳20000越南盾','3个工作日内领取结果']
     },
-    can_cu:{vi:'NĐ 123/2015/NĐ-CP · TT 04/2020/TT-BTP',en:'Decree 123/2015 · Circular 04/2020',zh:'第123/2015号法令 · 第04/2020号通报'},route:'Loại 1 — Template',latency:'12ms'},
+    can_cu:{vi:'NĐ 123/2015/NĐ-CP · TT 04/2024/TT-BTP',en:'Decree 123/2015 · Circular 04/2024',zh:'第123/2015号法令 · 2024年第04号通报'},route:'Loại 1 — Template',latency:'12ms'},
 ];
 const categories={
   'Hộ tịch':{items:[0,1]},
@@ -1648,7 +1711,90 @@ function loadTTHC(idx){
   addMsg(ans,true,`${t.route} · ${t.latency}${canCuStr?' · '+canCuStr:''}`);
   setBocso(true);
 }
-function loadTTHCPanel(idx){currentTTHC=tthcData[idx];checkedItems=new Array(currentTTHC.giay_to.length).fill(false);setBocso(true);}
+function loadTTHCPanel(idx){
+  currentTTHC=tthcData[idx];
+  checkedItems=new Array(currentTTHC.giay_to.length).fill(false);
+  renderRightPanel();
+  openSidebar();
+  setBocso(true);
+}
+
+function renderRightPanel(){
+  if(!currentTTHC)return;
+  const t=currentTTHC;
+  const done=checkedItems.filter(Boolean).length;
+  const total=t.giay_to.length;
+  const canCuStr=(t.can_cu&&t.can_cu.vi)?t.can_cu.vi:(typeof t.can_cu==='string'?t.can_cu:'');
+  const psum=document.getElementById('progress-summary');
+  if(psum)psum.textContent=`${done}/${total} giấy tờ`;
+  const rp=document.getElementById('right-panel');
+  if(!rp)return;
+  rp.innerHTML=`
+    <div class="rp-card">
+      <div class="rp-card-title">${t.icon||'📋'} ${loc(t.ten)}</div>
+      <div class="rp-info-row"><span style="color:var(--muted);font-weight:600">Lệ phí</span><span style="font-weight:700;color:${t.le_phi==='Miễn phí'?'var(--green)':'var(--amber)'}">${loc(t.le_phi)||t.le_phi}</span></div>
+      <div class="rp-info-row"><span style="color:var(--muted);font-weight:600">Thời hạn</span><span style="font-weight:700">${loc(t.thoi_han)||t.thoi_han}</span></div>
+      <div class="rp-info-row"><span style="color:var(--muted);font-weight:600">Nộp tại</span><span style="font-weight:700;font-size:12px;text-align:right;max-width:55%">${loc(t.co_quan)||t.co_quan}</span></div>
+      ${canCuStr?`<div class="rp-info-row"><span style="color:var(--muted);font-weight:600">Căn cứ</span><span style="font-weight:600;font-size:11.5px;text-align:right;color:var(--text2);max-width:60%">${canCuStr}</span></div>`:''}
+    </div>
+    <div class="rp-card">
+      <div class="rp-card-title">✅ Checklist giấy tờ</div>
+      <div class="rp-prog-wrap" style="margin-bottom:8px">
+        <div class="rp-prog-hd">
+          <span>Đã chuẩn bị: <strong>${done}/${total}</strong></span>
+          <span style="color:${done===total?'var(--green)':'var(--amber)'}" id="rp-cl-status">${done===total?'Đầy đủ ✓':'Còn thiếu'}</span>
+        </div>
+        <div class="rp-prog-track"><div class="rp-prog-fill" id="rp-prog-fill" style="width:${total>0?done/total*100:0}%"></div></div>
+      </div>
+      ${t.giay_to.map((g,i)=>`
+        <div class="rp-cl-item" onclick="toggleCheck(${i})" id="rp-cli-${i}">
+          <div class="rp-cl-box${checkedItems[i]?' chk':''}" id="rp-clb-${i}">${checkedItems[i]?`<svg width="12" height="12" style="color:white"><use href="#ic-check"/></svg>`:''}</div>
+          <div style="flex:1">
+            <div style="font-size:13px;font-weight:600;line-height:1.4;${checkedItems[i]?'text-decoration:line-through;color:var(--dim)':''}" id="rp-cll-${i}">${loc(g.ten)||g.ten}</div>
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:2px">
+              <div class="${g.bb?'cl-req req-yes':'cl-req req-opt'}" style="margin-top:0">${g.bb?'Bắt buộc':'Tùy chọn'}</div>
+              ${g.download?`<a href="${g.download}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="font-size:11px;color:var(--primary);font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:3px;padding:1px 6px;border:1px solid var(--primary);border-radius:4px;white-space:nowrap">⬇ Tải mẫu</a>`:''}
+            </div>
+          </div>
+        </div>`).join('')}
+    </div>
+    <div class="rp-card">
+      <div class="rp-card-title">🔖 Quy trình thực hiện</div>
+      ${(Array.isArray(t.buoc)?t.buoc:(t.buoc[currentLang]||t.buoc.vi||[])).map((b,i)=>`
+        <div class="rp-step ${i===0?'s-cur':'s-wait'}" id="rp-stp-${i}" onclick="advanceStep(${i})">
+          <div class="rp-step-num">${i+1}</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13px;font-weight:700;line-height:1.4">${loc(b)||b}</div>
+            <div style="font-size:11.5px;color:var(--muted);margin-top:2px" id="rp-stpm-${i}">${i===0?'Đang thực hiện':'Chưa bắt đầu'}</div>
+          </div>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;color:var(--dim);margin-top:4px"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>`).join('')}
+    </div>`;
+}
+
+function advanceStep(i){
+  const el=document.getElementById(`rp-stp-${i}`);
+  if(!el||el.classList.contains('s-done'))return;
+  el.className='rp-step s-done';
+  el.querySelector('.rp-step-num').innerHTML='<svg width="12" height="12" style="color:var(--green)"><use href="#ic-check"/></svg>';
+  const meta=document.getElementById(`rp-stpm-${i}`);if(meta)meta.textContent='Hoàn tất';
+  const next=document.getElementById(`rp-stp-${i+1}`);
+  if(next){next.className='rp-step s-cur';const nm=document.getElementById(`rp-stpm-${i+1}`);if(nm)nm.textContent='Đang thực hiện';}
+}
+
+function toggleSidebar(){
+  const body=document.getElementById('k-body');
+  const btn=document.getElementById('panel-toggle-btn');
+  body.classList.toggle('panel-open');
+  if(btn)btn.classList.toggle('active',body.classList.contains('panel-open'));
+}
+
+function openSidebar(){
+  const body=document.getElementById('k-body');
+  const btn=document.getElementById('panel-toggle-btn');
+  body.classList.add('panel-open');
+  if(btn)btn.classList.add('active');
+}
 
 function setBocso(on){
   const btn=document.getElementById('bocso-btn');
@@ -1695,6 +1841,14 @@ function toggleCheck(i){
   const dc=document.getElementById('cl-done');if(dc)dc.textContent=done;
   const st=document.getElementById('cl-status');if(st){st.textContent=done===total?'Đầy đủ ✓':'Còn thiếu';st.style.color=done===total?'var(--green)':'var(--amber)';}
   const fill=document.getElementById('cl-fill');if(fill)fill.style.width=`${total>0?done/total*100:0}%`;
+  // Sync right panel
+  const rpBox=document.getElementById(`rp-clb-${i}`);
+  if(rpBox){rpBox.className='rp-cl-box'+(checkedItems[i]?' chk':'');rpBox.innerHTML=checkedItems[i]?`<svg width="12" height="12" style="color:white"><use href="#ic-check"/></svg>`:'';}
+  const rpLbl=document.getElementById(`rp-cll-${i}`);
+  if(rpLbl){rpLbl.style.textDecoration=checkedItems[i]?'line-through':'none';rpLbl.style.color=checkedItems[i]?'var(--dim)':'';}
+  const rpFill=document.getElementById('rp-prog-fill');if(rpFill)rpFill.style.width=`${total>0?done/total*100:0}%`;
+  const rpSt=document.getElementById('rp-cl-status');if(rpSt){rpSt.textContent=done===total?'Đầy đủ ✓':'Còn thiếu';rpSt.style.color=done===total?'var(--green)':'var(--amber)';}
+  const psum=document.getElementById('progress-summary');if(psum)psum.textContent=`${done}/${total} giấy tờ`;
   if(done===total)showToast('✅ Đầy đủ giấy tờ! Nhấn BỐC SỐ để tiếp tục.');
 }
 
