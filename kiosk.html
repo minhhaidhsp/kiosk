@@ -272,6 +272,37 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 </style>
 </head>
 <body>
+<!-- ── PASSWORD GATE ── -->
+<div id="pw-overlay" style="position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99999;display:flex;align-items:center;justify-content:center">
+  <div style="background:#fff;border-radius:14px;box-shadow:0 8px 40px rgba(0,0,0,.22);padding:28px 32px;width:380px;max-width:92vw;font-family:'Be Vietnam Pro',sans-serif">
+    <div style="font-size:15px;font-weight:700;color:#1a1a1a;margin-bottom:3px" id="pw-domain"></div>
+    <div style="font-size:13px;color:#6b7280;margin-bottom:20px">🏛 Kiosk AI · Hành chính công TP.HCM</div>
+    <label style="font-size:13.5px;color:#374151;display:block;margin-bottom:8px">Nhập mật khẩu để tiếp tục:</label>
+    <input id="pw-input" type="password" autofocus style="width:100%;padding:10px 14px;border:2px solid #d1a84b;border-radius:8px;font-size:14px;outline:none;color:#1a1a1a;box-shadow:0 0 0 3px rgba(209,168,75,.12)" onkeydown="if(event.key==='Enter')pwOk()">
+    <div id="pw-err" style="color:#c8102e;font-size:12px;margin-top:6px;min-height:16px"></div>
+    <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:18px">
+      <button onclick="pwCancel()" style="padding:9px 22px;border-radius:8px;border:1.5px solid #e5e7eb;background:#fef3c7;color:#92400e;font-size:14px;font-weight:500;cursor:pointer">Huỷ</button>
+      <button onclick="pwOk()" style="padding:9px 22px;border-radius:8px;border:none;background:#92400e;color:#fff;font-size:14px;font-weight:700;cursor:pointer">OK</button>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  if(sessionStorage.getItem('kiosk_auth')==='1'){document.getElementById('pw-overlay').remove();return;}
+  document.getElementById('pw-domain').textContent=location.hostname+' cho biết';
+})();
+function pwOk(){
+  if(document.getElementById('pw-input').value==='demo2025'){
+    sessionStorage.setItem('kiosk_auth','1');
+    document.getElementById('pw-overlay').remove();
+  } else {
+    document.getElementById('pw-err').textContent='Mật khẩu không đúng. Vui lòng thử lại.';
+    document.getElementById('pw-input').value='';
+    document.getElementById('pw-input').focus();
+  }
+}
+function pwCancel(){history.length>1?history.back():window.close();}
+</script>
 
 <!-- Print zone -->
 <div id="print-zone" style="display:none">
