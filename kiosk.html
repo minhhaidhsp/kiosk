@@ -871,26 +871,69 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 <script>
 // ── DATA ──
 const tthcData=[
-  {ma:'TTHC-001',ten:'Đăng ký khai sinh',linh_vuc:'Hộ tịch',le_phi:'Miễn phí',thoi_han:'3 ngày làm việc',co_quan:'UBND Phường · Quầy 2 — Hộ tịch',quy:2,quy_lbl:'Quầy Hộ tịch',icon:'👶',color:'#FEE2E2',
-    giay_to:[{ten:'Giấy chứng sinh (bản gốc)',bb:true},{ten:'CCCD cha và mẹ (bản màu, công chứng)',bb:true},{ten:'Giấy đăng ký kết hôn (bản sao)',bb:true},{ten:'Tờ khai Mẫu 01/2024',bb:true},{ten:'Sổ hộ khẩu hoặc giấy tờ cư trú',bb:false}],
-    buoc:['Chuẩn bị đầy đủ giấy tờ theo danh sách','Đến Bộ phận Một cửa (7h30 – 17h)','Lấy số và nộp hồ sơ tại Quầy 2 — Hộ tịch','Nhận phiếu hẹn trả kết quả','Đến nhận Giấy khai sinh theo ngày hẹn'],
-    can_cu:'Luật Hộ tịch 2014 · TT 01/2024/TT-BTP',route:'Loại 3 — Semantic',latency:'145ms'},
-  {ma:'TTHC-002',ten:'Đăng ký kết hôn',linh_vuc:'Hộ tịch',le_phi:'Miễn phí',thoi_han:'5 ngày làm việc',co_quan:'UBND Phường · Quầy 2 — Hộ tịch',quy:2,quy_lbl:'Quầy Hộ tịch',icon:'💍',color:'#FDF4FF',
-    giay_to:[{ten:'Tờ khai đăng ký kết hôn (Mẫu 02)',bb:true},{ten:'CCCD/CMND của hai bên (bản sao)',bb:true},{ten:'Giấy xác nhận tình trạng hôn nhân',bb:true},{ten:'Ảnh 3×4 (2 ảnh/người)',bb:false}],
-    buoc:['Chuẩn bị giấy tờ của cả hai bên','Hai bên cùng đến UBND Phường','Nộp hồ sơ và ký tên tại Quầy 2','Cán bộ kiểm tra và phê duyệt','Nhận Giấy chứng nhận kết hôn'],
-    can_cu:'Luật Hộ tịch 2014 · NĐ 123/2015/NĐ-CP',route:'Loại 2 — Full-text',latency:'72ms'},
-  {ma:'TTHC-003',ten:'Xác nhận thường trú',linh_vuc:'Cư trú',le_phi:'Miễn phí',thoi_han:'2 ngày làm việc',co_quan:'Công an Phường · Quầy 4 — Cư trú',quy:4,quy_lbl:'Quầy Cư trú',icon:'🏠',color:'#CCFBF1',
-    giay_to:[{ten:'CCCD (bản gốc để đối chiếu)',bb:true},{ten:'Đơn đề nghị xác nhận thường trú',bb:true},{ten:'Thông tin hộ khẩu điện tử (VNeID)',bb:false}],
-    buoc:['Kiểm tra thông tin thường trú trên VNeID','Điền đơn đề nghị xác nhận','Đến Công an Phường nộp hồ sơ tại Quầy 4','Nhận giấy xác nhận trong 2 ngày làm việc'],
-    can_cu:'Luật Cư trú 2020 · NĐ 62/2021/NĐ-CP',route:'Loại 2 — Full-text',latency:'67ms'},
-  {ma:'TTHC-004',ten:'Đăng ký tạm trú',linh_vuc:'Cư trú',le_phi:'Miễn phí',thoi_han:'2 ngày làm việc',co_quan:'Công an Phường · Quầy 4 — Cư trú',quy:4,quy_lbl:'Quầy Cư trú',icon:'📋',color:'#F0FDF4',
-    giay_to:[{ten:'CCCD (bản gốc)',bb:true},{ten:'Hợp đồng thuê nhà hoặc xác nhận chủ nhà',bb:true},{ten:'Tờ khai đăng ký tạm trú (CT07)',bb:true}],
-    buoc:['Liên hệ chủ nhà lấy xác nhận','Điền tờ khai CT07','Đến Công an Phường Quầy 4 đăng ký','Cập nhật VNeID sau khi hoàn tất'],
-    can_cu:'Điều 30, Luật Cư trú 2020',route:'Loại 2 — Full-text',latency:'58ms'},
-  {ma:'TTHC-005',ten:'Xác nhận tình trạng hôn nhân',linh_vuc:'Tư pháp',le_phi:'20.000đ',thoi_han:'3 ngày làm việc',co_quan:'UBND Phường · Quầy 2',quy:2,quy_lbl:'Quầy Tư pháp',icon:'📝',color:'#FAF5FF',
-    giay_to:[{ten:'CCCD (bản gốc)',bb:true},{ten:'Tờ khai xác nhận tình trạng hôn nhân (CT01)',bb:true},{ten:'Giấy tờ cư trú (nếu có)',bb:false}],
-    buoc:['Điền tờ khai CT01','Đến UBND Phường nộp hồ sơ','Nộp lệ phí 20.000đ tại quầy','Nhận kết quả sau 3 ngày làm việc'],
-    can_cu:'NĐ 123/2015/NĐ-CP · TT 04/2020/TT-BTP',route:'Loại 1 — Template',latency:'12ms'},
+  {ma:'TTHC-001',ten:{vi:'Đăng ký khai sinh',en:'Register a birth',zh:'出生登记'},linh_vuc:'Hộ tịch',le_phi:'Miễn phí',thoi_han:'3 ngày làm việc',co_quan:'UBND Phường · Quầy 2 — Hộ tịch',quy:2,quy_lbl:'Quầy Hộ tịch',icon:'👶',color:'#FEE2E2',
+    giay_to:[
+      {ten:{vi:'Giấy chứng sinh (bản gốc)',en:'Birth certificate (original)',zh:'出生证明（原件）'},bb:true},
+      {ten:{vi:'CCCD cha và mẹ (bản màu, công chứng)',en:"Parents' ID cards (certified copies)",zh:'父母身份证（公证复印件）'},bb:true},
+      {ten:{vi:'Giấy đăng ký kết hôn (bản sao)',en:'Marriage certificate (copy)',zh:'结婚证（复印件）'},bb:true},
+      {ten:{vi:'Tờ khai Mẫu 01/2024',en:'Registration form (Form 01/2024)',zh:'登记表（表格01/2024）'},bb:true},
+      {ten:{vi:'Sổ hộ khẩu hoặc giấy tờ cư trú',en:'Household book or residence document',zh:'户口簿或居住证明'},bb:false}
+    ],
+    buoc:{
+      vi:['Chuẩn bị đầy đủ giấy tờ theo danh sách','Đến Bộ phận Một cửa (7h30 – 17h)','Lấy số và nộp hồ sơ tại Quầy 2 — Hộ tịch','Nhận phiếu hẹn trả kết quả','Đến nhận Giấy khai sinh theo ngày hẹn'],
+      en:['Prepare documents listed above','Visit One-Stop Service counter (7:30 – 17:00)','Take a ticket and submit at Counter 2 — Civil Records','Receive receipt and collection appointment','Collect birth certificate on appointment day'],
+      zh:['准备上述材料','前往一站式服务窗口（7:30 – 17:00）','取号并在2号窗口（户籍）提交材料','领取回执并等待取证日期','在约定日期领取出生证']
+    },
+    can_cu:{vi:'Luật Hộ tịch 2014 · TT 01/2024/TT-BTP',en:'Law on Civil Status 2014 · Circular 01/2024',zh:'户籍法2014 · 2024年第01号通报'},route:'Loại 3 — Semantic',latency:'145ms'},
+  {ma:'TTHC-002',ten:{vi:'Đăng ký kết hôn',en:'Register a marriage',zh:'登记结婚'},linh_vuc:'Hộ tịch',le_phi:'Miễn phí',thoi_han:'5 ngày làm việc',co_quan:'UBND Phường · Quầy 2 — Hộ tịch',quy:2,quy_lbl:'Quầy Hộ tịch',icon:'💍',color:'#FDF4FF',
+    giay_to:[
+      {ten:{vi:'Tờ khai đăng ký kết hôn (Mẫu 02)',en:'Marriage registration form (Form 02)',zh:'登记结婚表格（表格02）'},bb:true},
+      {ten:{vi:'CCCD/CMND của hai bên (bản sao)',en:'ID cards of both parties (copies)',zh:'双方身份证复印件'},bb:true},
+      {ten:{vi:'Giấy xác nhận tình trạng hôn nhân',en:'Proof of marital status',zh:'婚姻状况证明'},bb:true},
+      {ten:{vi:'Ảnh 3×4 (2 ảnh/người)',en:'3×4 photos (2 per person)',zh:'3×4照片（每人2张）'},bb:false}
+    ],
+    buoc:{
+      vi:['Chuẩn bị giấy tờ của cả hai bên','Hai bên cùng đến UBND Phường','Nộp hồ sơ và ký tên tại Quầy 2','Cán bộ kiểm tra và phê duyệt','Nhận Giấy chứng nhận kết hôn'],
+      en:['Prepare documents for both parties','Both parties visit the Ward People’s Committee','Submit documents and sign at Counter 2','Officer reviews and approves','Receive marriage certificate'],
+      zh:['准备双方材料','双方前往人民委员会登记','在2号窗口提交并签字','工作人员审核并批准','领取结婚证']
+    },
+    can_cu:{vi:'Luật Hộ tịch 2014 · NĐ 123/2015/NĐ-CP',en:'Law on Civil Status 2014 · Decree 123/2015',zh:'户籍法2014 · 第123/2015号法令'},route:'Loại 2 — Full-text',latency:'72ms'},
+  {ma:'TTHC-003',ten:{vi:'Xác nhận thường trú',en:'Permanent residence confirmation',zh:'常住确认'},linh_vuc:'Cư trú',le_phi:'Miễn phí',thoi_han:'2 ngày làm việc',co_quan:'Công an Phường · Quầy 4 — Cư trú',quy:4,quy_lbl:'Quầy Cư trú',icon:'🏠',color:'#CCFBF1',
+    giay_to:[
+      {ten:{vi:'CCCD (bản gốc để đối chiếu)',en:'ID card (original for verification)',zh:'身份证（原件，用于核对）'},bb:true},
+      {ten:{vi:'Đơn đề nghị xác nhận thường trú',en:'Application for permanent residence confirmation',zh:'常住确认申请表'},bb:true},
+      {ten:{vi:'Thông tin hộ khẩu điện tử (VNeID)',en:'Household registration on VNeID',zh:'VNeID上的户籍信息'},bb:false}
+    ],
+    buoc:{
+      vi:['Kiểm tra thông tin thường trú trên VNeID','Điền đơn đề nghị xác nhận','Đến Công an Phường nộp hồ sơ tại Quầy 4','Nhận giấy xác nhận trong 2 ngày làm việc'],
+      en:['Check permanent residence on VNeID','Fill application form','Submit at Police Ward Counter 4','Receive confirmation within 2 working days'],
+      zh:['在VNeID上检查常住信息','填写申请表','在公安派出所4号窗口提交材料','2个工作日内领取确认书']
+    },
+    can_cu:{vi:'Luật Cư trú 2020 · NĐ 62/2021/NĐ-CP',en:'Law on Residence 2020 · Decree 62/2021',zh:'居住法2020 · 第62/2021号法令'},route:'Loại 2 — Full-text',latency:'67ms'},
+  {ma:'TTHC-004',ten:{vi:'Đăng ký tạm trú',en:'Register temporary residence',zh:'登记暂住'},linh_vuc:'Cư trú',le_phi:'Miễn phí',thoi_han:'2 ngày làm việc',co_quan:'Công an Phường · Quầy 4 — Cư trú',quy:4,quy_lbl:'Quầy Cư trú',icon:'📋',color:'#F0FDF4',
+    giay_to:[
+      {ten:{vi:'CCCD (bản gốc)',en:'ID card (original)',zh:'身份证（原件）'},bb:true},
+      {ten:{vi:'Hợp đồng thuê nhà hoặc xác nhận chủ nhà',en:'Rental contract or landlord confirmation',zh:'租赁合同或房东证明'},bb:true},
+      {ten:{vi:'Tờ khai đăng ký tạm trú (CT07)',en:'Temporary residence form (CT07)',zh:'暂住登记表（CT07）'},bb:true}
+    ],
+    buoc:{
+      vi:['Liên hệ chủ nhà lấy xác nhận','Điền tờ khai CT07','Đến Công an Phường Quầy 4 đăng ký','Cập nhật VNeID sau khi hoàn tất'],
+      en:['Ask landlord for confirmation','Fill CT07 form','Register at Police Ward Counter 4','Update VNeID after completion'],
+      zh:['联系房东获取证明','填写CT07表格','在公安派出所4号窗口登记','完成后更新VNeID']
+    },
+    can_cu:{vi:'Điều 30, Luật Cư trú 2020',en:'Article 30, Law on Residence 2020',zh:'居住法2020 第30条'},route:'Loại 2 — Full-text',latency:'58ms'},
+  {ma:'TTHC-005',ten:{vi:'Xác nhận tình trạng hôn nhân',en:'Proof of marital status',zh:'婚姻状况证明'},linh_vuc:'Tư pháp',le_phi:'20.000đ',thoi_han:'3 ngày làm việc',co_quan:'UBND Phường · Quầy 2',quy:2,quy_lbl:'Quầy Tư pháp',icon:'📝',color:'#FAF5FF',
+    giay_to:[
+      {ten:{vi:'CCCD (bản gốc)',en:'ID card (original)',zh:'身份证（原件）'},bb:true},
+      {ten:{vi:'Tờ khai xác nhận tình trạng hôn nhân (CT01)',en:'Marital status form (CT01)',zh:'婚姻状况确认表（CT01）'},bb:true},
+      {ten:{vi:'Giấy tờ cư trú (nếu có)',en:'Residence documents (if any)',zh:'居住证明（如有）'},bb:false}
+    ],
+    buoc:{
+      vi:['Điền tờ khai CT01','Đến UBND Phường nộp hồ sơ','Nộp lệ phí 20.000đ tại quầy','Nhận kết quả sau 3 ngày làm việc'],
+      en:['Fill CT01 form','Submit at Ward People’s Committee','Pay fee 20,000 VND at counter','Receive result in 3 working days'],
+      zh:['填写CT01表格','在人民委员会提交材料','在窗口缴纳20000越南盾','3个工作日内领取结果']
+    },
+    can_cu:{vi:'NĐ 123/2015/NĐ-CP · TT 04/2020/TT-BTP',en:'Decree 123/2015 · Circular 04/2020',zh:'第123/2015号法令 · 第04/2020号通报'},route:'Loại 1 — Template',latency:'12ms'},
 ];
 const categories={
   'Hộ tịch':{items:[0,1]},
@@ -1035,6 +1078,13 @@ function setLang(lang){
   try{ updateChatLanguage(); }catch(e){console.warn('updateChatLanguage failed',e); }
 }
 
+// Localize a value that may be a string or an object with {vi,en,zh}
+function loc(v){
+  if(!v && v!==0) return '';
+  if(typeof v === 'object') return v[currentLang] || v.vi || v.en || v.zh || '';
+  return v;
+}
+
 // ── FONT SIZE ──
 let fontScale=1;
 function changeFontSize(dir){
@@ -1076,7 +1126,7 @@ function goCategory(cat){
     return `<button class="tthc-btn" onclick="loadTTHC(${i})">
       <div class="tthc-icon" style="background:${t.color}">${t.icon}</div>
       <div style="flex:1">
-        <div class="tthc-name">${t.ten}</div>
+        <div class="tthc-name">${loc(t.ten)}</div>
         <div class="tthc-meta">
           <span style="background:#dcfce7;color:#166534;font-size:12px;font-weight:700;padding:2px 8px;border-radius:20px;margin-right:8px">${t.le_phi}</span>
           ⏱ ${t.thoi_han}
@@ -1254,21 +1304,38 @@ function loadTTHC(idx){
 
   // Update hidden crumb (used by other flows) and the chat header so user
   // immediately sees which procedure they're viewing
-  document.getElementById('chat-crumb').textContent = `${currentTTHC.ten} — Hướng dẫn chi tiết`;
-  const chatTitle = document.getElementById('chat-title'); if(chatTitle) chatTitle.textContent = currentTTHC.ten;
-  const chatSub = document.getElementById('chat-subtitle'); if(chatSub) chatSub.textContent = `${currentTTHC.co_quan} · ${currentTTHC.thoi_han}`;
+  document.getElementById('chat-crumb').textContent = `${loc(currentTTHC.ten)} — Hướng dẫn chi tiết`;
+  const chatTitle = document.getElementById('chat-title'); if(chatTitle) chatTitle.textContent = loc(currentTTHC.ten);
+  const chatSub = document.getElementById('chat-subtitle'); if(chatSub) chatSub.textContent = `${loc(currentTTHC.co_quan)} · ${loc(currentTTHC.thoi_han)}`;
 
   const t=currentTTHC;
   // Build a natural assistant reply that includes the list of required documents
   // directly inside the message (no separate checklist block).
-  const docsHtml = t.giay_to.map(g=>{
-    const tag = g.bb ? '<strong>' : '';
-    const tagEnd = g.bb ? '</strong>' : '';
-    const req = g.bb ? ' — <span class="cl-req req-yes">Bắt buộc</span>' : ' — <span class="cl-req req-opt">Tùy chọn</span>';
-    return `• ${tag}${g.ten}${tagEnd}${req}`;
-  }).join('<br>');
+  // Build document list per language so the assistant reply can be accurate
+  const docsByLang = {vi:[],en:[],zh:[]};
+  for(const g of t.giay_to){
+    const tagOpen = g.bb ? '<strong>' : '';
+    const tagClose = g.bb ? '</strong>' : '';
+    const yes = {vi:'Bắt buộc',en:'Required',zh:'必需'}[currentLang]||'Required';
+    const opt = {vi:'Tùy chọn',en:'Optional',zh:'可选'}[currentLang]||'Optional';
+    const reqMap = {vi:` — <span class="cl-req req-yes">${yes}</span>`,en:` — <span class="cl-req req-yes">${yes}</span>`,zh:` — <span class="cl-req req-yes">${yes}</span>`};
+    const reqOptMap = {vi:` — <span class="cl-req req-opt">${opt}</span>`,en:` — <span class="cl-req req-opt">${opt}</span>`,zh:` — <span class="cl-req req-opt">${opt}</span>`};
+    const gvi = (g.ten && typeof g.ten === 'object') ? (g.ten.vi||g.ten.en||g.ten.zh||'') : g.ten;
+    const gen = (g.ten && typeof g.ten === 'object') ? (g.ten.en||g.ten.vi||g.ten.zh||'') : g.ten;
+    const gzh = (g.ten && typeof g.ten === 'object') ? (g.ten.zh||g.ten.vi||g.ten.en||'') : g.ten;
+    docsByLang.vi.push(`• ${tagOpen}${gvi}${tagClose}${g.bb?reqMap.vi:reqOptMap.vi}`);
+    docsByLang.en.push(`• ${tagOpen}${gen}${tagClose}${g.bb?reqMap.en:reqOptMap.en}`);
+    docsByLang.zh.push(`• ${tagOpen}${gzh}${tagClose}${g.bb?reqMap.zh:reqOptMap.zh}`);
+  }
+  const docsHtmlVi = docsByLang.vi.join('<br>');
+  const docsHtmlEn = docsByLang.en.join('<br>');
+  const docsHtmlZh = docsByLang.zh.join('<br>');
 
-  const ans = `Thủ tục <strong>${t.ten}</strong> gồm các loại giấy tờ sau:<br><br>${docsHtml}<br><br>📍 <strong>${t.co_quan}</strong> · 💰 <strong style="color:${t.le_phi==='Miễn phí'?'var(--green)':'var(--amber)'}">${t.le_phi}</strong> · ⏱ <strong>${t.thoi_han}</strong><br><br>Tham khảo: ${t.can_cu}`;
+  const ans = {
+    vi: `Thủ tục <strong>${(t.ten && t.ten.vi)?t.ten.vi:loc(t.ten)}</strong> gồm các loại giấy tờ sau:<br><br>${docsHtmlVi}<br><br>📍 <strong>${loc(t.co_quan)}</strong> · 💰 <strong style="color:${t.le_phi==='Miễn phí'?'var(--green)':'var(--amber)'}">${t.le_phi}</strong> · ⏱ <strong>${(t.thoi_han && typeof t.thoi_han==='object')?t.thoi_han.vi:loc(t.thoi_han)}</strong><br><br>Tham khảo: ${(t.can_cu && t.can_cu.vi)?t.can_cu.vi:loc(t.can_cu)}`,
+    en: `Procedure <strong>${(t.ten && t.ten.en)?t.ten.en:loc(t.ten)}</strong> includes the following documents:<br><br>${docsHtmlEn}<br><br>📍 <strong>${loc(t.co_quan)}</strong> · 💰 <strong style="color:${t.le_phi==='Miễn phí'?'var(--green)':'var(--amber)'}">${t.le_phi}</strong> · ⏱ <strong>${(t.thoi_han && typeof t.thoi_han==='object')?t.thoi_han.en:loc(t.thoi_han)}</strong><br><br>Reference: ${(t.can_cu && t.can_cu.en)?t.can_cu.en:loc(t.can_cu)}`,
+    zh: `流程：<strong>${(t.ten && t.ten.zh)?t.ten.zh:loc(t.ten)}</strong> 包括以下材料：<br><br>${docsHtmlZh}<br><br>📍 <strong>${loc(t.co_quan)}</strong> · 💰 <strong style="color:${t.le_phi==='Miễn phí'?'var(--green)':'var(--amber)'}">${t.le_phi}</strong> · ⏱ <strong>${(t.thoi_han && typeof t.thoi_han==='object')?t.thoi_han.zh:loc(t.thoi_han)}</strong><br><br>参考：${(t.can_cu && t.can_cu.zh)?t.can_cu.zh:loc(t.can_cu)}`
+  };
 
   // Add assistant message (no separate checklist). Keep BỐC SỐ enabled so user
   // can still take a ticket after reviewing documents.
@@ -1293,21 +1360,21 @@ function renderChecklistInChat(){
   const div=document.createElement('div');div.id='cl-inline';div.style.alignSelf='flex-start';div.style.width='100%';
   div.innerHTML=`
     <div class="checklist-inline">
-      <div class="cl-title">✅ Checklist: ${t.ten}</div>
+      <div class="cl-title">✅ ${ {vi:'Checklist',en:'Checklist',zh:'清单'}[currentLang] || 'Checklist'}: ${loc(t.ten)}</div>
       <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;margin-bottom:6px">
-        <span>Đã chuẩn bị: <span id="cl-done">${done}</span>/${total}</span>
-        <span style="color:${done===total?'var(--green)':'var(--amber)'}" id="cl-status">${done===total?'Đầy đủ ✓':'Còn thiếu'}</span>
+        <span>${ {vi:'Đã chuẩn bị',en:'Prepared',zh:'已准备'}[currentLang] || 'Prepared'}: <span id="cl-done">${done}</span>/${total}</span>
+        <span style="color:${done===total?'var(--green)':'var(--amber)'}" id="cl-status">${done===total?({vi:'Đầy đủ ✓',en:'Complete ✓',zh:'已齐全 ✓'}[currentLang]||'Complete ✓'):( {vi:'Còn thiếu',en:'Missing',zh:'缺失'}[currentLang]||'Missing')}</span>
       </div>
       <div class="cl-progress-bar"><div class="cl-progress-fill" id="cl-fill" style="width:${total>0?done/total*100:0}%"></div></div>
       ${t.giay_to.map((g,i)=>`
         <div class="cl-item" onclick="toggleCheck(${i})" id="cli-${i}">
           <div class="cl-box${checkedItems[i]?' chk':''}" id="clb-${i}">${checkedItems[i]?`<svg width="13" height="13" style="color:white"><use href="#ic-check"/></svg>`:''}</div>
           <div style="flex:1">
-            <div class="cl-lbl${checkedItems[i]?' done':''}" id="cll-${i}">${g.ten}</div>
-            <div class="${g.bb?'cl-req req-yes':'cl-req req-opt'}">${g.bb?'Bắt buộc':'Tùy chọn'}</div>
+            <div class="cl-lbl${checkedItems[i]?' done':''}" id="cll-${i}">${loc(g.ten)}</div>
+            <div class="${g.bb?'cl-req req-yes':'cl-req req-opt'}">${g.bb?({vi:'Bắt buộc',en:'Required',zh:'必需'}[currentLang]||'Required'):( {vi:'Tùy chọn',en:'Optional',zh:'可选'}[currentLang]||'Optional')}</div>
           </div>
         </div>`).join('')}
-      <div style="font-size:12px;color:var(--muted);margin-top:8px;padding-top:8px;border-top:1px solid var(--border)">📖 ${t.can_cu}</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:8px;padding-top:8px;border-top:1px solid var(--border)">📖 ${loc(t.can_cu)}</div>
     </div>`;
   msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;
 }
@@ -1362,20 +1429,21 @@ function goTicket(){
   if(!currentTTHC)return;const t=currentTTHC;
   const num=['B047','B048','B049','B050','B051'][Math.floor(Math.random()*5)];
   document.getElementById('ticket-num').textContent=num;
-  document.getElementById('ticket-tthc').textContent=t.ten;
+  document.getElementById('ticket-tthc').textContent=loc(t.ten);
   document.getElementById('tk-quy').textContent=t.quy;
   document.getElementById('tk-quy-lbl').textContent=t.quy_lbl;
   document.getElementById('tk-wait-time').textContent=`~${3+t.giay_to.filter(g=>g.bb).length*3}'`;
   document.getElementById('ticket-docs').innerHTML=t.giay_to.filter(g=>g.bb)
-    .map(g=>`<div class="t-doc-item"><div class="t-doc-dot"></div><div style="flex:1;font-weight:600">${g.ten}</div></div>`).join('')
-    +`<div style="margin-top:8px;padding:8px 10px;background:var(--card);border:1px solid var(--border);border-radius:7px;font-size:12.5px;color:var(--muted)">📖 ${t.can_cu}</div>`;
+    .map(g=>`<div class="t-doc-item"><div class="t-doc-dot"></div><div style="flex:1;font-weight:600">${loc(g.ten)}</div></div>`).join('')
+    +`<div style="margin-top:8px;padding:8px 10px;background:var(--card);border:1px solid var(--border);border-radius:7px;font-size:12.5px;color:var(--muted)">📖 ${loc(t.can_cu)}</div>`;
   document.getElementById('pz-num').textContent=num;
-  document.getElementById('pz-tthc').textContent=t.ten;
+  document.getElementById('pz-tthc').textContent=loc(t.ten);
   document.getElementById('pz-quy').textContent=`${t.quy} — ${t.quy_lbl}`;
   document.getElementById('pz-time').textContent=new Date().toLocaleString('vi');
-  document.getElementById('pz-docs').innerHTML=t.giay_to.filter(g=>g.bb).map(g=>`• ${g.ten}`).join('<br>');
+  document.getElementById('pz-docs').innerHTML=t.giay_to.filter(g=>g.bb).map(g=>`• ${loc(g.ten)}`).join('<br>');
   goScreen('s-ticket');
-  showToast(`🎫 Đã cấp số ${num} · ${t.quy_lbl} · ${t.ten}`);
+  const toastPrefix = ({vi:'Đã cấp số',en:'Issued ticket',zh:'已发放号码'}[currentLang] || 'Issued ticket');
+  showToast(`🎫 ${toastPrefix} ${num} · ${t.quy_lbl} · ${loc(t.ten)}`);
 }
 function printTicket(){
   document.getElementById('print-zone').style.display='block';
