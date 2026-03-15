@@ -123,6 +123,13 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 .ai-bubble{background:#fff;border:1px solid var(--border);border-bottom-left-radius:4px;box-shadow:var(--shc)}
 .user-bubble{background:#FEE2E2;color:#7f1d1d;border-bottom-right-radius:4px}
 .msg-time{font-size:11px;color:var(--dim);margin-top:4px}
+/* Message action bar */
+.msg-actions{display:flex;align-items:center;gap:2px;margin-left:46px;margin-top:5px;opacity:.55;transition:opacity .2s}
+.msg-actions:hover{opacity:1}
+.msg-act-btn{width:30px;height:30px;border-radius:7px;border:1px solid transparent;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all .15s;padding:0;font-family:inherit}
+.msg-act-btn:hover{background:var(--card);border-color:var(--border);color:var(--text2)}
+.msg-act-btn.act-active{color:var(--red);background:var(--rl);border-color:var(--rb)}
+.msg-act-sep{width:1px;height:14px;background:var(--border);margin:0 3px;flex-shrink:0}
 .source-box{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-size:12.5px;color:#374151;margin-top:10px;line-height:1.6}
 .route-badge{display:inline-flex;align-items:center;gap:4px;background:var(--rl);border:1px solid var(--rb);color:#991b1b;font-size:11px;font-weight:700;padding:2px 8px;border-radius:5px;margin-top:5px}
 
@@ -203,7 +210,7 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 .k-bottom{height:44px;background:var(--red);display:flex;align-items:center;padding:0 24px;gap:18px;flex-shrink:0;position:relative}
 .k-bottom-item{display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,.85)}
 .k-bottom-dot{width:6px;height:6px;border-radius:50%;background:#fff}
-.k-bottom-brand{position:absolute;left:50%;transform:translateX(-50%);font-size:11px;font-weight:800;color:rgba(255,255,255,.65);letter-spacing:.12em;text-transform:uppercase;pointer-events:none;white-space:nowrap}
+.k-bottom-brand{position:absolute;left:50%;transform:translateX(-50%);font-size:11px;font-weight:800;color:rgba(255,255,255,.65);letter-spacing:.12em;;pointer-events:none;white-space:nowrap}
 
 /* ── TOAST ── */
 .k-toast{position:fixed;bottom:58px;left:50%;transform:translateX(-50%);background:#111827;color:#fff;padding:12px 24px;border-radius:12px;font-size:14px;font-weight:700;box-shadow:var(--shl);z-index:999;display:none;white-space:nowrap;animation:tUp .2s ease}
@@ -486,9 +493,9 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
       </div>
     </div>
     <div class="idle-chat-hint" onclick="goScreen('s-chat');focusInput()">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C8102E" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#C8102E" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
       <div class="idle-chat-hint-txt" id="idle-chat-hint-txt">Hoặc <strong>nhấn đây để hỏi AI trực tiếp</strong> — nói hoặc gõ câu hỏi của bạn</div>
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8102E" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#C8102E" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
     </div>
   </div>
 
@@ -953,7 +960,7 @@ const demoScripts=[
     }
   },
   // 1: Công chứng bản sao
-  {loadIdx:null,typing:1000,
+  {loadIdx:null,route:'Loại 2 — Full-text',latency:'55ms',can_cu:'NĐ 23/2015/NĐ-CP',typing:1000,
     q:{vi:'Tôi muốn công chứng bản sao từ bản chính thì thủ tục và phí như thế nào?',en:'How can I get certified copies from originals, and what are the procedures and fees?',zh:'我想办理副本公证，程序和费用是多少？'},
     aiReply:{
       vi:`Thủ tục công chứng bản sao từ bản chính:<br><br>📄 Giấy tờ cần thiết:<br>1. Bản chính giấy tờ<br>2. Bản sao photocopy tương ứng<br><br>⏱ Thời gian: Giải quyết ngay trong ngày.<br>💰 Lệ phí: 2.000 VNĐ/trang (từ trang thứ 3 là 1.000 VNĐ/trang, tối đa 200.000 VNĐ/bản).`,
@@ -989,7 +996,7 @@ const demoScripts=[
     }
   },
   // 5: Khai tử
-  {loadIdx:null,typing:900,
+  {loadIdx:null,route:'Loại 1 — Template',latency:'22ms',can_cu:'Luật Hộ tịch 2014 · Điều 32',typing:900,
     q:{vi:'Thủ tục đăng ký khai tử cần giấy tờ gì và bao lâu thì xong?',en:'What documents are required for death registration and how long does it take?',zh:'办理死亡登记需要什么文件，多久能办完？'},
     aiReply:{
       vi:`Để đăng ký khai tử, bạn cần chuẩn bị:<br><br>📄 Giấy tờ cần thiết:<br>1. Tờ khai<br>2. Giấy báo tử hoặc xác nhận của cơ quan chức năng<br><br>⏱ Thời gian: Giải quyết ngay trong ngày làm việc.<br>💰 Lệ phí: Miễn phí nếu đăng ký đúng hạn.`,
@@ -998,7 +1005,7 @@ const demoScripts=[
     }
   },
   // 6: Vay vốn hộ nghèo
-  {loadIdx:null,typing:1400,
+  {loadIdx:null,route:'Loại 3 — Semantic',latency:'98ms',can_cu:'NĐ 78/2002/NĐ-CP · QĐ 59/2015/QĐ-TTg',typing:1400,
     q:{vi:'Gia đình tôi thuộc hộ nghèo, muốn vay vốn làm kinh tế thì thủ tục ra sao và mất bao lâu?',en:'My family is a poor household, how do we apply for an economic loan and how long does it take?',zh:'我的家庭属于贫困户，想申请经济贷款，手续如何，需要多长时间？'},
     aiReply:{
       vi:`Thủ tục vay vốn hỗ trợ hộ nghèo:<br><br>📄 Giấy tờ cần thiết:<br>1. Đơn đề nghị vay vốn<br>2. Giấy xác nhận hộ nghèo<br>3. Biên bản họp tổ tiết kiệm<br><br>⏱ Thời gian: 10 - 15 ngày làm việc.<br>💰 Lệ phí: Không mất phí thủ tục.`,
@@ -1007,7 +1014,7 @@ const demoScripts=[
     }
   },
   // 7: Tranh chấp đất đai
-  {loadIdx:null,typing:1200,
+  {loadIdx:null,route:'Loại 3 — Semantic',latency:'112ms',can_cu:'Luật Đất đai 2024 · Luật Hòa giải cơ sở 2013',typing:1200,
     q:{vi:'Tôi có tranh chấp ranh giới đất với hàng xóm, nộp đơn hòa giải tại phường thì bao lâu sẽ được giải quyết?',en:'I have a land boundary dispute with my neighbor, how long will mediation at the ward office take?',zh:'我与邻居有土地边界纠纷，向坊办提交调解申请后多久能解决？'},
     aiReply:{
       vi:`Thủ tục hòa giải tranh chấp đất tại phường:<br><br>📄 Giấy tờ cần thiết:<br>1. Đơn yêu cầu hòa giải<br>2. Giấy tờ nhà đất liên quan<br>3. Chứng cứ kèm theo<br><br>⏱ Thời gian: Không quá 45 ngày làm việc.<br>💰 Lệ phí: Miễn phí hòa giải tại cấp Phường.`,
@@ -1016,7 +1023,7 @@ const demoScripts=[
     }
   },
   // 8: Bảo hiểm y tế trẻ em
-  {loadIdx:null,typing:1100,
+  {loadIdx:null,route:'Loại 2 — Full-text',latency:'44ms',can_cu:'Luật BHYT 2014 · NĐ 146/2018/NĐ-CP',typing:1100,
     q:{vi:'Làm thẻ bảo hiểm y tế cho trẻ dưới 6 tuổi mất bao lâu và cần đóng bao nhiêu tiền?',en:'How long does it take to get a health insurance card for a child under 6 and how much is the fee?',zh:'为6岁以下儿童办理医保卡需要多长时间，费用是多少？'},
     aiReply:{
       vi:`Làm thẻ bảo hiểm y tế cho trẻ dưới 6 tuổi:<br><br>📄 Giấy tờ cần thiết:<br>1. Tờ khai TK1-TS (liên thông cùng khai sinh)<br><br>⏱ Thời gian: 07 - 10 ngày làm việc sau khi có khai sinh.<br>💰 Lệ phí: Miễn phí (Nhà nước hỗ trợ 100%).`,
@@ -1046,7 +1053,7 @@ const i18n={
     idle_title:'Xin chào!<br>Tôi có thể giúp gì cho bạn?',
     idle_sub:'Hãy chạm vào màn hình để bắt đầu tra cứu thủ tục hành chính',
     idle_tap:'CHẠM ĐỂ BẮT ĐẦU &nbsp;→',
-    idle_chat_hint:'Hoặc <strong>nhấn đây để hỏi AI trực tiếp</strong> — nói hoặc gõ câu hỏi của bạn',
+    idle_chat_hint:'Hoặc <strong>nhấn đây để hỏi trực tiếp Trợ lý AI</strong> — nói hoặc gõ câu hỏi của bạn',
     cat_heading:'Bạn cần hỗ trợ lĩnh vực nào?',
     cat_sub:'Chạm vào lĩnh vực phù hợp — hoặc hỏi AI bằng giọng nói bên dưới',
     cat_ai_strong:'Hỏi trực tiếp trợ lý AI',
@@ -1244,6 +1251,15 @@ function addMsg(html,isAi,sourceTxt,doSpeak=true){
   // Pick appropriate html for current language (fallback to vi then en then zh)
   const chosen = htmlByLang[currentLang] || htmlByLang.vi || htmlByLang.en || htmlByLang.zh || '';
 
+  const actionsHtml = isAi ? `
+    <div class="msg-actions">
+      <button class="msg-act-btn act-like" onclick="reactMsg(${id},'like')" title="Hữu ích"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg></button>
+      <button class="msg-act-btn act-dislike" onclick="reactMsg(${id},'dislike')" title="Không hữu ích"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3H10z"/><path d="M17 2h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/></svg></button>
+      <div class="msg-act-sep"></div>
+      <button class="msg-act-btn act-speak" onclick="speakMsg(${id})" title="Đọc to"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></button>
+      <button class="msg-act-btn act-copy" onclick="copyMsg(${id})" title="Sao chép"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+    </div>` : '';
+
   div.dataset.msgId = String(id);
   div.innerHTML=`
     <div class="msg ${isAi?'ai-msg':'user-msg'}">
@@ -1253,6 +1269,7 @@ function addMsg(html,isAi,sourceTxt,doSpeak=true){
       <div class="msg-bubble ${isAi?'ai-bubble':'user-bubble'}">${chosen}${sourceHtml}</div>
     </div>
     ${routeBadge}
+    ${actionsHtml}
     <div class="msg-time" style="${isAi?'margin-left:46px':'margin-right:46px'}">${time}${isAi?' · <span style="color:var(--lime)">✓</span>':''}</div>`;
   msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;
   if(isAi&&ttsEnabled&&doSpeak)speak(chosen);
@@ -1294,7 +1311,10 @@ function sendDemo(idx){
     setTimeout(()=>{
       removeTyping();
       // Pass multilingual AI reply object so the message can be re-rendered
-      addMsg(raw.aiReply,true, loadIdx!=null?`${tthcData[loadIdx].route} · ${tthcData[loadIdx].latency}`:'');
+      const _route=loadIdx!=null?tthcData[loadIdx].route:(raw.route||'');
+      const _lat=loadIdx!=null?tthcData[loadIdx].latency:(raw.latency||'');
+      const _cu=loadIdx!=null?((tthcData[loadIdx].can_cu&&tthcData[loadIdx].can_cu.vi)||tthcData[loadIdx].can_cu||''):(raw.can_cu||'');
+      addMsg(raw.aiReply,true,_route?`${_route} · ${_lat}${_cu?' · '+_cu:''}`:(_cu||''));
       if(typeof loadIdx === 'number') loadTTHCPanel(loadIdx);
       if(ttsEnabled){ const ttsText = raw.aiReply && raw.aiReply[currentLang] ? raw.aiReply[currentLang] : (raw.aiReply || ''); if(ttsText) speak(ttsText); }
     },typing);
@@ -1317,8 +1337,11 @@ function sendChat(text){
     if(found){
       const raw = demoScripts[found.idx]||null;
       if(raw && raw.aiReply){
-        addMsg(raw.aiReply,true, `${tthcData[found.idx].route} · ${tthcData[found.idx].latency}`);
-        loadTTHCPanel(found.idx);
+        const _fi=found.idx;const _td=tthcData[_fi]||{};const _fr=raw;
+        const _rt=_td.route||_fr.route||'';const _lt=_td.latency||_fr.latency||'';
+        const _cu=(_td.can_cu&&_td.can_cu.vi)||_td.can_cu||_fr.can_cu||'';
+        addMsg(raw.aiReply,true,_rt?`${_rt} · ${_lt}${_cu?' · '+_cu:''}`:(_cu||''));
+        if(_td.giay_to)loadTTHCPanel(_fi);
       } else if(raw) {
         loadTTHC(found.idx);
       }
@@ -1392,7 +1415,8 @@ function loadTTHC(idx){
 
   // Add assistant message (no separate checklist). Keep BỐC SỐ enabled so user
   // can still take a ticket after reviewing documents.
-  addMsg(ans,true,`${t.route} · ${t.latency}`);
+  const canCuStr=(t.can_cu&&t.can_cu.vi)?t.can_cu.vi:(typeof t.can_cu==='string'?t.can_cu:'');
+  addMsg(ans,true,`${t.route} · ${t.latency}${canCuStr?' · '+canCuStr:''}`);
   setBocso(true);
 }
 function loadTTHCPanel(idx){currentTTHC=tthcData[idx];checkedItems=new Array(currentTTHC.giay_to.length).fill(false);setBocso(true);}
@@ -1602,6 +1626,62 @@ const legalTexts = {
       }
     ]
   },
+  'NĐ 23/2015/NĐ-CP': {
+    docs: [
+      {
+        num: 'NĐ 23/2015/NĐ-CP — Về cấp bản sao từ sổ gốc, chứng thực bản sao từ bản chính, chứng thực chữ ký và chứng thực hợp đồng, giao dịch',
+        title: 'Điều 20 — Thủ tục chứng thực bản sao từ bản chính',
+        body: `<strong>1.</strong> Người yêu cầu chứng thực xuất trình bản chính giấy tờ, văn bản làm cơ sở để chứng thực bản sao và bản sao cần chứng thực.<br><br><strong>2.</strong> Người tiếp nhận hồ sơ kiểm tra bản chính, đối chiếu với bản sao; nếu nội dung bản sao đúng với bản chính, không vi phạm pháp luật thì thực hiện chứng thực.<br><br><strong>3.</strong> Thời hạn thực hiện: <span class="legal-highlight">Ngay trong ngày làm việc</span>; trường hợp tiếp nhận sau 15 giờ thì hoàn thành trong ngày làm việc tiếp theo.`
+      },
+      {
+        num: 'Thông tư 226/2016/TT-BTC — Quy định mức thu lệ phí chứng thực',
+        title: 'Mức thu lệ phí chứng thực bản sao',
+        body: `<span class="legal-highlight">2.000 đồng/trang</span> đối với trang thứ nhất và trang thứ hai; từ trang thứ ba trở lên mức thu là <span class="legal-highlight">1.000 đồng/trang</span>.<br><br>Tổng mức thu tối đa không quá <strong>200.000 đồng/bản</strong> (không phân biệt số trang).<br><br>Trường hợp chứng thực nhiều bản của cùng một loại giấy tờ, văn bản trong một lần thì từ bản thứ hai trở lên thu <strong>1.000 đồng/bản</strong>.`
+      }
+    ]
+  },
+  'Luật Hộ tịch 2014 · Điều 32': {
+    docs: [
+      {
+        num: 'Luật số 60/2014/QH13 — Luật Hộ tịch 2014',
+        title: 'Điều 32 — Đăng ký khai tử',
+        body: `<strong>1.</strong> Người có trách nhiệm đăng ký khai tử: vợ/chồng hoặc con, cha, mẹ hoặc người thân thích khác của người chết.<br><br><strong>2.</strong> Trong thời hạn <span class="legal-highlight">15 ngày kể từ ngày có người chết</span>, người có trách nhiệm phải đăng ký khai tử.<br><br><strong>3.</strong> Thẩm quyền đăng ký khai tử tại UBND cấp xã nơi cư trú cuối cùng của người chết.<br><br><strong>4.</strong> Hồ sơ gồm: Tờ khai đăng ký khai tử; Giấy báo tử của cơ sở y tế hoặc văn bản xác nhận của cơ quan công an hoặc chính quyền địa phương.`
+      },
+      {
+        num: 'Điều 34 — Miễn lệ phí đăng ký hộ tịch',
+        title: 'Lệ phí đăng ký khai tử',
+        body: `Đăng ký khai tử <span class="legal-highlight">được miễn lệ phí</span> nếu thực hiện đúng thời hạn quy định (trong 15 ngày kể từ ngày có người chết).<br><br>Trường hợp đăng ký khai tử quá hạn có thể bị xử phạt vi phạm hành chính theo quy định.<br><br>Thời gian giải quyết: <strong>Ngay trong ngày làm việc</strong>.`
+      }
+    ]
+  },
+  'NĐ 78/2002/NĐ-CP · QĐ 59/2015/QĐ-TTg': {
+    docs: [
+      {
+        num: 'NĐ 78/2002/NĐ-CP — Về tín dụng đối với người nghèo và các đối tượng chính sách khác',
+        title: 'Điều 2 — Đối tượng được vay vốn',
+        body: `<strong>1.</strong> Hộ nghèo, hộ cận nghèo theo chuẩn nghèo do Chính phủ quy định.<br><br><strong>2.</strong> Đối tượng có nhu cầu vay vốn phát triển sản xuất, kinh doanh, giải quyết việc làm, xây dựng nhà ở, học sinh - sinh viên và các đối tượng chính sách khác.<br><br><span class="legal-highlight">Thời hạn giải quyết: 10 – 15 ngày làm việc</span> kể từ khi hội đồng tổ tiết kiệm họp thống nhất.`
+      },
+      {
+        num: 'QĐ 59/2015/QĐ-TTg — Chuẩn nghèo tiếp cận đa chiều giai đoạn 2016–2020',
+        title: 'Điều 1 — Chuẩn hộ nghèo, hộ cận nghèo',
+        body: `<strong>Khu vực nông thôn:</strong> Hộ nghèo là hộ đáp ứng một trong hai tiêu chí — (i) Thu nhập bình quân đầu người/tháng từ <strong>700.000 đồng trở xuống</strong>; (ii) Thu nhập bình quân đầu người/tháng trên 700.000 đồng đến 1.000.000 đồng và thiếu hụt từ 3 chỉ số đo lường mức độ thiếu hụt tiếp cận các dịch vụ xã hội cơ bản trở lên.<br><br><strong>Khu vực thành thị:</strong> Hộ nghèo là hộ đáp ứng — Thu nhập bình quân đầu người/tháng từ <strong>900.000 đồng trở xuống</strong> hoặc trên 900.000 đồng đến 1.300.000 đồng và thiếu hụt từ 3 chỉ số trở lên.`
+      }
+    ]
+  },
+  'Luật Đất đai 2024 · Luật Hòa giải cơ sở 2013': {
+    docs: [
+      {
+        num: 'Luật Đất đai 2024 (Luật số 31/2024/QH15)',
+        title: 'Điều 235 — Hòa giải tranh chấp đất đai',
+        body: `<strong>1.</strong> Nhà nước khuyến khích các bên tranh chấp đất đai tự hòa giải hoặc giải quyết tranh chấp đất đai thông qua hòa giải ở cơ sở.<br><br><strong>2.</strong> Tranh chấp đất đai mà các bên tranh chấp không tự hòa giải được thì gửi đơn đến <span class="legal-highlight">UBND cấp xã nơi có đất tranh chấp</span> để hòa giải.<br><br><strong>3.</strong> Thời hạn hòa giải: <span class="legal-highlight">Không quá 45 ngày</span> kể từ ngày UBND cấp xã nhận được đơn yêu cầu hòa giải.`
+      },
+      {
+        num: 'Luật Hòa giải cơ sở 2013 (Luật số 35/2013/QH13)',
+        title: 'Điều 3 — Phạm vi hòa giải cơ sở',
+        body: `Hòa giải cơ sở được tiến hành đối với các mâu thuẫn, tranh chấp giữa các bên phát sinh từ quan hệ dân sự, hôn nhân và gia đình, kinh doanh thương mại, lao động và các lĩnh vực khác trong đời sống xã hội.<br><br><strong>Thủ tục tiến hành:</strong> Tổ hòa giải tổ chức phiên hòa giải trong thời hạn <strong>không quá 5 ngày làm việc</strong> kể từ ngày nhận được yêu cầu; trong trường hợp vụ việc phức tạp thì có thể kéo dài hơn nhưng phải thông báo cho các bên biết.<br><br><span class="legal-highlight">Kết quả hòa giải thành lập thành văn bản có chữ ký của các bên và tổ trưởng tổ hòa giải.</span>`
+      }
+    ]
+  },
   'NĐ 123/2015/NĐ-CP · TT 04/2020/TT-BTP': {
     docs: [
       {
@@ -1613,6 +1693,20 @@ const legalTexts = {
         num: 'TT 04/2020/TT-BTP',
         title: 'Biểu mẫu Mẫu CT01',
         body: `Mẫu CT01 — Tờ khai đề nghị cấp Giấy xác nhận tình trạng hôn nhân ban hành kèm theo Thông tư 04/2020/TT-BTP ngày 28/5/2020.<br><br>Người yêu cầu tự khai và chịu trách nhiệm về tính chính xác của các thông tin kê khai. <span class="legal-highlight">Lệ phí: 20.000 đồng/trường hợp</span> theo Thông tư 281/2016/TT-BTC.`
+      }
+    ]
+  },
+  'Luật BHYT 2014 · NĐ 146/2018/NĐ-CP': {
+    docs: [
+      {
+        num: 'Luật Bảo hiểm y tế 2014 sửa đổi 2018 (Luật số 46/2014/QH13)',
+        title: 'Điều 12 — Đối tượng tham gia BHYT bắt buộc',
+        body: `Trẻ em dưới <span class="legal-highlight">6 tuổi</span> thuộc đối tượng tham gia bảo hiểm y tế theo hộ gia đình và được <strong>Nhà nước hỗ trợ 100% mức đóng</strong> bảo hiểm y tế.<br><br>Thẻ BHYT được cấp liên thông ngay sau khi đăng ký khai sinh (thông qua mẫu TK1-TS).<br><br><span class="legal-highlight">Trẻ em dưới 6 tuổi được khám, chữa bệnh BHYT miễn phí không phụ thuộc vào tuyến điều trị.</span>`
+      },
+      {
+        num: 'NĐ 146/2018/NĐ-CP — Quy định chi tiết và hướng dẫn biện pháp thi hành Luật BHYT',
+        title: 'Điều 11 — Thủ tục cấp thẻ BHYT cho trẻ em dưới 6 tuổi',
+        body: `<strong>1.</strong> Căn cứ Giấy chứng sinh hoặc Giấy khai sinh, UBND cấp xã lập danh sách trẻ em dưới 6 tuổi gửi cơ quan BHXH.<br><br><strong>2.</strong> Cơ quan BHXH cấp thẻ BHYT cho trẻ trong thời hạn <span class="legal-highlight">07 – 10 ngày làm việc</span> kể từ ngày nhận được danh sách.<br><br><strong>3.</strong> Trường hợp liên thông khai sinh — BHYT qua hệ thống dịch vụ công trực tuyến, thẻ BHYT được cấp <strong>tự động</strong> mà không cần nộp hồ sơ riêng.<br><br>Mức đóng BHYT: <strong>4,5% mức lương cơ sở/tháng</strong>, Nhà nước hỗ trợ 100%.`
       }
     ]
   }
@@ -1643,6 +1737,25 @@ function showLegalPopup(ref) {
 }
 function closeLegalPopup(){document.getElementById('legal-popup-bg').classList.remove('open');}
 
+// ── MESSAGE ACTIONS ──
+function reactMsg(id,type){
+  const el=document.querySelector(`[data-msg-id="${id}"]`);if(!el)return;
+  const likeBtn=el.querySelector('.act-like');
+  const dislikeBtn=el.querySelector('.act-dislike');
+  if(type==='like'){const was=likeBtn.classList.contains('act-active');likeBtn.classList.toggle('act-active');if(!was)dislikeBtn.classList.remove('act-active');}
+  else{const was=dislikeBtn.classList.contains('act-active');dislikeBtn.classList.toggle('act-active');if(!was)likeBtn.classList.remove('act-active');}
+}
+function speakMsg(id){
+  const m=chatHistory.find(m=>m.id===id);if(!m)return;
+  const html=(m.htmlByLang&&(m.htmlByLang[currentLang]||m.htmlByLang.vi))||'';
+  speak(html.replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim());
+}
+function copyMsg(id){
+  const m=chatHistory.find(m=>m.id===id);if(!m)return;
+  const html=(m.htmlByLang&&(m.htmlByLang[currentLang]||m.htmlByLang.vi))||'';
+  const plain=html.replace(/<br\s*\/?>/gi,'\n').replace(/<[^>]*>/g,'').replace(/\n{3,}/g,'\n\n').trim();
+  navigator.clipboard?.writeText(plain).then(()=>showToast('Đã sao chép')).catch(()=>showToast('Không thể sao chép'));
+}
 
 // ── AUTOCOMPLETE ──
 const acCategoryLabels={vi:{0:'Hộ tịch',1:'Chứng thực',2:'Hôn nhân',3:'Cư trú',4:'Hôn nhân',5:'Hộ tịch',6:'Chính sách',7:'Đất đai',8:'Bảo hiểm'},en:{0:'Civil',1:'Notary',2:'Marriage',3:'Residence',4:'Marriage',5:'Civil',6:'Policy',7:'Land',8:'Insurance'},zh:{0:'户籍',1:'公证',2:'婚姻',3:'居住',4:'婚姻',5:'户籍',6:'政策',7:'土地',8:'保险'}};
