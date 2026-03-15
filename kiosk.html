@@ -251,6 +251,86 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 .legal-highlight{background:#FEF9C3;border-radius:3px;padding:0 3px}
 
 /* ══════════════════════════════
+   TABLET RESPONSIVE (641–1024px)
+══════════════════════════════ */
+@media (min-width:641px) and (max-width:1024px){
+  .kiosk-shell{height:100dvh}
+
+  /* ── TOP BAR ── */
+  .k-top{height:60px;padding:0 18px;gap:10px}
+  .k-logo-wrap{width:40px;height:40px}
+  .k-logo-wrap svg,.k-logo-wrap img{width:40px!important;height:40px!important}
+  .k-brand-txt strong{font-size:18px}
+  .k-brand-txt span{font-size:15px}
+  .k-time-val{font-size:17px}
+  .k-time-date{font-size:10px}
+  .ctrl-btn{width:30px;height:30px;font-size:12px}
+  .lang-pill{padding:4px 9px;font-size:11px}
+  .k-home-btn{padding:7px 13px;font-size:13px}
+
+  /* ── CONTENT ── */
+  .k-content{padding:20px 24px}
+
+  /* ── IDLE SCREEN ── */
+  .idle-label{font-size:14px;margin-bottom:10px}
+  .idle-ai-icon{width:72px;height:72px;margin-bottom:16px}
+  .idle-ai-icon svg{width:72px;height:72px}
+  .idle-title{font-size:38px;margin-bottom:8px}
+  .idle-sub{font-size:18px;margin-bottom:26px}
+  .idle-tap-btn{padding:15px 48px;font-size:22px}
+  .idle-q-btn{font-size:16px;padding:10px 16px}
+  .idle-chat-hint{max-width:520px}
+  .idle-chat-hint svg{width:26px!important;height:26px!important}
+  .idle-chat-hint-txt{font-size:15px}
+
+  /* ── CATEGORY SCREEN ── */
+  .cat-grid{grid-template-columns:repeat(3,1fr);gap:12px}
+  .cat-btn{padding:20px 14px 16px;border-radius:14px}
+  .cat-icon{font-size:50px;margin-bottom:10px}
+  .cat-name{font-size:22px}
+  .cat-count{font-size:15px}
+  .cat-ai-txt strong{font-size:20px}
+  .cat-ai-txt span{font-size:15px}
+
+  /* ── TTHC LIST ── */
+  .tthc-icon{width:42px;height:42px;font-size:26px}
+  .tthc-name{font-size:19px}
+  .tthc-meta{font-size:14px}
+
+  /* ── CHAT ── */
+  .k-chat-hd{padding:12px 18px}
+  .k-chat-msgs{padding:16px 18px;gap:12px}
+  .msg-bubble{font-size:17px;padding:10px 14px}
+  .msg-av{width:32px;height:32px}
+  .msg-av svg{width:32px;height:32px}
+  .msg-actions{margin-left:40px}
+  .checklist-inline{margin-left:40px}
+  .cl-lbl{font-size:14px}
+
+  /* ── INPUT AREA ── */
+  .k-input-area{padding:12px 18px}
+  .k-chip{font-size:15px;padding:6px 12px}
+  .k-text-input{font-size:16px;padding:11px 14px}
+  .k-send-btn{font-size:16px;padding:12px 18px}
+  .k-voice-btn{width:44px;height:44px}
+  .k-ac-item{font-size:17px}
+  .bocso-row{padding:10px 18px}
+  .bocso-btn{font-size:16px}
+
+  /* ── TICKET SCREEN ── */
+  .ticket-shell{padding:20px}
+  .ticket-wrap{grid-template-columns:320px 1fr;gap:18px}
+  .ticket-card{padding:24px}
+  .ticket-num{font-size:64px}
+  .ticket-tthc{font-size:16px}
+  .ticket-meta-val{font-size:22px}
+
+  /* ── MODALS & POPUPS ── */
+  .legal-popup{width:90vw}
+  .modal{width:90vw}
+}
+
+/* ══════════════════════════════
    MOBILE RESPONSIVE (≤ 640px)
 ══════════════════════════════ */
 @media (max-width:640px){
