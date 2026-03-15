@@ -1145,11 +1145,20 @@ function loadTTHC(idx){
   const chatSub = document.getElementById('chat-subtitle'); if(chatSub) chatSub.textContent = `${currentTTHC.co_quan} · ${currentTTHC.thoi_han}`;
 
   const t=currentTTHC;
-  const ans = `Tôi tìm thấy thủ tục <strong>${t.ten}</strong> phù hợp!<br><br>📍 <strong>${t.co_quan}</strong><br>💰 Lệ phí: <strong style="color:${t.le_phi==='Miễn phí'?'var(--green)':'var(--amber)'}">${t.le_phi}</strong> &nbsp;·&nbsp; ⏱ Thời hạn: <strong>${t.thoi_han}</strong><br><br>Tôi đã chuẩn bị checklist giấy tờ bên dưới. Hãy tích vào từng mục khi đã chuẩn bị xong rồi nhấn <strong>Bốc số</strong> nhé!`;
+  // Build a natural assistant reply that includes the list of required documents
+  // directly inside the message (no separate checklist block).
+  const docsHtml = t.giay_to.map(g=>{
+    const tag = g.bb ? '<strong>' : '';
+    const tagEnd = g.bb ? '</strong>' : '';
+    const req = g.bb ? ' — <span class="cl-req req-yes">Bắt buộc</span>' : ' — <span class="cl-req req-opt">Tùy chọn</span>';
+    return `• ${tag}${g.ten}${tagEnd}${req}`;
+  }).join('<br>');
 
-  // Add assistant message and checklist inline
-  addMsg(ans,true,`${t.route} · ${t.latency} · ${t.can_cu}`);
-  renderChecklistInChat();
+  const ans = `Thủ tục <strong>${t.ten}</strong> gồm các loại giấy tờ sau:<br><br>${docsHtml}<br><br>📍 <strong>${t.co_quan}</strong> · 💰 <strong style="color:${t.le_phi==='Miễn phí'?'var(--green)':'var(--amber)'}">${t.le_phi}</strong> · ⏱ <strong>${t.thoi_han}</strong><br><br>Tham khảo: ${t.can_cu}`;
+
+  // Add assistant message (no separate checklist). Keep BỐC SỐ enabled so user
+  // can still take a ticket after reviewing documents.
+  addMsg(ans,true,`${t.route} · ${t.latency}`);
   setBocso(true);
 }
 function loadTTHCPanel(idx){currentTTHC=tthcData[idx];checkedItems=new Array(currentTTHC.giay_to.length).fill(false);setBocso(true);}
