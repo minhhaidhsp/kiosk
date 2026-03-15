@@ -32,8 +32,9 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 /* Logo: sử dụng SVG ngôi sao 5 bàn tay thay emoji */
 .k-logo-wrap{width:48px;height:48px;flex-shrink:0}
 .k-logo-wrap svg{width:48px;height:48px}
-.k-brand-txt strong{display:block;font-size:17px;font-weight:800;color:#111827;line-height:0}
-.k-brand-txt span{font-size:13px;color:#6B7280;font-weight:500}
+.k-brand-txt{display:flex;flex-direction:column;justify-content:center;gap:2px}
+.k-brand-txt strong{display:block;font-size:24px;font-weight:800;color:#c8102e;line-height:1.2}
+.k-brand-txt span{font-size:20px;color:#c8102e;font-weight:500;line-height:1.2}
 .k-top-right{margin-left:auto;display:flex;align-items:center;gap:8px}
 .k-time-val{font-size:22px;font-weight:700;color:#111827;font-family:'JetBrains Mono',monospace;line-height:1}
 .k-time-date{font-size:11px;color:#9CA3AF;text-align:right}
@@ -62,42 +63,42 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 
 /* ── IDLE SCREEN ── */
 .idle-shell{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fff;position:relative;overflow:hidden;border-top:3px solid var(--red)}
-.idle-label{font-size:13px;color:var(--dim);letter-spacing:.14em;text-transform:uppercase;margin-bottom:14px;z-index:1}
+.idle-label{font-size:19.5px;color:var(--dim);letter-spacing:.14em;text-transform:uppercase;margin-bottom:14px;z-index:1}
 .idle-ai-icon{width:88px;height:88px;margin-bottom:22px;z-index:1;animation:float 3s ease-in-out infinite}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-.idle-title{font-size:38px;font-weight:900;color:#111827;text-align:center;line-height:1.2;margin-bottom:10px;z-index:1}
-.idle-sub{font-size:17px;color:var(--muted);text-align:center;margin-bottom:36px;z-index:1}
-.idle-tap-btn{padding:18px 60px;background:var(--red);color:#fff;border:none;border-radius:16px;font-size:21px;font-weight:800;cursor:pointer;font-family:'Be Vietnam Pro',sans-serif;box-shadow:0 6px 24px rgba(200,16,46,.3);transition:all .2s;z-index:1;letter-spacing:.01em}
+.idle-title{font-size:57px;font-weight:900;color:#111827;text-align:center;line-height:1.2;margin-bottom:10px;z-index:1}
+.idle-sub{font-size:25.5px;color:var(--muted);text-align:center;margin-bottom:36px;z-index:1}
+.idle-tap-btn{padding:18px 60px;background:var(--red);color:#fff;border:none;border-radius:16px;font-size:31.5px;font-weight:800;cursor:pointer;font-family:'Be Vietnam Pro',sans-serif;box-shadow:0 6px 24px rgba(200,16,46,.3);transition:all .2s;z-index:1;letter-spacing:.01em}
 .idle-tap-btn:hover{transform:scale(1.03);box-shadow:0 10px 32px rgba(200,16,46,.4)}
 .idle-quick{display:flex;gap:12px;margin-top:24px;flex-wrap:wrap;justify-content:center;z-index:1}
-.idle-q-btn{padding:12px 20px;background:var(--card);border:1.5px solid var(--border);border-radius:12px;color:#374151;font-size:15px;font-weight:600;cursor:pointer;font-family:'Be Vietnam Pro',sans-serif;transition:all .15s;display:flex;align-items:center;gap:8px}
+.idle-q-btn{padding:12px 20px;background:var(--card);border:1.5px solid var(--border);border-radius:12px;color:#374151;font-size:22.5px;font-weight:600;cursor:pointer;font-family:'Be Vietnam Pro',sans-serif;transition:all .15s;display:flex;align-items:center;gap:8px}
 .idle-q-btn:hover{background:var(--rl);border-color:var(--rb);color:var(--red)}
 .idle-chat-hint{z-index:1;margin-top:20px;display:flex;align-items:center;gap:10px;padding:12px 20px;background:var(--rl);border:1.5px solid var(--rb);border-radius:14px;cursor:pointer;transition:all .15s;max-width:480px;width:100%}
 .idle-chat-hint:hover{background:#ffd5d5;border-color:var(--red)}
-.idle-chat-hint-txt{font-size:14px;color:#991b1b}
+.idle-chat-hint-txt{font-size:21px;color:#991b1b}
 
 /* ── CATEGORY SCREEN ── */
 .cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:4px 0}
 .cat-btn{background:#fff;border:1.5px solid var(--border);border-radius:16px;padding:30px 20px 24px;cursor:pointer;text-align:center;transition:all .2s;font-family:'Be Vietnam Pro',sans-serif}
 .cat-btn:hover{border-color:var(--red);transform:translateY(-2px);box-shadow:var(--shl)}
-.cat-icon{font-size:44px;margin-bottom:14px;display:flex;align-items:center;justify-content:center}
-.cat-name{font-size:20px;font-weight:800;color:var(--text);margin-bottom:3px}
-.cat-count{font-size:14px;color:var(--muted)}
+.cat-icon{font-size:66px;margin-bottom:14px;display:flex;align-items:center;justify-content:center}
+.cat-name{font-size:30px;font-weight:800;color:var(--text);margin-bottom:3px}
+.cat-count{font-size:21px;color:var(--muted)}
 /* no cat-bar */
 .cat-ai-entry{background:linear-gradient(135deg,var(--rl),#fff5f5);border:1.5px solid var(--rb);border-radius:16px;padding:20px 24px;cursor:pointer;display:flex;align-items:center;gap:16px;transition:all .2s;font-family:'Be Vietnam Pro',sans-serif;grid-column:1/-1}
 .cat-ai-entry:hover{border-color:var(--red);transform:translateY(-2px);box-shadow:var(--shl)}
 .cat-ai-orb{width:48px;height:48px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
-.cat-ai-txt strong{display:block;font-size:18px;font-weight:800;color:var(--red);margin-bottom:2px}
-.cat-ai-txt span{font-size:14px;color:var(--muted)}
-.cat-ai-arrow{margin-left:auto;font-size:24px;color:var(--red)}
+.cat-ai-txt strong{display:block;font-size:27px;font-weight:800;color:var(--red);margin-bottom:2px}
+.cat-ai-txt span{font-size:21px;color:var(--muted)}
+.cat-ai-arrow{margin-left:auto;font-size:36px;color:var(--red)}
 
 /* TTHC list */
 .tthc-list{display:flex;flex-direction:column;gap:10px}
 .tthc-btn{background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:16px 20px;cursor:pointer;display:flex;align-items:center;gap:14px;transition:all .2s;font-family:'Be Vietnam Pro',sans-serif;text-align:left;width:100%}
 .tthc-btn:hover{border-color:var(--red);box-shadow:var(--shl)}
-.tthc-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
-.tthc-name{font-size:17px;font-weight:800;color:var(--text);margin-bottom:3px}
-.tthc-meta{font-size:13px;color:var(--muted)}
+.tthc-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:36px;flex-shrink:0}
+.tthc-name{font-size:25.5px;font-weight:800;color:var(--text);margin-bottom:3px}
+.tthc-meta{font-size:19.5px;color:var(--muted)}
 
 /* ── CHAT SCREEN ── */
 .k-body{flex:1;display:flex;flex-direction:column;overflow:hidden}
@@ -113,7 +114,7 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 .msg.ai-msg{align-self:flex-start}
 .msg-av{width:36px;height:36px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px}
 .ai-av{background:transparent;flex-shrink:0}
-.usr-av{background:#fef9c3;flex-shrink:0}
+.usr-av{background:transparent;flex-shrink:0}
 .msg-bubble{padding:12px 16px;border-radius:16px;font-size:calc(15px * 1.5);line-height:1.45;max-width:100%}
 /* Improve paragraph spacing inside message bubbles */
 .msg-bubble p{margin:0 0 .7em}
@@ -151,13 +152,20 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 /* Input area */
 .k-input-area{padding:16px 24px;border-top:1px solid var(--border);background:#fff;flex-shrink:0}
 .k-input-chips{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px}
-.k-chip{padding:7px 14px;background:var(--card);border:1.5px solid var(--border);border-radius:20px;font-size:13px;font-weight:600;color:var(--text2);cursor:pointer;transition:all .15s;font-family:'Be Vietnam Pro',sans-serif;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.k-chip{padding:7px 14px;background:var(--card);border:1.5px solid var(--border);border-radius:20px;font-size:calc(15px * 1.5);font-weight:600;color:var(--text2);cursor:pointer;transition:all .15s;font-family:'Be Vietnam Pro',sans-serif;display:flex;align-items:center;gap:6px;white-space:nowrap}
 .k-chip:hover{background:var(--rl);border-color:var(--rb);color:var(--red)}
-.k-input-row{display:flex;gap:8px;align-items:center}
-.k-text-input{flex:1;padding:13px 16px;border:1.5px solid var(--border);border-radius:12px;font-size:18px;font-family:'Be Vietnam Pro',sans-serif;outline:none;transition:border-color .15s;color:var(--text);background:#fff}
+.k-input-row{display:flex;gap:8px;align-items:center;position:relative}
+.k-text-input{flex:1;padding:13px 16px;border:1.5px solid var(--border);border-radius:12px;font-size:calc(15px * 1.5);font-family:'Be Vietnam Pro',sans-serif;outline:none;transition:border-color .15s;color:var(--text);background:#fff}
 .k-text-input:focus{border-color:var(--red)}
-.k-send-btn{padding:14px 22px;background:var(--red);color:#fff;border:none;border-radius:12px;font-size:17px;font-weight:800;cursor:pointer;font-family:'Be Vietnam Pro',sans-serif;transition:all .15s;white-space:nowrap}
+.k-send-btn{padding:14px 22px;background:var(--red);color:#fff;border:none;border-radius:12px;font-size:calc(15px * 1.5);font-weight:800;cursor:pointer;font-family:'Be Vietnam Pro',sans-serif;transition:all .15s;white-space:nowrap}
 .k-send-btn:hover{background:var(--red2)}
+/* Autocomplete */
+.k-autocomplete{display:none;position:absolute;bottom:calc(100% + 6px);left:0;right:0;background:#fff;border:1.5px solid var(--border);border-radius:12px;box-shadow:0 -4px 20px rgba(0,0,0,.1);z-index:200;max-height:300px;overflow-y:auto}
+.k-autocomplete.show{display:block}
+.k-ac-item{padding:11px 16px;cursor:pointer;font-size:calc(15px * 1.5);color:var(--text);border-bottom:1px solid var(--border);line-height:1.4;display:flex;align-items:center;gap:8px}
+.k-ac-item:last-child{border:none}
+.k-ac-item:hover,.k-ac-item.k-ac-active{background:var(--rl);color:var(--red)}
+.k-ac-badge{font-size:11px;font-weight:700;color:var(--muted);background:var(--card);border:1px solid var(--border);padding:1px 7px;border-radius:10px;flex-shrink:0;white-space:nowrap}
 
 /* Voice btn — mic icon SVG */
 .k-voice-btn{width:48px;height:48px;background:var(--card);border:1.5px solid var(--border);border-radius:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}
@@ -192,9 +200,10 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 .t-doc-dot{width:6px;height:6px;border-radius:50%;background:var(--red);flex-shrink:0}
 
 /* ── BOTTOM BAR ── */
-.k-bottom{height:44px;background:var(--red);display:flex;align-items:center;padding:0 24px;gap:18px;flex-shrink:0}
+.k-bottom{height:44px;background:var(--red);display:flex;align-items:center;padding:0 24px;gap:18px;flex-shrink:0;position:relative}
 .k-bottom-item{display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,.85)}
 .k-bottom-dot{width:6px;height:6px;border-radius:50%;background:#fff}
+.k-bottom-brand{position:absolute;left:50%;transform:translateX(-50%);font-size:11px;font-weight:800;color:rgba(255,255,255,.65);letter-spacing:.12em;text-transform:uppercase;pointer-events:none;white-space:nowrap}
 
 /* ── TOAST ── */
 .k-toast{position:fixed;bottom:58px;left:50%;transform:translateX(-50%);background:#111827;color:#fff;padding:12px 24px;border-radius:12px;font-size:14px;font-weight:700;box-shadow:var(--shl);z-index:999;display:none;white-space:nowrap;animation:tUp .2s ease}
@@ -418,9 +427,9 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
       </div>
       <!-- Lang: compact pills -->
       <div class="lang-group">
-        <button class="lang-pill on" id="lang-vi" onclick="setLang('vi')">VI</button>
-        <button class="lang-pill" id="lang-en" onclick="setLang('en')">EN</button>
-        <button class="lang-pill" id="lang-zh" onclick="setLang('zh')">中文</button>
+        <button class="lang-pill on" data-lang="vi" onclick="setLang('vi')">VI</button>
+        <button class="lang-pill" data-lang="en" onclick="setLang('en')">EN</button>
+        <button class="lang-pill" data-lang="zh" onclick="setLang('zh')">中文</button>
       </div>
       <div class="k-time">
         <div class="k-time-val" id="clock">08:42</div>
@@ -485,6 +494,7 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 
   <div class="k-bottom">
     <div class="k-bottom-item"><span class="k-bottom-dot"></span>Hệ thống online</div>
+    <div class="k-bottom-brand">HCMCUE-WikiGovAI</div>
     <div class="k-bottom-item">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
       Máy in sẵn sàng
@@ -519,9 +529,9 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
         <button class="ctrl-btn" onclick="toggleTTS()"><svg width="16" height="16"><use href="#ic-volume"/></svg></button>
       </div>
       <div class="lang-group">
-        <button class="lang-pill" id="cat-lang-vi" onclick="setLang('vi')">VI</button>
-        <button class="lang-pill" id="cat-lang-en" onclick="setLang('en')">EN</button>
-        <button class="lang-pill" id="cat-lang-zh" onclick="setLang('zh')">中文</button>
+        <button class="lang-pill" data-lang="vi" onclick="setLang('vi')">VI</button>
+        <button class="lang-pill" data-lang="en" onclick="setLang('en')">EN</button>
+        <button class="lang-pill" data-lang="zh" onclick="setLang('zh')">中文</button>
       </div>
       <button class="k-home-btn" onclick="goScreen('s-idle')">
         <svg width="15" height="15"><use href="#ic-home"/></svg>
@@ -533,9 +543,9 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 
   <div class="k-content">
     <div style="text-align:center;margin-bottom:24px">
-      <div style="font-size:13px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px" id="cat-step-lbl">Bước 1 — Chọn lĩnh vực</div>
-      <div style="font-size:28px;font-weight:900;color:var(--navy);margin-bottom:6px" id="cat-heading">Bạn cần hỗ trợ lĩnh vực nào?</div>
-      <div style="font-size:16px;color:var(--muted)" id="cat-sub">Chạm vào lĩnh vực phù hợp — hoặc hỏi AI bằng giọng nói bên dưới</div>
+      <div style="font-size:19.5px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px" id="cat-step-lbl">Bước 1 — Chọn lĩnh vực</div>
+      <div style="font-size:42px;font-weight:900;color:var(--navy);margin-bottom:6px" id="cat-heading">Bạn cần hỗ trợ lĩnh vực nào?</div>
+      <div style="font-size:24px;color:var(--muted)" id="cat-sub">Chạm vào lĩnh vực phù hợp — hoặc hỏi AI bằng giọng nói bên dưới</div>
     </div>
 
     <div class="cat-grid">
@@ -590,7 +600,7 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
       <!-- AI entry -->
       <div class="cat-ai-entry" onclick="goScreen('s-chat');focusInput()">
         <div class="cat-ai-orb">
-          <svg width="44" height="44" viewBox="0 0 44 44" fill="none"><rect width="44" height="44" rx="22" fill="#C8102E"/><path d="M22 12a6 6 0 1 1 0 12 6 6 0 0 1 0-12z" fill="none" stroke="white" stroke-width="2"/><circle cx="19" cy="19" r="1.5" fill="white"/><circle cx="25" cy="19" r="1.5" fill="white"/><path d="M19 23s1 1.5 3 1.5 3-1.5 3-1.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/><line x1="22" y1="12" x2="22" y2="9" stroke="white" stroke-width="2" stroke-linecap="round"/><circle cx="22" cy="8" r="2" fill="white"/><path d="M14 28c0-4.4 3.6-8 8-8s8 3.6 8 8" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+          <svg width="52" height="52" viewBox="0 0 88 88" aria-hidden="true"><use href="#robot-icon"/></svg>
         </div>
         <div class="cat-ai-txt">
           <strong id="cat-ai-strong">Hỏi trực tiếp trợ lý AI</strong>
@@ -605,6 +615,7 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 
   <div class="k-bottom">
     <div class="k-bottom-item"><span class="k-bottom-dot"></span><span id="cat-bottom-step">Bước 1/3 — Chọn lĩnh vực</span></div>
+    <div class="k-bottom-brand">HCMCUE-WikiGovAI</div>
     <div style="margin-left:auto" class="k-bottom-item" id="cat-bottom-hint">Chạm vào lĩnh vực hoặc hỏi AI trực tiếp</div>
   </div>
 </div>
@@ -631,19 +642,19 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
         <button class="ctrl-btn" id="tts-btn" onclick="toggleTTS()" title="Đọc to"><svg width="16" height="16"><use href="#ic-volume"/></svg></button>
       </div>
       <div class="lang-group">
-        <button class="lang-pill on" id="lang-vi" onclick="setLang('vi')">VI</button>
-        <button class="lang-pill" id="lang-en" onclick="setLang('en')">EN</button>
-        <button class="lang-pill" id="lang-zh" onclick="setLang('zh')">中文</button>
+        <button class="lang-pill on" data-lang="vi" onclick="setLang('vi')">VI</button>
+        <button class="lang-pill" data-lang="en" onclick="setLang('en')">EN</button>
+        <button class="lang-pill" data-lang="zh" onclick="setLang('zh')">中文</button>
       </div>
       <div class="k-time"><div class="k-time-val">08:42</div></div>
     </div>
   </div>
     <div class="k-content">
     <div style="margin-bottom:22px">
-      <div style="font-size:13px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px">Bước 2 — Chọn thủ tục</div>
+      <div style="font-size:19.5px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px">Bước 2 — Chọn thủ tục</div>
       <!-- breadcrumb for goCategory (kept for JS) -->
       <div id="tthc-list-crumb" style="display:none"></div>
-      <div style="font-size:26px;font-weight:900;color:var(--navy)" id="tthc-list-title">Thủ tục Hộ tịch</div>
+      <div style="font-size:39px;font-weight:900;color:var(--navy)" id="tthc-list-title">Thủ tục Hộ tịch</div>
     </div>
     <div class="tthc-list" id="tthc-list-items"></div>
     <div style="margin-top:12px;display:flex;gap:8px">
@@ -653,6 +664,7 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
   </div>
   <div class="k-bottom">
     <div class="k-bottom-item"><span class="k-bottom-dot"></span>Bước 2/3 — Chọn thủ tục</div>
+    <div class="k-bottom-brand">HCMCUE-WikiGovAI</div>
   </div>
 </div>
 
@@ -678,9 +690,9 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
         <button class="ctrl-btn" onclick="toggleTTS()"><svg width="16" height="16"><use href="#ic-volume"/></svg></button>
       </div>
       <div class="lang-group">
-        <button class="lang-pill on" id="cat-lang-vi" onclick="setLang('vi')">VI</button>
-        <button class="lang-pill" id="cat-lang-en" onclick="setLang('en')">EN</button>
-        <button class="lang-pill" id="cat-lang-zh" onclick="setLang('zh')">中文</button>
+        <button class="lang-pill" data-lang="vi" onclick="setLang('vi')">VI</button>
+        <button class="lang-pill" data-lang="en" onclick="setLang('en')">EN</button>
+        <button class="lang-pill" data-lang="zh" onclick="setLang('zh')">中文</button>
       </div>
       <button class="k-home-btn" onclick="goScreen('s-idle')"><svg width="15" height="15"><use href="#ic-home"/></svg> Trang chủ</button>
       <div class="k-time"><div class="k-time-val">08:42</div></div>
@@ -689,19 +701,6 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 
   <div class="k-body">
     <div class="k-chat-area">
-      <div class="k-chat-hd">
-        <div class="k-chat-hd-icon">
-          <svg width="36" height="36" viewBox="0 0 88 88" aria-hidden="true"><use href="#robot-icon"/></svg>
-        </div>
-        <div>
-          <div class="k-chat-title" id="chat-title">Hỏi trực tiếp trợ lý AI</div>
-          <div style="font-size:12px;color:var(--muted)" id="chat-subtitle">Hỏi bằng giọng nói hoặc gõ câu hỏi bất kỳ</div>
-        </div>
-        <button id="clear-chat-btn" style="margin-left:auto;padding:6px 12px;border:1.5px solid var(--border);border-radius:8px;background:#fff;color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;font-family:'Be Vietnam Pro',sans-serif;display:flex;align-items:center;gap:5px" onclick="clearChat()">
-            <svg width="13" height="13"><use href="#ic-trash"/></svg>
-            <span id="clear-chat-label">Xóa chat</span>
-          </button>
-      </div>
       <div class="k-chat-msgs" id="chat-msgs"></div>
     </div>
   </div>
@@ -710,27 +709,28 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
   <div class="k-input-area">
   <div class="k-input-chips" id="demo-chips">
       <div class="k-chip" onclick="sendDemo(0)">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-        <span data-vi="Đăng ký kết hôn cần gì?" data-en="What do I need to register a marriage?" data-zh="登记结婚需要什么材料？">Đăng ký kết hôn cần gì?</span>
-      </div>
-      <div class="k-chip" onclick="sendDemo(1)">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-        <span data-vi="Làm khai sinh cho con" data-en="Register my child's birth" data-zh="为孩子办理出生登记">Làm khai sinh cho con</span>
+        <span data-vi="Đăng ký khai sinh cho con" data-en="Register my child's birth" data-zh="为孩子办理出生登记">Đăng ký khai sinh cho con</span>
       </div>
       <div class="k-chip" onclick="sendDemo(2)">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
-        <span data-vi="Đăng ký thường trú mất bao lâu?" data-en="How long does permanent residence registration take?" data-zh="登记常住需要多长时间？">Đăng ký thường trú mất bao lâu?</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <span data-vi="Thủ tục đăng ký kết hôn" data-en="Marriage registration procedure" data-zh="结婚登记手续">Thủ tục đăng ký kết hôn</span>
       </div>
       <div class="k-chip" onclick="sendDemo(3)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        <span data-vi="Đăng ký tạm trú mới" data-en="New temporary residence registration" data-zh="新办暂住登记">Đăng ký tạm trú mới</span>
+      </div>
+      <div class="k-chip" onclick="sendDemo(1)">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-        <span data-vi="Tôi thuê nhà, cần đăng ký tạm trú?" data-en="I rent a house, do I need to register temporary residence?" data-zh="我租房，需要登记暂住吗？">Tôi thuê nhà, cần đăng ký tạm trú?</span>
+        <span data-vi="Công chứng bản sao" data-en="Certified copy" data-zh="副本公证">Công chứng bản sao</span>
       </div>
     </div>
     <div class="k-input-row">
+      <div class="k-autocomplete" id="autocomplete-list"></div>
       <button class="k-voice-btn" id="voice-btn" onclick="toggleVoice()" title="Nhận dạng giọng nói">
         <svg width="20" height="20" style="color:var(--muted)"><use href="#ic-mic"/></svg>
       </button>
-      <input class="k-text-input" id="chat-input" placeholder="Gõ câu hỏi hoặc nhấn mic để nói..." onkeydown="if(event.key==='Enter')sendChatInput()">
+      <input class="k-text-input" id="chat-input" placeholder="Gõ câu hỏi hoặc nhấn mic để nói..." autocomplete="off" onkeydown="handleChatKeydown(event)">
       <button class="k-send-btn" id="send-btn-lbl" onclick="sendChatInput()">
         <svg width="16" height="16" style="display:inline-block;vertical-align:middle;margin-right:5px"><use href="#ic-send"/></svg>
         <span id="send-btn-label">Gửi</span>
@@ -747,6 +747,7 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 
   <div class="k-bottom">
     <div class="k-bottom-item"><span class="k-bottom-dot"></span>AI đang hoạt động</div>
+    <div class="k-bottom-brand">HCMCUE-WikiGovAI</div>
     <div class="k-bottom-item">
       <svg width="14" height="14"><use href="#ic-print"/></svg> Máy in sẵn sàng
     </div>
@@ -776,9 +777,9 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
         <button class="ctrl-btn" id="tts-btn" onclick="toggleTTS()" title="Đọc to"><svg width="16" height="16"><use href="#ic-volume"/></svg></button>
       </div>
       <div class="lang-group">
-        <button class="lang-pill on" id="lang-vi" onclick="setLang('vi')">VI</button>
-        <button class="lang-pill" id="lang-en" onclick="setLang('en')">EN</button>
-        <button class="lang-pill" id="lang-zh" onclick="setLang('zh')">中文</button>
+        <button class="lang-pill on" data-lang="vi" onclick="setLang('vi')">VI</button>
+        <button class="lang-pill" data-lang="en" onclick="setLang('en')">EN</button>
+        <button class="lang-pill" data-lang="zh" onclick="setLang('zh')">中文</button>
       </div>
       <div class="k-time"><div class="k-time-val">08:43</div></div>
     </div>
@@ -847,6 +848,7 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
   </div>
   <div class="k-bottom">
     <div class="k-bottom-item"><span class="k-bottom-dot"></span><svg width="14" height="14"><use href="#ic-print"/></svg> Máy in sẵn sàng</div>
+    <div class="k-bottom-brand">HCMCUE-WikiGovAI</div>
     <div style="margin-left:auto" class="k-bottom-item">Cảm ơn bạn đã sử dụng dịch vụ · Trung tâm Phục vụ hành chính công</div>
   </div>
 </div>
@@ -941,46 +943,99 @@ const categories={
   'Tư pháp':{items:[4]},
 };
 const demoScripts=[
+  // 0: Khai sinh
+  {loadIdx:0,typing:1200,
+    q:{vi:'Tôi muốn đăng ký khai sinh cho con thì cần chuẩn bị giấy tờ gì, mất bao lâu và phí bao nhiêu?',en:"What documents are required for my child's birth registration, how long does it take, and what is the fee?",zh:'我想为孩子办理出生登记，需要准备什么文件，需要多长时间，费用是多少？'},
+    aiReply:{
+      vi:`Để đăng ký khai sinh cho con, bạn cần chuẩn bị:<br><br>📄 Giấy tờ cần thiết:<br>1. Tờ khai theo mẫu<br>2. Giấy chứng sinh<br>3. CCCD cha mẹ<br><br>⏱ Thời gian: Giải quyết ngay trong ngày (nếu nhận đủ hồ sơ trước 15h).<br>💰 Lệ phí: Miễn phí đối với đăng ký đúng hạn.`,
+      en:`To register your child's birth, you need to prepare:<br><br>📄 Required documents:<br>1. Application form<br>2. Birth certificate<br>3. Parents' ID cards<br><br>⏱ Processing time: Same-day (if submitted before 3:00 PM).<br>💰 Fee: Free for on-time registration.`,
+      zh:`为孩子办理出生登记，您需要准备：<br><br>📄 所需材料：<br>1. 申请表<br>2. 出生证明<br>3. 父母身份证<br><br>⏱ 办理时间：当天办理（若在下午3点前提交）。<br>💰 费用：按期登记免费。`
+    }
+  },
+  // 1: Công chứng bản sao
+  {loadIdx:null,typing:1000,
+    q:{vi:'Tôi muốn công chứng bản sao từ bản chính thì thủ tục và phí như thế nào?',en:'How can I get certified copies from originals, and what are the procedures and fees?',zh:'我想办理副本公证，程序和费用是多少？'},
+    aiReply:{
+      vi:`Thủ tục công chứng bản sao từ bản chính:<br><br>📄 Giấy tờ cần thiết:<br>1. Bản chính giấy tờ<br>2. Bản sao photocopy tương ứng<br><br>⏱ Thời gian: Giải quyết ngay trong ngày.<br>💰 Lệ phí: 2.000 VNĐ/trang (từ trang thứ 3 là 1.000 VNĐ/trang, tối đa 200.000 VNĐ/bản).`,
+      en:`Certified copy procedure:<br><br>📄 Required documents:<br>1. Original documents<br>2. Corresponding photocopies<br><br>⏱ Processing time: Immediate / Same-day.<br>💰 Fee: 2,000 VND/page (from 3rd page: 1,000 VND/page; max 200,000 VND/copy).`,
+      zh:`副本公证手续：<br><br>📄 所需材料：<br>1. 原件<br>2. 相应的复印件<br><br>⏱ 办理时间：现场办理 / 当天。<br>💰 费用：每页 2,000 越盾（从第3页起每页 1,000 越盾；每件最高 200,000 越盾）。`
+    }
+  },
+  // 2: Kết hôn
   {loadIdx:1,typing:1200,
-    q:{vi:'Tôi muốn đăng ký kết hôn, cần chuẩn bị những gì vậy?',en:'I want to register a marriage, what documents do I need?',zh:'我想登记结婚，需要准备哪些材料？'},
+    q:{vi:'Thủ tục đăng ký kết hôn cần những gì, có mất phí không và bao lâu thì nhận kết quả?',en:'What is needed for marriage registration, is there a fee, and when will I get the result?',zh:'办理结婚登记需要什么，是否收费，多久可以拿到结果？'},
     aiReply:{
-      vi:`Để <strong>đăng ký kết hôn</strong> tại Trung tâm DVC, hai bạn cần chuẩn bị:<br><br>📄 <strong>Giấy tờ cần thiết:</strong><br>1. Tờ khai đăng ký kết hôn (Mẫu 02)<br>2. CCCD/CMND của hai bên (bản sao)<br>3. Giấy xác nhận tình trạng hôn nhân (nếu cần)<br>4. Ảnh 3×4 — 2 ảnh/người<br><br>Nộp tại Quầy 2 — Hộ tịch · Miễn phí · 5 ngày làm việc.`,
-      en:`To register a marriage at the service center you will need:<br><br>� <strong>Required documents:</strong><br>1. Marriage registration form (Form 02)<br>2. ID cards of both parties (copies)<br>3. Proof of marital status (if applicable)<br>4. Two 3×4 photos per person<br><br>Submit at Counter 2 — Civil Records · Free · 5 working days.`,
-      zh:`在服务中心登记结婚需要准备：<br><br>📄 <strong>所需材料：</strong><br>1. 登记结婚表格（表格02）<br>2. 双方身份证复印件<br>3. 婚姻状况证明（如适用）<br>4. 每人两张3×4照片<br><br>提交至2号窗口（户籍）· 免费 · 5个工作日。`
+      vi:`Để đăng ký kết hôn, hai bên cần chuẩn bị:<br><br>📄 Giấy tờ cần thiết:<br>1. Tờ khai<br>2. CCCD<br>3. Giấy xác nhận tình trạng hôn nhân (nếu khác nơi cư trú)<br><br>⏱ Thời gian: 03 - 05 ngày làm việc (nếu cần xác minh thêm).<br>💰 Lệ phí: Miễn phí cho công dân Việt Nam cư trú trong nước.`,
+      en:`For marriage registration both parties need to prepare:<br><br>📄 Required documents:<br>1. Application form<br>2. ID cards<br>3. Marital status certificate (if different residence)<br><br>⏱ Processing time: 03 - 05 working days (if verification needed).<br>💰 Fee: Free for Vietnamese citizens residing in the country.`,
+      zh:`办理结婚登记，双方需要准备：<br><br>📄 所需材料：<br>1. 申请表<br>2. 身份证<br>3. 单身证明（如户籍地不同）<br><br>⏱ 办理时间：03 - 05 个工作日（如需额外核实）。<br>💰 费用：居住在国内的越南公民免费。`
     }
   },
-  {loadIdx:0,typing:1400,
-    q:{vi:'Con tôi mới sinh 3 ngày, tôi cần làm gì để khai sinh cho bé?',en:"My baby was just born, what do I need to register the birth?",zh:'我的孩子刚出生，我需要做什么来登记出生？'},
+  // 3: Tạm trú
+  {loadIdx:3,typing:1300,
+    q:{vi:'Tôi mới chuyển đến phường, muốn đăng ký tạm trú thì làm như thế nào và bao lâu có kết quả?',en:'I just moved to the ward, how do I register for temporary residence and how long does it take?',zh:'我刚搬到这个坊，想办理暂住登记，该怎么做，多久有结果？'},
     aiReply:{
-      vi:`Bạn cần đăng ký khai sinh trong vòng 60 ngày kể từ ngày sinh. 📄 <strong>Giấy tờ cần thiết:</strong><br>1. Giấy chứng sinh (bản gốc)<br>2. CCCD cha mẹ (bản sao công chứng)<br>3. Giấy đăng ký kết hôn (nếu có)<br>4. Tờ khai Mẫu 01/2024<br><br>Nộp tại Quầy 2 — Hộ tịch · Miễn phí · 3 ngày làm việc.`,
-      en:`You must register the birth within 60 days. 📄 <strong>Required documents:</strong><br>1. Birth certificate from the hospital (original)<br>2. Parents' ID cards (certified copies)<br>3. Marriage certificate (if applicable)<br>4. Registration form (Form 01/2024)<br><br>Submit at Counter 2 — Civil Records · Free · 3 working days.`,
-      zh:`须在出生后60天内办理出生登记。📄 <strong>所需材料：</strong><br>1. 医院出具的出生证明（原件）<br>2. 父母身份证复印件（公证）<br>3. 结婚证（如适用）<br>4. 登记表格（01/2024）<br><br>提交至2号窗口（户籍）· 免费 · 3个工作日。`
+      vi:`Để đăng ký tạm trú, bạn cần chuẩn bị:<br><br>📄 Giấy tờ cần thiết:<br>1. Tờ khai CT01<br>2. Hợp đồng thuê nhà hoặc Sổ hồng<br>3. CCCD<br><br>⏱ Thời gian: 03 ngày làm việc kể từ ngày nhận đủ hồ sơ.<br>💰 Lệ phí: Theo quy định địa phương (khoảng 7.000 - 15.000 VNĐ).`,
+      en:`To register temporary residence, prepare:<br><br>📄 Required documents:<br>1. Form CT01<br>2. Rental contract or house ownership certificate<br>3. ID card<br><br>⏱ Processing time: 03 working days from receipt of full documents.<br>💰 Fee: Around 7,000 - 15,000 VND (local regulations).`,
+      zh:`办理暂住登记需要准备：<br><br>📄 所需材料：<br>1. CT01申请表<br>2. 租房合同或房产证<br>3. 身份证<br><br>⏱ 办理时间：收到完整材料后 03 个工作日。<br>💰 费用：约 7,000 - 15,000 越盾（视地方规定）。`
     }
   },
-  {loadIdx:2,typing:1000,
-    q:{vi:'Đăng ký thường trú mất bao lâu? Tôi cần giấy tờ gì?',en:'How long does permanent residence registration take and what documents are needed?',zh:'登记常住需要多长时间，需要哪些材料？'},
+  // 4: Giấy xác nhận độc thân
+  {loadIdx:4,typing:1100,
+    q:{vi:'Tôi cần xin giấy xác nhận độc thân để mua đất, thời gian giải quyết và phí như thế nào?',en:'I need a single status certificate for a land purchase, what is the processing time and fee?',zh:'我需要申请单身证明用于买地，办理时间和费用是多少？'},
     aiReply:{
-      vi:`Thủ tục xác nhận thường trú: ⏱ Thời gian: 2 ngày làm việc.<br><br>📄 Giấy tờ: CCCD (bản gốc), đơn đề nghị, thông tin hộ khẩu trên VNeID (nếu có). Nộp tại Quầy 4 — Cư trú.`,
-      en:`Permanent residence confirmation typically takes 2 working days.<br><br>📄 Documents: ID card (original), application form, household registration on VNeID (if available). Submit at Counter 4 — Residence.`,
-      zh:`常住登记通常需2个工作日。<br><br>📄 材料：身份证原件、申请表、VNeID上的户籍信息（如有）。提交至4号窗口（居住）。`
+      vi:`Để xin giấy xác nhận tình trạng hôn nhân (độc thân), bạn cần:<br><br>📄 Giấy tờ cần thiết:<br>1. Tờ khai theo mẫu<br>2. CCCD<br><br>⏱ Thời gian: 03 ngày làm việc (có thể kéo dài nếu cần xác minh nhiều nơi).<br>💰 Lệ phí: 15.000 VNĐ/bản.`,
+      en:`To get a single/marital status certificate:<br><br>📄 Required documents:<br>1. Application form<br>2. ID card<br><br>⏱ Processing time: 03 working days (longer if multi-location verification needed).<br>💰 Fee: 15,000 VND/copy.`,
+      zh:`申请婚姻状况（单身）证明需要：<br><br>📄 所需材料：<br>1. 申请表<br>2. 身份证<br><br>⏱ 办理时间：03 个工作日（如需多地核实则延长）。<br>💰 费用：每份 15,000 越盾。`
     }
   },
-  {loadIdx:3,typing:1600,
-    q:{vi:'Tôi đang thuê nhà ở đây, chủ nhà bảo phải đăng ký tạm trú?',en:'I rent a place here; do I need to register temporary residence?',zh:'我在这里租房，需要登记暂住吗？'},
+  // 5: Khai tử
+  {loadIdx:null,typing:900,
+    q:{vi:'Thủ tục đăng ký khai tử cần giấy tờ gì và bao lâu thì xong?',en:'What documents are required for death registration and how long does it take?',zh:'办理死亡登记需要什么文件，多久能办完？'},
     aiReply:{
-      vi:`Người thuê nhà cần đăng ký tạm trú trong vòng 30 ngày. � <strong>Chuẩn bị:</strong><br>1. CCCD bản gốc<br>2. Hợp đồng thuê hoặc xác nhận chủ nhà<br>3. Tờ khai CT07 — nộp tại Quầy 4 — Cư trú.`,
-      en:`Renters should register temporary residence within 30 days. 📄 <strong>Prepare:</strong><br>1. ID card (original)<br>2. Rental contract or landlord confirmation<br>3. Form CT07 — submit at Counter 4 — Residence.`,
-      zh:`租房者应在30天内登记暂住。� <strong>准备：</strong><br>1. 身份证原件<br>2. 房屋租赁合同或房东证明<br>3. CT07表格 — 提交至4号窗口（居住）。`
+      vi:`Để đăng ký khai tử, bạn cần chuẩn bị:<br><br>📄 Giấy tờ cần thiết:<br>1. Tờ khai<br>2. Giấy báo tử hoặc xác nhận của cơ quan chức năng<br><br>⏱ Thời gian: Giải quyết ngay trong ngày làm việc.<br>💰 Lệ phí: Miễn phí nếu đăng ký đúng hạn.`,
+      en:`For death registration, you need to prepare:<br><br>📄 Required documents:<br>1. Application form<br>2. Death notice or authority confirmation<br><br>⏱ Processing time: Within the same working day.<br>💰 Fee: Free for on-time registration.`,
+      zh:`办理死亡登记需要准备：<br><br>📄 所需材料：<br>1. 申请表<br>2. 死亡通知书或相关部门确认书<br><br>⏱ 办理时间：当个工作日内。<br>💰 费用：按期登记免费。`
+    }
+  },
+  // 6: Vay vốn hộ nghèo
+  {loadIdx:null,typing:1400,
+    q:{vi:'Gia đình tôi thuộc hộ nghèo, muốn vay vốn làm kinh tế thì thủ tục ra sao và mất bao lâu?',en:'My family is a poor household, how do we apply for an economic loan and how long does it take?',zh:'我的家庭属于贫困户，想申请经济贷款，手续如何，需要多长时间？'},
+    aiReply:{
+      vi:`Thủ tục vay vốn hỗ trợ hộ nghèo:<br><br>📄 Giấy tờ cần thiết:<br>1. Đơn đề nghị vay vốn<br>2. Giấy xác nhận hộ nghèo<br>3. Biên bản họp tổ tiết kiệm<br><br>⏱ Thời gian: 10 - 15 ngày làm việc.<br>💰 Lệ phí: Không mất phí thủ tục.`,
+      en:`Loan application procedure for poor households:<br><br>📄 Required documents:<br>1. Loan application form<br>2. Poor household certificate<br>3. Savings group meeting minutes<br><br>⏱ Processing time: 10 - 15 working days.<br>💰 Fee: No processing fee.`,
+      zh:`贫困户经济贷款申请手续：<br><br>📄 所需材料：<br>1. 贷款申请书<br>2. 贫困户证明<br>3. 储蓄小组会议纪要<br><br>⏱ 办理时间：10 - 15 个工作日。<br>💰 费用：免手续费。`
+    }
+  },
+  // 7: Tranh chấp đất đai
+  {loadIdx:null,typing:1200,
+    q:{vi:'Tôi có tranh chấp ranh giới đất với hàng xóm, nộp đơn hòa giải tại phường thì bao lâu sẽ được giải quyết?',en:'I have a land boundary dispute with my neighbor, how long will mediation at the ward office take?',zh:'我与邻居有土地边界纠纷，向坊办提交调解申请后多久能解决？'},
+    aiReply:{
+      vi:`Thủ tục hòa giải tranh chấp đất tại phường:<br><br>📄 Giấy tờ cần thiết:<br>1. Đơn yêu cầu hòa giải<br>2. Giấy tờ nhà đất liên quan<br>3. Chứng cứ kèm theo<br><br>⏱ Thời gian: Không quá 45 ngày làm việc.<br>💰 Lệ phí: Miễn phí hòa giải tại cấp Phường.`,
+      en:`Ward-level land dispute mediation:<br><br>📄 Required documents:<br>1. Mediation request form<br>2. Land-related documents<br>3. Supporting evidence<br><br>⏱ Processing time: Max 45 working days.<br>💰 Fee: Free at the ward level.`,
+      zh:`坊级土地纠纷调解手续：<br><br>📄 所需材料：<br>1. 调解申请书<br>2. 土地相关文件<br>3. 相关证据<br><br>⏱ 办理时间：不超过 45 个工作日。<br>💰 费用：坊级调解免费。`
+    }
+  },
+  // 8: Bảo hiểm y tế trẻ em
+  {loadIdx:null,typing:1100,
+    q:{vi:'Làm thẻ bảo hiểm y tế cho trẻ dưới 6 tuổi mất bao lâu và cần đóng bao nhiêu tiền?',en:'How long does it take to get a health insurance card for a child under 6 and how much is the fee?',zh:'为6岁以下儿童办理医保卡需要多长时间，费用是多少？'},
+    aiReply:{
+      vi:`Làm thẻ bảo hiểm y tế cho trẻ dưới 6 tuổi:<br><br>📄 Giấy tờ cần thiết:<br>1. Tờ khai TK1-TS (liên thông cùng khai sinh)<br><br>⏱ Thời gian: 07 - 10 ngày làm việc sau khi có khai sinh.<br>💰 Lệ phí: Miễn phí (Nhà nước hỗ trợ 100%).`,
+      en:`Health insurance card for children under 6:<br><br>📄 Required documents:<br>1. Form TK1-TS (integrated with birth registration)<br><br>⏱ Processing time: 07 - 10 working days after birth registration.<br>💰 Fee: Free (100% government subsidized).`,
+      zh:`为6岁以下儿童办理医保卡：<br><br>📄 所需材料：<br>1. TK1-TS申报表（与出生登记联办）<br><br>⏱ 办理时间：出生登记后约 07 - 10 个工作日。<br>💰 费用：免费（政府 100% 补贴）。`
     }
   }
 ];
 
 const freeformResponses=[
-  {kw:{vi:['kết hôn','lấy vợ','lấy chồng','cưới'],en:['marriage','get married','wedding'],zh:['结婚','登记结婚','婚姻']},idx:1},
   {kw:{vi:['khai sinh','sinh con','con mới sinh','trẻ sơ sinh','em bé'],en:['birth','newborn','baby'],zh:['出生','新生儿','婴儿']},idx:0},
-  {kw:{vi:['thường trú','hộ khẩu'],en:['permanent','residence','household'],zh:['常住','户口']},idx:2},
-  {kw:{vi:['tạm trú','thuê nhà','trọ'],en:['temporary','rent','tenant'],zh:['暂住','租房','租住']},idx:3},
-  {kw:{vi:['hôn nhân','độc thân','chưa kết hôn'],en:['marital','single','not married'],zh:['婚姻','单身','未婚']},idx:4},
+  {kw:{vi:['công chứng','bản sao','chứng thực'],en:['certified','copy','notary'],zh:['公证','复印','副本']},idx:1},
+  {kw:{vi:['kết hôn','lấy vợ','lấy chồng','cưới'],en:['marriage','get married','wedding'],zh:['结婚','登记结婚','婚姻']},idx:2},
+  {kw:{vi:['tạm trú','thuê nhà','trọ','chuyển đến'],en:['temporary','rent','tenant','moved'],zh:['暂住','租房','租住','搬']},idx:3},
+  {kw:{vi:['độc thân','hôn nhân','chưa kết hôn'],en:['single','marital','not married'],zh:['单身','婚姻','未婚']},idx:4},
+  {kw:{vi:['khai tử','tử vong','qua đời','mất'],en:['death','died','passed'],zh:['死亡','去世','登记死亡']},idx:5},
+  {kw:{vi:['hộ nghèo','vay vốn','vay tiền'],en:['poor','loan','borrow'],zh:['贫困','贷款','借款']},idx:6},
+  {kw:{vi:['tranh chấp','đất đai','ranh giới','hòa giải'],en:['dispute','land','boundary','mediation'],zh:['纠纷','土地','边界','调解']},idx:7},
+  {kw:{vi:['bảo hiểm','bảo hiểm y tế','trẻ em','bhyt'],en:['insurance','health','child'],zh:['医保','保险','儿童']},idx:8},
 ];
 
 // ── LANGUAGE ──
@@ -1045,9 +1100,7 @@ const i18n={
 
 function setLang(lang){
   currentLang=lang;const t=i18n[lang];
-  ['lang-vi','cat-lang-vi'].forEach(id=>{const el=document.getElementById(id);if(el)el.className='lang-pill'+(lang==='vi'?' on':'');});
-  ['lang-en','cat-lang-en'].forEach(id=>{const el=document.getElementById(id);if(el)el.className='lang-pill'+(lang==='en'?' on':'');});
-  ['lang-zh','cat-lang-zh'].forEach(id=>{const el=document.getElementById(id);if(el)el.className='lang-pill'+(lang==='zh'?' on':'');});
+  document.querySelectorAll('.lang-pill[data-lang]').forEach(el=>{el.className='lang-pill'+(el.dataset.lang===lang?' on':'');});
   document.getElementById('idle-label').textContent=t.idle_label;
   document.getElementById('idle-title').innerHTML=t.idle_title;
   document.getElementById('idle-sub').textContent=t.idle_sub;
@@ -1195,7 +1248,7 @@ function addMsg(html,isAi,sourceTxt,doSpeak=true){
   div.innerHTML=`
     <div class="msg ${isAi?'ai-msg':'user-msg'}">
       <div class="msg-av ${isAi?'ai-av':'usr-av'}">
-  ${isAi?`<svg width="36" height="36" viewBox="0 0 88 88" aria-hidden="true"><use href="#robot-icon"/></svg>`:`<svg width="18" height="18" style="color:#6B7280"><use href="#ic-user"/></svg>`}
+  ${isAi?`<svg width="36" height="36" viewBox="0 0 88 88" aria-hidden="true"><use href="#robot-icon"/></svg>`:`<svg width="36" height="36" viewBox="0 0 88 88" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="88" height="88" rx="44" fill="#E0E7FF"/><rect width="88" height="88" rx="44" stroke="#C7D2FE" stroke-width="2"/><circle cx="44" cy="32" r="14" fill="#4F46E5"/><path d="M15 74c0-16 13-26 29-26s29 10 29 26" stroke="#4F46E5" stroke-width="5" stroke-linecap="round"/></svg>`}
       </div>
       <div class="msg-bubble ${isAi?'ai-bubble':'user-bubble'}">${chosen}${sourceHtml}</div>
     </div>
@@ -1313,9 +1366,9 @@ function loadTTHC(idx){
   // directly inside the message (no separate checklist block).
   // Build document list per language so the assistant reply can be accurate
   const docsByLang = {vi:[],en:[],zh:[]};
-  for(const g of t.giay_to){
-    const tagOpen = g.bb ? '<strong>' : '';
-    const tagClose = g.bb ? '</strong>' : '';
+  for(let gi=0;gi<t.giay_to.length;gi++){
+    const g=t.giay_to[gi];
+    const n=gi+1;
     const yes = {vi:'Bắt buộc',en:'Required',zh:'必需'}[currentLang]||'Required';
     const opt = {vi:'Tùy chọn',en:'Optional',zh:'可选'}[currentLang]||'Optional';
     const reqMap = {vi:` — <span class="cl-req req-yes">${yes}</span>`,en:` — <span class="cl-req req-yes">${yes}</span>`,zh:` — <span class="cl-req req-yes">${yes}</span>`};
@@ -1323,9 +1376,9 @@ function loadTTHC(idx){
     const gvi = (g.ten && typeof g.ten === 'object') ? (g.ten.vi||g.ten.en||g.ten.zh||'') : g.ten;
     const gen = (g.ten && typeof g.ten === 'object') ? (g.ten.en||g.ten.vi||g.ten.zh||'') : g.ten;
     const gzh = (g.ten && typeof g.ten === 'object') ? (g.ten.zh||g.ten.vi||g.ten.en||'') : g.ten;
-    docsByLang.vi.push(`• ${tagOpen}${gvi}${tagClose}${g.bb?reqMap.vi:reqOptMap.vi}`);
-    docsByLang.en.push(`• ${tagOpen}${gen}${tagClose}${g.bb?reqMap.en:reqOptMap.en}`);
-    docsByLang.zh.push(`• ${tagOpen}${gzh}${tagClose}${g.bb?reqMap.zh:reqOptMap.zh}`);
+    docsByLang.vi.push(`${n}. ${gvi}${g.bb?reqMap.vi:reqOptMap.vi}`);
+    docsByLang.en.push(`${n}. ${gen}${g.bb?reqMap.en:reqOptMap.en}`);
+    docsByLang.zh.push(`${n}. ${gzh}${g.bb?reqMap.zh:reqOptMap.zh}`);
   }
   const docsHtmlVi = docsByLang.vi.join('<br>');
   const docsHtmlEn = docsByLang.en.join('<br>');
@@ -1591,8 +1644,71 @@ function showLegalPopup(ref) {
 function closeLegalPopup(){document.getElementById('legal-popup-bg').classList.remove('open');}
 
 
+// ── AUTOCOMPLETE ──
+const acCategoryLabels={vi:{0:'Hộ tịch',1:'Chứng thực',2:'Hôn nhân',3:'Cư trú',4:'Hôn nhân',5:'Hộ tịch',6:'Chính sách',7:'Đất đai',8:'Bảo hiểm'},en:{0:'Civil',1:'Notary',2:'Marriage',3:'Residence',4:'Marriage',5:'Civil',6:'Policy',7:'Land',8:'Insurance'},zh:{0:'户籍',1:'公证',2:'婚姻',3:'居住',4:'婚姻',5:'户籍',6:'政策',7:'土地',8:'保险'}};
+
+function initAutocomplete(){
+  const input=document.getElementById('chat-input');
+  const list=document.getElementById('autocomplete-list');
+  if(!input||!list)return;
+  input.addEventListener('input',function(){
+    const val=this.value.trim().toLowerCase();
+    if(val.length<1){list.classList.remove('show');return;}
+    const matches=demoScripts.reduce((acc,d,i)=>{
+      const q=(d.q&&d.q[currentLang])||'';
+      if(q.toLowerCase().includes(val))acc.push({d,i});
+      return acc;
+    },[]);
+    if(!matches.length){list.classList.remove('show');return;}
+    list.innerHTML=matches.slice(0,6).map(({d,i})=>{
+      const q=(d.q&&d.q[currentLang])||'';
+      const cat=(acCategoryLabels[currentLang]&&acCategoryLabels[currentLang][i])||'';
+      return `<div class="k-ac-item" data-idx="${i}"><span class="k-ac-badge">${cat}</span>${q}</div>`;
+    }).join('');
+    list.querySelectorAll('.k-ac-item').forEach(el=>{
+      el.addEventListener('click',()=>selectAutocomplete(+el.dataset.idx));
+    });
+    list.classList.add('show');
+  });
+  document.addEventListener('click',function(e){
+    if(!e.target.closest('#chat-input')&&!e.target.closest('#autocomplete-list'))list.classList.remove('show');
+  });
+}
+
+function handleChatKeydown(e){
+  const list=document.getElementById('autocomplete-list');
+  const items=[...list.querySelectorAll('.k-ac-item')];
+  const activeEl=list.querySelector('.k-ac-item.k-ac-active');
+  if(e.key==='ArrowDown'){
+    e.preventDefault();
+    if(!items.length)return;
+    if(!activeEl){items[0].classList.add('k-ac-active');}
+    else{const ni=items.indexOf(activeEl);activeEl.classList.remove('k-ac-active');items[(ni+1)%items.length].classList.add('k-ac-active');}
+  }else if(e.key==='ArrowUp'){
+    e.preventDefault();
+    if(!items.length)return;
+    if(!activeEl){items[items.length-1].classList.add('k-ac-active');}
+    else{const ni=items.indexOf(activeEl);activeEl.classList.remove('k-ac-active');items[(ni-1+items.length)%items.length].classList.add('k-ac-active');}
+  }else if(e.key==='Enter'){
+    if(activeEl){e.preventDefault();activeEl.click();}
+    else sendChatInput();
+  }else if(e.key==='Escape'){
+    list.classList.remove('show');
+  }
+}
+
+function selectAutocomplete(idx){
+  const input=document.getElementById('chat-input');
+  const list=document.getElementById('autocomplete-list');
+  const d=demoScripts[idx];
+  input.value=(d.q&&d.q[currentLang])||'';
+  list.classList.remove('show');
+  sendChatInput();
+}
+
 // ── INIT LANG ──
 setLang('vi');
+initAutocomplete();
 </script>
 </body>
 </html>
