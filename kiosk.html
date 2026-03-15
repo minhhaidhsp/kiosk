@@ -697,9 +697,10 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
           <div class="k-chat-title" id="chat-title">Hỏi trực tiếp trợ lý AI</div>
           <div style="font-size:12px;color:var(--muted)" id="chat-subtitle">Hỏi bằng giọng nói hoặc gõ câu hỏi bất kỳ</div>
         </div>
-        <button style="margin-left:auto;padding:6px 12px;border:1.5px solid var(--border);border-radius:8px;background:#fff;color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;font-family:'Be Vietnam Pro',sans-serif;display:flex;align-items:center;gap:5px" onclick="clearChat()">
-          <svg width="13" height="13"><use href="#ic-trash"/></svg> Xóa chat
-        </button>
+        <button id="clear-chat-btn" style="margin-left:auto;padding:6px 12px;border:1.5px solid var(--border);border-radius:8px;background:#fff;color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;font-family:'Be Vietnam Pro',sans-serif;display:flex;align-items:center;gap:5px" onclick="clearChat()">
+            <svg width="13" height="13"><use href="#ic-trash"/></svg>
+            <span id="clear-chat-label">Xóa chat</span>
+          </button>
       </div>
       <div class="k-chat-msgs" id="chat-msgs"></div>
     </div>
@@ -707,22 +708,22 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 
   <!-- Input + Bốc số -->
   <div class="k-input-area">
-    <div class="k-input-chips" id="demo-chips">
+  <div class="k-input-chips" id="demo-chips">
       <div class="k-chip" onclick="sendDemo(0)">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-        Đăng ký kết hôn cần gì?
+        <span data-vi="Đăng ký kết hôn cần gì?" data-en="What do I need to register a marriage?" data-zh="登记结婚需要什么材料？">Đăng ký kết hôn cần gì?</span>
       </div>
       <div class="k-chip" onclick="sendDemo(1)">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-        Làm khai sinh cho con
+        <span data-vi="Làm khai sinh cho con" data-en="Register my child's birth" data-zh="为孩子办理出生登记">Làm khai sinh cho con</span>
       </div>
       <div class="k-chip" onclick="sendDemo(2)">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
-        Đăng ký thường trú mất bao lâu?
+        <span data-vi="Đăng ký thường trú mất bao lâu?" data-en="How long does permanent residence registration take?" data-zh="登记常住需要多长时间？">Đăng ký thường trú mất bao lâu?</span>
       </div>
       <div class="k-chip" onclick="sendDemo(3)">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-        Tôi thuê nhà, cần đăng ký tạm trú?
+        <span data-vi="Tôi thuê nhà, cần đăng ký tạm trú?" data-en="I rent a house, do I need to register temporary residence?" data-zh="我租房，需要登记暂住吗？">Tôi thuê nhà, cần đăng ký tạm trú?</span>
       </div>
     </div>
     <div class="k-input-row">
@@ -731,7 +732,8 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
       </button>
       <input class="k-text-input" id="chat-input" placeholder="Gõ câu hỏi hoặc nhấn mic để nói..." onkeydown="if(event.key==='Enter')sendChatInput()">
       <button class="k-send-btn" id="send-btn-lbl" onclick="sendChatInput()">
-        <svg width="16" height="16" style="display:inline-block;vertical-align:middle;margin-right:5px"><use href="#ic-send"/></svg>Gửi
+        <svg width="16" height="16" style="display:inline-block;vertical-align:middle;margin-right:5px"><use href="#ic-send"/></svg>
+        <span id="send-btn-label">Gửi</span>
       </button>
     </div>
   </div>
@@ -739,7 +741,7 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
   <div class="bocso-row">
     <button class="bocso-btn" id="bocso-btn" onclick="goTicket()" disabled>
       <svg width="18" height="18"><use href="#ic-ticket"/></svg>
-      BỐC SỐ & IN PHIẾU
+      <span id="bocso-btn-label">BỐC SỐ & IN PHIẾU</span>
     </button>
   </div>
 
@@ -799,11 +801,11 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
           💡 Vui lòng giữ phiếu và chú ý màn hình hiển thị số. Khi gọi số, bạn có <strong>5 phút</strong> để đến quầy.
         </div>
         <div style="display:flex;gap:9px">
-          <button class="t-btn t-btn-outline" onclick="showToast('📲 Đã gửi SMS thông báo khi đến lượt!')">📲 Nhận SMS</button>
-          <button class="t-btn t-btn-primary" onclick="printTicket()"><svg width="15" height="15"><use href="#ic-print"/></svg> In phiếu</button>
+          <button id="ticket-sms-btn" class="t-btn t-btn-outline" onclick="showToast('📲 Đã gửi SMS thông báo khi đến lượt!')">📲 <span id="ticket-sms-label">Nhận SMS</span></button>
+          <button id="ticket-print-btn" class="t-btn t-btn-primary" onclick="printTicket()"><svg width="15" height="15"><use href="#ic-print"/></svg> <span id="ticket-print-label">In phiếu</span></button>
         </div>
         <div style="margin-top:9px">
-          <button class="t-btn t-btn-outline" style="width:100%;justify-content:center" onclick="goScreen('s-idle')"><svg width="14" height="14"><use href="#ic-home"/></svg> Hoàn tất · Về màn hình chính</button>
+          <button id="ticket-done-btn" class="t-btn t-btn-outline" style="width:100%;justify-content:center" onclick="goScreen('s-idle')"><svg width="14" height="14"><use href="#ic-home"/></svg> <span id="ticket-done-label">Hoàn tất · Về màn hình chính</span></button>
         </div>
       </div>
       <div class="ticket-right">
@@ -896,21 +898,46 @@ const categories={
   'Tư pháp':{items:[4]},
 };
 const demoScripts=[
-  {q:'Tôi muốn đăng ký kết hôn, cần chuẩn bị những gì vậy?',typing:1200,loadIdx:1,
-    aiReply:`Để <strong>đăng ký kết hôn</strong> tại Trung tâm DVC, hai bạn cần chuẩn bị:<br><br><strong>📄 Giấy tờ cần thiết:</strong><br>1. Tờ khai đăng ký kết hôn <em>(Mẫu 02 — lấy miễn phí tại quầy)</em><br>2. CCCD/CMND của cả hai người <em>(bản sao)</em><br>3. Giấy xác nhận tình trạng hôn nhân <em>(nếu chưa cùng hộ khẩu)</em><br>4. Ảnh 3×4 — 2 ảnh mỗi người<br><br><strong>Nộp tại:</strong> Quầy 2 — Hộ tịch · 💰 <strong>Miễn phí</strong> · ⏱ <strong>5 ngày làm việc</strong>`},
-  {q:'Con tôi mới sinh 3 ngày, tôi cần làm gì để khai sinh cho bé?',typing:1400,loadIdx:0,
-    aiReply:`Bạn cần <strong>đăng ký khai sinh trong vòng 60 ngày</strong> kể từ ngày sinh. Dưới đây là những gì cần chuẩn bị:<br><br><strong>📄 Giấy tờ cần thiết:</strong><br>1. <strong>Giấy chứng sinh</strong> — bản gốc do bệnh viện cấp ✅<br>2. <strong>CCCD của bố và mẹ</strong> — bản màu, công chứng<br>3. <strong>Giấy đăng ký kết hôn</strong> — bản sao (nếu bố mẹ đã kết hôn)<br>4. <strong>Tờ khai Mẫu 01/2024</strong> — lấy miễn phí tại quầy<br><br>Nộp tại <strong>Quầy 2 — Hộ tịch</strong> · 💰 <strong>Miễn phí</strong> · ⏱ <strong>3 ngày làm việc</strong>`},
-  {q:'Đăng ký thường trú mất bao lâu? Tôi cần giấy tờ gì?',typing:1000,loadIdx:2,
-    aiReply:`<strong>Xác nhận thường trú</strong> — thời gian giải quyết:<br><br>⏱ <strong>Thời gian:</strong> Chỉ <strong>2 ngày làm việc</strong>.<br><br><strong>📄 Giấy tờ:</strong><br>1. CCCD bản gốc — để đối chiếu<br>2. Đơn đề nghị xác nhận thường trú<br>3. Thông tin hộ khẩu trên VNeID <em>(nếu đã cập nhật)</em><br><br>Nộp tại <strong>Quầy 4 — Cư trú</strong> · 💰 <strong>Miễn phí</strong>`},
-  {q:'Tôi đang thuê nhà ở đây, chủ nhà bảo phải đăng ký tạm trú. Tôi cần làm gì?',typing:1600,loadIdx:3,
-    aiReply:`Đúng rồi, theo Luật Cư trú 2020, người thuê nhà cần <strong>đăng ký tạm trú trong vòng 30 ngày</strong> kể từ khi đến ở. 📋<br><br><strong>📄 Chuẩn bị trước ở nhà:</strong><br>1. CCCD bản gốc của bạn<br>2. Hợp đồng thuê nhà <em>hoặc</em> giấy xác nhận chủ nhà<br>3. Tờ khai CT07 — tải tại <em>dichvucong.gov.vn</em> hoặc lấy tại quầy<br><br>Nộp tại <strong>Quầy 4 — Cư trú</strong> · 💰 <strong>Miễn phí</strong> · ⏱ <strong>2 ngày làm việc</strong>`},
+  {loadIdx:1,typing:1200,
+    q:{vi:'Tôi muốn đăng ký kết hôn, cần chuẩn bị những gì vậy?',en:'I want to register a marriage, what documents do I need?',zh:'我想登记结婚，需要准备哪些材料？'},
+    aiReply:{
+      vi:`Để <strong>đăng ký kết hôn</strong> tại Trung tâm DVC, hai bạn cần chuẩn bị:<br><br>📄 <strong>Giấy tờ cần thiết:</strong><br>1. Tờ khai đăng ký kết hôn (Mẫu 02)<br>2. CCCD/CMND của hai bên (bản sao)<br>3. Giấy xác nhận tình trạng hôn nhân (nếu cần)<br>4. Ảnh 3×4 — 2 ảnh/người<br><br>Nộp tại Quầy 2 — Hộ tịch · Miễn phí · 5 ngày làm việc.`,
+      en:`To register a marriage at the service center you will need:<br><br>� <strong>Required documents:</strong><br>1. Marriage registration form (Form 02)<br>2. ID cards of both parties (copies)<br>3. Proof of marital status (if applicable)<br>4. Two 3×4 photos per person<br><br>Submit at Counter 2 — Civil Records · Free · 5 working days.`,
+      zh:`在服务中心登记结婚需要准备：<br><br>📄 <strong>所需材料：</strong><br>1. 登记结婚表格（表格02）<br>2. 双方身份证复印件<br>3. 婚姻状况证明（如适用）<br>4. 每人两张3×4照片<br><br>提交至2号窗口（户籍）· 免费 · 5个工作日。`
+    }
+  },
+  {loadIdx:0,typing:1400,
+    q:{vi:'Con tôi mới sinh 3 ngày, tôi cần làm gì để khai sinh cho bé?',en:"My baby was just born, what do I need to register the birth?",zh:'我的孩子刚出生，我需要做什么来登记出生？'},
+    aiReply:{
+      vi:`Bạn cần đăng ký khai sinh trong vòng 60 ngày kể từ ngày sinh. 📄 <strong>Giấy tờ cần thiết:</strong><br>1. Giấy chứng sinh (bản gốc)<br>2. CCCD cha mẹ (bản sao công chứng)<br>3. Giấy đăng ký kết hôn (nếu có)<br>4. Tờ khai Mẫu 01/2024<br><br>Nộp tại Quầy 2 — Hộ tịch · Miễn phí · 3 ngày làm việc.`,
+      en:`You must register the birth within 60 days. 📄 <strong>Required documents:</strong><br>1. Birth certificate from the hospital (original)<br>2. Parents' ID cards (certified copies)<br>3. Marriage certificate (if applicable)<br>4. Registration form (Form 01/2024)<br><br>Submit at Counter 2 — Civil Records · Free · 3 working days.`,
+      zh:`须在出生后60天内办理出生登记。📄 <strong>所需材料：</strong><br>1. 医院出具的出生证明（原件）<br>2. 父母身份证复印件（公证）<br>3. 结婚证（如适用）<br>4. 登记表格（01/2024）<br><br>提交至2号窗口（户籍）· 免费 · 3个工作日。`
+    }
+  },
+  {loadIdx:2,typing:1000,
+    q:{vi:'Đăng ký thường trú mất bao lâu? Tôi cần giấy tờ gì?',en:'How long does permanent residence registration take and what documents are needed?',zh:'登记常住需要多长时间，需要哪些材料？'},
+    aiReply:{
+      vi:`Thủ tục xác nhận thường trú: ⏱ Thời gian: 2 ngày làm việc.<br><br>📄 Giấy tờ: CCCD (bản gốc), đơn đề nghị, thông tin hộ khẩu trên VNeID (nếu có). Nộp tại Quầy 4 — Cư trú.`,
+      en:`Permanent residence confirmation typically takes 2 working days.<br><br>📄 Documents: ID card (original), application form, household registration on VNeID (if available). Submit at Counter 4 — Residence.`,
+      zh:`常住登记通常需2个工作日。<br><br>📄 材料：身份证原件、申请表、VNeID上的户籍信息（如有）。提交至4号窗口（居住）。`
+    }
+  },
+  {loadIdx:3,typing:1600,
+    q:{vi:'Tôi đang thuê nhà ở đây, chủ nhà bảo phải đăng ký tạm trú?',en:'I rent a place here; do I need to register temporary residence?',zh:'我在这里租房，需要登记暂住吗？'},
+    aiReply:{
+      vi:`Người thuê nhà cần đăng ký tạm trú trong vòng 30 ngày. � <strong>Chuẩn bị:</strong><br>1. CCCD bản gốc<br>2. Hợp đồng thuê hoặc xác nhận chủ nhà<br>3. Tờ khai CT07 — nộp tại Quầy 4 — Cư trú.`,
+      en:`Renters should register temporary residence within 30 days. 📄 <strong>Prepare:</strong><br>1. ID card (original)<br>2. Rental contract or landlord confirmation<br>3. Form CT07 — submit at Counter 4 — Residence.`,
+      zh:`租房者应在30天内登记暂住。� <strong>准备：</strong><br>1. 身份证原件<br>2. 房屋租赁合同或房东证明<br>3. CT07表格 — 提交至4号窗口（居住）。`
+    }
+  }
 ];
+
 const freeformResponses=[
-  {kw:['kết hôn','lấy vợ','lấy chồng','cưới'],idx:1},
-  {kw:['khai sinh','sinh con','con mới sinh','trẻ sơ sinh','em bé'],idx:0},
-  {kw:['thường trú','hộ khẩu'],idx:2},
-  {kw:['tạm trú','thuê nhà','trọ'],idx:3},
-  {kw:['hôn nhân','độc thân','chưa kết hôn'],idx:4},
+  {kw:{vi:['kết hôn','lấy vợ','lấy chồng','cưới'],en:['marriage','get married','wedding'],zh:['结婚','登记结婚','婚姻']},idx:1},
+  {kw:{vi:['khai sinh','sinh con','con mới sinh','trẻ sơ sinh','em bé'],en:['birth','newborn','baby'],zh:['出生','新生儿','婴儿']},idx:0},
+  {kw:{vi:['thường trú','hộ khẩu'],en:['permanent','residence','household'],zh:['常住','户口']},idx:2},
+  {kw:{vi:['tạm trú','thuê nhà','trọ'],en:['temporary','rent','tenant'],zh:['暂住','租房','租住']},idx:3},
+  {kw:{vi:['hôn nhân','độc thân','chưa kết hôn'],en:['marital','single','not married'],zh:['婚姻','单身','未婚']},idx:4},
 ];
 
 // ── LANGUAGE ──
@@ -926,8 +953,14 @@ const i18n={
     cat_sub:'Chạm vào lĩnh vực phù hợp — hoặc hỏi AI bằng giọng nói bên dưới',
     cat_ai_strong:'Hỏi trực tiếp trợ lý AI',
     cat_ai_span:'Không biết chọn lĩnh vực nào? Hãy mô tả nhu cầu — AI sẽ hướng dẫn ngay',
+  suggest_examples:'Thử: "khai sinh", "kết hôn", "thường trú", "tạm trú" hoặc nhấn 🎤 để nói.',
     cat_home:'Màn hình chính',send:'Gửi',placeholder:'Gõ câu hỏi hoặc nhấn mic để nói...',
-    greeting:`Xin chào! Tôi là trợ lý AI tại <strong>Trung tâm Phục vụ hành chính công</strong>.<br>Bạn có thể hỏi tôi về bất kỳ thủ tục hành chính nào tại Bộ phận Một cửa — tôi sẽ hướng dẫn cụ thể giấy tờ cần chuẩn bị, nơi nộp và thời gian giải quyết.<br>Bạn cần hỗ trợ thủ tục nào?`},
+  bocso:'BỐC SỐ & IN PHIẾU',
+  ticket_print:'In phiếu',
+  ticket_sms:'Nhận SMS',
+  ticket_done:'Hoàn tất · Về màn hình chính',
+  clear_chat:'Xóa chat',
+  greeting:`Xin chào! Tôi là trợ lý AI tại <strong>Trung tâm Phục vụ hành chính công</strong>.<br>Bạn có thể hỏi tôi về bất kỳ thủ tục hành chính nào tại Bộ phận Một cửa — tôi sẽ hướng dẫn cụ thể giấy tờ cần chuẩn bị, nơi nộp và thời gian giải quyết.<br>Bạn cần hỗ trợ thủ tục nào?`},
  
     en:{brand:'HCMC Administrative Service Center',sub:'One-Stop Service · Ban Co Ward',
     idle_label:'AI Kiosk · Ban Co Ward · District 3 · HCMC',
@@ -939,8 +972,14 @@ const i18n={
     cat_sub:'Tap a category — or ask AI directly below',
     cat_ai_strong:'Ask AI Directly',
     cat_ai_span:"Describe your need — AI will guide you",
-    cat_home:'Home',send:'Send',placeholder:'Type your question or tap mic to speak...',
-    greeting:`Hello! I'm the AI assistant at <strong>HCMC Administrative Service Center</strong>.<br><br>Ask me about any administrative procedure — I'll guide you on required documents, submission location, and processing time.<br><br>What procedure do you need help with?`},
+  suggest_examples:'Try: "birth", "marriage", "permanent residence", "temporary residence" or tap 🎤 to speak.',
+  cat_home:'Home',send:'Send',placeholder:'Type your question or tap mic to speak...',
+  bocso:'TAKE TICKET & PRINT',
+  ticket_print:'Print',
+  ticket_sms:'Send SMS',
+  ticket_done:'Done · Back to Home',
+  clear_chat:'Clear chat',
+  greeting:`Hello! I'm the AI assistant at <strong>HCMC Administrative Service Center</strong>.<br><br>Ask me about any administrative procedure — I'll guide you on required documents, submission location, and processing time.<br><br>What procedure do you need help with?`},
   zh:{brand:'胡志明市行政服务中心',sub:'一站式服务中心 · 第3郡',
     idle_label:'AI服务亭 · 第3郡 · 胡志明市',
     idle_title:'您好！<br>我能为您做什么？',
@@ -951,8 +990,14 @@ const i18n={
     cat_sub:'请选择服务类别 — 或直接向AI提问',
     cat_ai_strong:'直接咨询AI',
     cat_ai_span:'描述您的需求，AI将为您指引',
-    cat_home:'主页',send:'发送',placeholder:'输入问题或点击麦克风说话...',
-    greeting:`您好！我是<strong>胡志明市行政服务中心</strong>的AI助手。<br><br>您可以询问我任何行政手续问题 — 我将为您介绍所需文件、提交地点和办理时间。<br><br>请问您需要办理什么手续？`},
+  suggest_examples:'试试："出生登记"、"结婚登记"、"常住登记"、"暂住登记"，或点击 🎤 说话。',
+  cat_home:'主页',send:'发送',placeholder:'输入问题或点击麦克风说话...',
+  bocso:'取号并打印',
+  ticket_print:'打印',
+  ticket_sms:'接收短信',
+  ticket_done:'完成 · 返回首页',
+  clear_chat:'清除对话',
+  greeting:`您好！我是<strong>胡志明市行政服务中心</strong>的AI助手。<br><br>您可以询问我任何行政手续问题 — 我将为您介绍所需文件、提交地点和办理时间。<br><br>请问您需要办理什么手续？`},
 };
 
 function setLang(lang){
@@ -979,7 +1024,15 @@ function setLang(lang){
   // Chat header strings
   const ct=document.getElementById('chat-title'); if(ct) ct.textContent = t.cat_ai_strong;
   const cs=document.getElementById('chat-subtitle'); if(cs) cs.textContent = t.cat_ai_span;
+  // Action labels (chat/ticket)
+  const clearLbl = document.getElementById('clear-chat-label'); if(clearLbl) clearLbl.textContent = t.clear_chat;
+  const bocsoLbl = document.getElementById('bocso-btn-label'); if(bocsoLbl) bocsoLbl.textContent = t.bocso;
+  const ticketSmsLbl = document.getElementById('ticket-sms-label'); if(ticketSmsLbl) ticketSmsLbl.textContent = t.ticket_sms;
+  const ticketPrintLbl = document.getElementById('ticket-print-label'); if(ticketPrintLbl) ticketPrintLbl.textContent = t.ticket_print;
+  const ticketDoneLbl = document.getElementById('ticket-done-label'); if(ticketDoneLbl) ticketDoneLbl.textContent = t.ticket_done;
   showToast('🌐 '+{vi:'Tiếng Việt',en:'English',zh:'中文'}[lang]);
+  // Re-render existing chat messages so AI/system content updates to the new language
+  try{ updateChatLanguage(); }catch(e){console.warn('updateChatLanguage failed',e); }
 }
 
 // ── FONT SIZE ──
@@ -1038,18 +1091,26 @@ function focusInput(){setTimeout(()=>document.getElementById('chat-input')?.focu
 
 // ── CHAT ──
 let currentTTHC=null,checkedItems=[],chatInited=false;
+// Keep an in-memory history of chat messages so we can re-render them
+// when the UI language changes. Each entry: {id,isAi,sourceTxt,htmlByLang,time}
+const chatHistory = [];
+let _msgIdCounter = 1;
 function initChat(){
   if(chatInited)return;chatInited=true;
   document.getElementById('chat-msgs').innerHTML='';
-  addMsg(i18n[currentLang].greeting,true,null,false);
+  // Add greeting as a localized message (keep all language variants)
+  addMsg({vi:i18n.vi.greeting,en:i18n.en.greeting,zh:i18n.zh.greeting},true,null,false);
 }
 function clearChat(){
   chatInited=false;currentTTHC=null;checkedItems=[];
   document.getElementById('chat-msgs').innerHTML='';
+  // clear history as well
+  chatHistory.length = 0; _msgIdCounter = 1;
   setBocso(false);initChat();
 }
 
 function addMsg(html,isAi,sourceTxt,doSpeak=true){
+  // html may be a string (legacy) or an object with {vi,en,zh}
   const msgs=document.getElementById('chat-msgs');
   const time=new Date().toLocaleTimeString('vi',{hour:'2-digit',minute:'2-digit'});
   const div=document.createElement('div');
@@ -1057,21 +1118,55 @@ function addMsg(html,isAi,sourceTxt,doSpeak=true){
   div.style.alignItems=isAi?'flex-start':'flex-end';
   div.style.gap='4px';
 
-  const sourceHtml=sourceTxt&&isAi?`<div class="source-box" onclick="showLegalPopup('${sourceTxt}')" style="cursor:pointer" title="Nhấn để xem văn bản pháp lý">📖 <strong>Căn cứ:</strong> ${sourceTxt} <span style="color:var(--red);font-size:11px;margin-left:4px">→ Xem toàn văn</span></div>`:'';
-  const routeMatch=sourceTxt&&sourceTxt.match(/Loại \d/);
-  const routeBadge=routeMatch&&isAi?`<div class="route-badge">⚡ ${routeMatch[0]} · Đã xác minh</div>`:'';
+  const id = _msgIdCounter++;
 
+  // Normalize htmlByLang
+  let htmlByLang = {vi:'',en:'',zh:''};
+  if(typeof html === 'string'){
+    // legacy: use same content for all langs (but we still store it so it can be preserved)
+    htmlByLang = {vi:html,en:html,zh:html};
+  } else if(html && typeof html === 'object'){
+    htmlByLang.vi = html.vi || html.vi===""? html.vi : (html['vi']||'');
+    htmlByLang.en = html.en || html.en===""? html.en : (html['en']||'');
+    htmlByLang.zh = html.zh || html.zh===""? html.zh : (html['zh']||'');
+  }
+
+  // Save into in-memory history so we can re-render on language change
+  chatHistory.push({id,isAi,sourceTxt,htmlByLang,time});
+
+  const sourceHtml = sourceTxt && isAi ? `<div class="source-box" onclick="showLegalPopup('${sourceTxt}')" style="cursor:pointer" title="Nhấn để xem văn bản pháp lý">📖 <strong>Căn cứ:</strong> ${sourceTxt} <span style="color:var(--red);font-size:11px;margin-left:4px">→ Xem toàn văn</span></div>` : '';
+  const routeMatch = sourceTxt && sourceTxt.match(/Loại \d/);
+  const routeBadge = routeMatch && isAi ? `<div class="route-badge">⚡ ${routeMatch[0]} · Đã xác minh</div>` : '';
+
+  // Pick appropriate html for current language (fallback to vi then en then zh)
+  const chosen = htmlByLang[currentLang] || htmlByLang.vi || htmlByLang.en || htmlByLang.zh || '';
+
+  div.dataset.msgId = String(id);
   div.innerHTML=`
     <div class="msg ${isAi?'ai-msg':'user-msg'}">
       <div class="msg-av ${isAi?'ai-av':'usr-av'}">
   ${isAi?`<svg width="36" height="36" viewBox="0 0 88 88" aria-hidden="true"><use href="#robot-icon"/></svg>`:`<svg width="18" height="18" style="color:#6B7280"><use href="#ic-user"/></svg>`}
       </div>
-      <div class="msg-bubble ${isAi?'ai-bubble':'user-bubble'}">${html}${sourceHtml}</div>
+      <div class="msg-bubble ${isAi?'ai-bubble':'user-bubble'}">${chosen}${sourceHtml}</div>
     </div>
     ${routeBadge}
     <div class="msg-time" style="${isAi?'margin-left:46px':'margin-right:46px'}">${time}${isAi?' · <span style="color:var(--lime)">✓</span>':''}</div>`;
   msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;
-  if(isAi&&ttsEnabled&&doSpeak)speak(html);
+  if(isAi&&ttsEnabled&&doSpeak)speak(chosen);
+}
+
+function updateChatLanguage(){
+  // Re-render existing chat message bubbles according to currentLang
+  for(const m of chatHistory){
+    const id = String(m.id);
+    const el = document.querySelector(`[data-msg-id="${id}"]`);
+    if(!el) continue;
+    const bubble = el.querySelector('.msg-bubble');
+    if(!bubble) continue;
+    const html = (m.htmlByLang && (m.htmlByLang[currentLang] || m.htmlByLang.vi || m.htmlByLang.en || m.htmlByLang.zh)) || '';
+    const sourceHtml = m.sourceTxt && m.isAi ? `<div class="source-box" onclick="showLegalPopup('${m.sourceTxt}')" style="cursor:pointer" title="Nhấn để xem văn bản pháp lý">📖 <strong>Căn cứ:</strong> ${m.sourceTxt} <span style="color:var(--red);font-size:11px;margin-left:4px">→ Xem toàn văn</span></div>` : '';
+    bubble.innerHTML = html + sourceHtml;
+  }
 }
 
 function showTyping(){
@@ -1086,16 +1181,20 @@ function showTyping(){
 function removeTyping(){document.getElementById('typing-ind')?.remove();}
 
 function sendDemo(idx){
-  const d=demoScripts[idx];
+  const raw=demoScripts[idx];
+  const q = raw.q && raw.q[currentLang] ? raw.q[currentLang] : (raw.q || '');
+  const typing = raw.typing || 1000;
+  const loadIdx = raw.loadIdx;
   goScreen('s-chat');
   setTimeout(()=>{
-    addMsg(d.q,false);showTyping();
+    addMsg(q,false);showTyping();
     setTimeout(()=>{
       removeTyping();
-      addMsg(d.aiReply,true,`${tthcData[d.loadIdx].route} · ${tthcData[d.loadIdx].latency}`);
-      loadTTHCPanel(d.loadIdx);
-      if(ttsEnabled)speak(d.aiReply);
-    },d.typing);
+      // Pass multilingual AI reply object so the message can be re-rendered
+      addMsg(raw.aiReply,true, loadIdx!=null?`${tthcData[loadIdx].route} · ${tthcData[loadIdx].latency}`:'');
+      if(typeof loadIdx === 'number') loadTTHCPanel(loadIdx);
+      if(ttsEnabled){ const ttsText = raw.aiReply && raw.aiReply[currentLang] ? raw.aiReply[currentLang] : (raw.aiReply || ''); if(ttsText) speak(ttsText); }
+    },typing);
   },200);
 }
 
@@ -1104,16 +1203,31 @@ function sendChat(text){
   addMsg(text,false);showTyping();
   const lower=text.toLowerCase();
   let found=null;
-  for(const r of freeformResponses){if(r.kw.some(k=>lower.includes(k))){found=r;break;}}
+  for(const r of freeformResponses){
+    const kws = (r.kw && r.kw[currentLang])? r.kw[currentLang] : (Array.isArray(r.kw)?r.kw:[]);
+    for(const k of kws){ if(lower.includes(k)) { found=r; break; } }
+    if(found) break;
+  }
   const delay=700+Math.random()*500;
   setTimeout(()=>{
     removeTyping();
     if(found){
-      const d=demoScripts[found.idx]||null;
-      if(d&&d.aiReply){addMsg(d.aiReply,true,`${tthcData[found.idx].route} · ${tthcData[found.idx].latency}`);loadTTHCPanel(found.idx);}
-      else loadTTHC(found.idx);
+      const raw = demoScripts[found.idx]||null;
+      if(raw && raw.aiReply){
+        addMsg(raw.aiReply,true, `${tthcData[found.idx].route} · ${tthcData[found.idx].latency}`);
+        loadTTHCPanel(found.idx);
+      } else if(raw) {
+        loadTTHC(found.idx);
+      }
     } else {
-      addMsg(`Tôi hiểu bạn đang hỏi về "<strong>${text}</strong>".<br><br>Hãy thử: <em>"khai sinh"</em>, <em>"kết hôn"</em>, <em>"thường trú"</em>, <em>"tạm trú"</em><br>Hoặc nhấn 🎤 để nói trực tiếp!`,true);
+      const hint = (i18n[currentLang] && i18n[currentLang].suggest_examples) ? i18n[currentLang].suggest_examples : `Try examples or press 🎤 to speak.`;
+      // build a localized fallback assistant message so it can update with setLang()
+      const fallback = {
+        vi: `Tôi hiểu bạn đang hỏi về "<strong>${text}</strong>".<br><br>${i18n.vi.suggest_examples}`,
+        en: `I understand you're asking about "<strong>${text}</strong>".<br><br>${i18n.en.suggest_examples}`,
+        zh: `我理解您在询问 "<strong>${text}</strong>"。<br><br>${i18n.zh.suggest_examples}`
+      };
+      addMsg(fallback,true);
     }
   },delay);
 }
