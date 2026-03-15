@@ -105,7 +105,6 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 .k-chat-hd{padding:12px 24px;border-bottom:1px solid var(--border);background:#fff;display:flex;align-items:center;gap:10px;flex-shrink:0}
 .k-chat-hd-icon{width:36px;height:36px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
 .k-chat-title{font-size:16px;font-weight:800;color:#111827}
-.ai-tag{display:inline-flex;align-items:center;gap:5px;background:#f0fdf4;border:1px solid #86efac;color:var(--green);font-size:12px;font-weight:700;padding:3px 10px;border-radius:20px}
 .k-chat-msgs{flex:1;overflow-y:auto;padding:20px 24px;display:flex;flex-direction:column;gap:16px;scrollbar-width:thin;scrollbar-color:var(--dim) transparent}
 
 /* Chat bubbles */
@@ -651,10 +650,6 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
       </div>
     </div>
     <div class="k-top-right">
-      <div class="ai-tag">
-        <svg width="10" height="10" viewBox="0 0 10 10"><circle cx="5" cy="5" r="4" fill="#22c55e"/></svg>
-        AI · Qwen2.5-7B
-      </div>
       <div class="ctrl-group">
         <button class="ctrl-btn" onclick="changeFontSize(-1)">A−</button>
         <button class="ctrl-btn" onclick="changeFontSize(1)">A+</button>
@@ -893,8 +888,9 @@ const i18n={
     cat_ai_strong:'Hỏi trực tiếp trợ lý AI',
     cat_ai_span:'Không biết chọn lĩnh vực nào? Hãy mô tả nhu cầu — AI sẽ hướng dẫn ngay',
     cat_home:'Màn hình chính',send:'Gửi',placeholder:'Gõ câu hỏi hoặc nhấn mic để nói...',
-    greeting:`Xin chào! Tôi là trợ lý AI tại <strong>Trung tâm Phục vụ hành chính công</strong>.<br><br>Bạn có thể hỏi tôi về bất kỳ thủ tục hành chính nào tại Bộ phận Một cửa — tôi sẽ hướng dẫn cụ thể giấy tờ cần chuẩn bị, nơi nộp và thời gian giải quyết.<br><br>Bạn cần hỗ trợ thủ tục nào?`},
-  en:{brand:'HCMC Administrative Service Center',sub:'One-Stop Service · Ban Co Ward',
+    greeting:`Xin chào! Tôi là trợ lý AI tại <strong>Trung tâm Phục vụ hành chính công</strong>.<br>Bạn có thể hỏi tôi về bất kỳ thủ tục hành chính nào tại Bộ phận Một cửa — tôi sẽ hướng dẫn cụ thể giấy tờ cần chuẩn bị, nơi nộp và thời gian giải quyết.<br>Bạn cần hỗ trợ thủ tục nào?`},
+ 
+    en:{brand:'HCMC Administrative Service Center',sub:'One-Stop Service · Ban Co Ward',
     idle_label:'AI Kiosk · Ban Co Ward · District 3 · HCMC',
     idle_title:'Hello!<br>How can I help you today?',
     idle_sub:'Tap the screen to start looking up administrative procedures',
@@ -974,8 +970,8 @@ function goScreen(id){
 }
 function goCategory(cat){
   const c=categories[cat];if(!c){goScreen('s-chat');return;}
-  document.getElementById('tthc-list-crumb').textContent=`Bộ phận Một cửa`;
-  document.getElementById('tthc-list-title').textContent=`Bộ phận Một cửa`;
+  document.getElementById('tthc-list-crumb').textContent=`${cat} · Bước 2/3`;
+  document.getElementById('tthc-list-title').textContent=`Thủ tục ${cat}`;
   const el=document.getElementById('tthc-list-items');
   el.innerHTML=c.items.map(i=>{
     const t=tthcData[i];
