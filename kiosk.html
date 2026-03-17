@@ -58,6 +58,18 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 .k-home-btn{padding:9px 18px;background:#fff;border:1.5px solid var(--border);border-radius:10px;color:#374151;font-size:14px;font-weight:700;cursor:pointer;font-family:'Be Vietnam Pro',sans-serif;transition:all .15s;display:flex;align-items:center;gap:8px}
 .k-home-btn:hover{background:var(--rl);border-color:var(--rb);color:var(--red)}
 
+/* Mobile settings menu button (hidden on desktop/tablet) */
+.k-mob-menu-btn{display:none;align-items:center;gap:5px;padding:6px 12px;background:var(--card);border:1.5px solid var(--border);border-radius:10px;font-size:13px;font-weight:800;cursor:pointer;font-family:'Be Vietnam Pro',sans-serif;color:var(--text2);transition:all .15s;white-space:nowrap}
+.k-mob-menu-btn:hover,.k-mob-menu-btn.open{background:var(--rl);border-color:var(--rb);color:var(--red)}
+/* Mobile settings dropdown panel */
+.k-mob-menu{display:none;position:fixed;top:52px;left:0;right:0;z-index:800;background:#fff;border-bottom:3px solid var(--red);box-shadow:0 8px 28px rgba(0,0,0,.15)}
+.k-mob-menu.open{display:block;animation:mDown .18s ease}
+@keyframes mDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
+.k-mob-menu-inner{padding:12px 20px;display:flex;flex-direction:column;gap:0}
+.k-mob-menu-row{display:flex;align-items:center;gap:14px;padding:10px 0}
+.k-mob-menu-row+.k-mob-menu-row{border-top:1px solid var(--border)}
+.k-mob-menu-lbl{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;width:68px;flex-shrink:0}
+
 /* ── CONTENT ── */
 .k-content{flex:1;overflow-y:auto;overflow-x:hidden;padding:28px 36px;scrollbar-width:thin;scrollbar-color:var(--dim) transparent}
 
@@ -73,9 +85,22 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 .idle-quick{display:flex;gap:12px;margin-top:24px;flex-wrap:wrap;justify-content:center;z-index:1}
 .idle-q-btn{padding:12px 20px;background:var(--card);border:1.5px solid var(--border);border-radius:12px;color:#374151;font-size:22.5px;font-weight:600;cursor:pointer;font-family:'Be Vietnam Pro',sans-serif;transition:all .15s;display:flex;align-items:center;gap:8px}
 .idle-q-btn:hover{background:var(--rl);border-color:var(--rb);color:var(--red)}
-.idle-chat-hint{z-index:1;margin-top:20px;display:flex;align-items:center;gap:10px;padding:12px 20px;background:var(--rl);border:1.5px solid var(--rb);border-radius:14px;cursor:pointer;transition:all .15s;max-width:480px;width:100%}
+.idle-chat-hint{z-index:1;margin-top:12px;display:flex;align-items:center;gap:10px;padding:12px 20px;background:var(--rl);border:1.5px solid var(--rb);border-radius:14px;cursor:pointer;transition:all .15s;max-width:480px;width:100%}
 .idle-chat-hint:hover{background:#ffd5d5;border-color:var(--red)}
 .idle-chat-hint-txt{font-size:21px;color:#991b1b}
+/* Bốc số nhanh button on idle */
+.idle-bocso-hint{z-index:1;margin-top:12px;display:flex;align-items:center;gap:12px;padding:14px 22px;background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:1.5px solid #86efac;border-radius:14px;cursor:pointer;transition:all .15s;max-width:480px;width:100%}
+.idle-bocso-hint:hover{background:linear-gradient(135deg,#dcfce7,#bbf7d0);border-color:var(--green);transform:translateY(-1px);box-shadow:0 4px 16px rgba(22,163,74,.15)}
+.idle-bocso-hint-txt strong{display:block;font-size:21px;font-weight:800;color:#14532d;line-height:1.3}
+.idle-bocso-hint-txt span{font-size:17px;color:#15803d}
+/* Quick ticket modal */
+.qt-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.qt-item{padding:14px 16px;background:#fff;border:1.5px solid var(--border);border-radius:12px;cursor:pointer;display:flex;align-items:center;gap:12px;transition:all .2s;font-family:'Be Vietnam Pro',sans-serif}
+.qt-item:hover{border-color:var(--green);background:#f0fdf4;transform:translateY(-1px);box-shadow:0 4px 14px rgba(22,163,74,.12)}
+.qt-ai-item:hover{border-color:var(--red)!important;background:#ffd5d5!important;box-shadow:0 4px 14px rgba(200,16,46,.12)!important}
+.qt-item-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0}
+.qt-item-name{font-size:14px;font-weight:700;color:var(--text);line-height:1.35}
+.qt-item-meta{font-size:12px;color:var(--muted);margin-top:2px}
 
 /* ── CATEGORY SCREEN ── */
 .cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:4px 0}
@@ -100,16 +125,32 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 .tthc-name{font-size:25.5px;font-weight:800;color:var(--text);margin-bottom:3px}
 .tthc-meta{font-size:19.5px;color:var(--muted)}
 
-/* ── CHAT SCREEN ── */
-.k-body{flex:1;display:grid;grid-template-columns:1fr 0px;overflow:hidden;transition:grid-template-columns .25s ease}
-.k-body.panel-open{grid-template-columns:1fr 380px}
-.k-left{display:flex;flex-direction:column;overflow:hidden;min-width:0}
+/* ── CHAT SCREEN LAYOUT ── */
+.k-body{flex:1;display:grid;grid-template-columns:56px 1fr;overflow:hidden;transition:grid-template-columns .25s ease}
+.k-body.panel-open{grid-template-columns:380px 1fr}
+.k-main{display:flex;flex-direction:column;overflow:hidden;min-width:0}
 
-/* ── RIGHT SIDEBAR PANEL ── */
-.k-right{border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;background:var(--card);min-width:0}
-.k-right-hd{padding:12px 16px;border-bottom:1px solid var(--border);background:#fff;font-size:13.5px;font-weight:800;color:#111827;display:flex;align-items:center;gap:7px;flex-shrink:0}
-.k-right-body{flex:1;overflow-y:auto;padding:14px;scrollbar-width:thin;scrollbar-color:var(--dim) transparent;display:flex;flex-direction:column;gap:10px}
-.k-right-bocso{padding:10px 14px;border-top:1px solid var(--border);background:#fff;flex-shrink:0}
+/* ── LEFT SIDEBAR (checklist – Gemini style) ── */
+.k-sidebar{background:#fff;border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;min-width:0;flex-shrink:0}
+.k-sidebar-hd{height:56px;flex-shrink:0;display:flex;align-items:center;border-bottom:1px solid var(--border)}
+.k-sidebar-toggle{width:56px;height:56px;flex-shrink:0;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text2);transition:background .15s}
+.k-sidebar-toggle:hover{background:var(--rl);color:var(--red)}
+.k-sidebar-hd-meta{flex:1;display:flex;align-items:center;gap:6px;padding-right:14px;overflow:hidden;white-space:nowrap}
+.k-sidebar-hd-title{font-size:13px;font-weight:800;color:#111827;flex:1;overflow:hidden;text-overflow:ellipsis}
+.k-sidebar-prog{font-size:11.5px;color:var(--muted);font-weight:600;white-space:nowrap;flex-shrink:0}
+/* Icon rail – visible only when collapsed */
+.k-sidebar-rail{flex:1;display:flex;flex-direction:column;align-items:center;padding:10px 0;gap:4px;overflow:hidden}
+.k-sidebar-rail-btn{width:40px;height:40px;border:none;border-radius:10px;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--dim);transition:all .15s;flex-shrink:0}
+.k-sidebar-rail-btn:hover{background:var(--rl);color:var(--red)}
+/* Full content – visible only when expanded */
+.k-sidebar-inner{flex:1;display:flex;flex-direction:column;overflow:hidden;min-height:0}
+.k-sidebar-body{flex:1;overflow-y:auto;padding:14px;scrollbar-width:thin;scrollbar-color:var(--dim) transparent;display:flex;flex-direction:column;gap:10px}
+.k-sidebar-footer{padding:10px 14px;border-top:1px solid var(--border);background:#fff;flex-shrink:0}
+/* Collapsed state */
+.k-body:not(.panel-open) .k-sidebar-hd-meta{display:none}
+.k-body:not(.panel-open) .k-sidebar-inner{display:none}
+/* Expanded state */
+.k-body.panel-open .k-sidebar-rail{display:none}
 .rp-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px 16px;box-shadow:var(--shc)}
 .rp-card-title{font-size:13px;font-weight:800;color:#111827;margin-bottom:10px;display:flex;align-items:center;gap:6px}
 .rp-card-title::before{content:'';width:3px;height:13px;background:var(--red);border-radius:2px;flex-shrink:0;display:inline-block}
@@ -134,10 +175,7 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 .rp-step.s-done .rp-step-num{background:#dcfce7;color:var(--green)}
 .rp-step.s-cur .rp-step-num{background:var(--rl);color:var(--red)}
 .rp-step.s-wait .rp-step-num{background:var(--card);color:var(--dim)}
-/* Sidebar toggle button */
-.k-panel-toggle{padding:6px 11px;background:var(--card);border:1.5px solid var(--border);border-radius:9px;color:var(--text2);font-size:12px;font-weight:700;cursor:pointer;font-family:'Be Vietnam Pro',sans-serif;transition:all .15s;display:flex;align-items:center;gap:5px;white-space:nowrap}
-.k-panel-toggle:hover{background:var(--rl);border-color:var(--rb);color:var(--red)}
-.k-panel-toggle.active{background:var(--rl);border-color:var(--rb);color:var(--red)}
+/* rp-* card styles */
 .k-chat-hd{padding:14px 24px;border-bottom:1px solid var(--border);background:#fff;display:flex;align-items:center;gap:10px;flex-shrink:0}
 .k-chat-hd-icon{width:44px;height:44px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
 .k-chat-title{font-size:16px;font-weight:800;color:#111827}
@@ -167,6 +205,12 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 .msg-act-sep{width:1px;height:14px;background:var(--border);margin:0 3px;flex-shrink:0}
 .source-box{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-size:12.5px;color:#374151;margin-top:10px;line-height:1.6}
 .route-badge{display:inline-flex;align-items:center;gap:4px;background:var(--rl);border:1px solid var(--rb);color:#991b1b;font-size:11px;font-weight:700;padding:2px 8px;border-radius:5px;margin-top:5px}
+/* Checklist open button inside AI message */
+.checklist-open-btn{display:flex;align-items:center;gap:8px;padding:9px 13px;margin-top:10px;background:linear-gradient(135deg,var(--rl) 0%,#fff8f8 100%);border:1.5px solid var(--rb);border-radius:10px;cursor:pointer;transition:all .15s;font-size:13px;font-weight:700;color:var(--red);font-family:'Be Vietnam Pro',sans-serif;width:100%;text-align:left}
+.checklist-open-btn:hover{background:var(--rl);border-color:var(--red);transform:translateX(2px)}
+.checklist-open-btn span{flex:1}
+/* Bốc số row – below input area in k-main */
+.k-bocso-row{padding:8px 24px 14px;background:#fff;flex-shrink:0}
 
 /* Typing dots */
 .typing-dots{display:flex;gap:4px;padding:12px 16px;background:#fff;border:1px solid var(--border);border-radius:16px;border-bottom-left-radius:4px;width:fit-content}
@@ -311,12 +355,19 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
   .idle-ai-icon{width:72px;height:72px;margin-bottom:16px}
   .idle-ai-icon svg{width:72px;height:72px}
   .idle-title{font-size:38px;margin-bottom:8px}
-  .idle-sub{font-size:18px;margin-bottom:26px}
+  .idle-sub{font-size:18px;margin-bottom:20px}
   .idle-tap-btn{padding:15px 48px;font-size:22px}
-  .idle-q-btn{font-size:16px;padding:10px 16px}
-  .idle-chat-hint{max-width:520px}
-  .idle-chat-hint svg{width:26px!important;height:26px!important}
-  .idle-chat-hint-txt{font-size:15px}
+  .idle-bocso-hint{max-width:520px}
+  .idle-bocso-hint-txt strong{font-size:17px}
+  .idle-bocso-hint-txt span{font-size:14px}
+
+  /* ── QUICK TICKET MODAL ── */
+  .qt-grid{grid-template-columns:1fr 1fr}
+  .qt-item{padding:12px 14px;gap:10px}
+  .qt-item-icon{width:40px;height:40px;font-size:22px}
+  .qt-item-name{font-size:13px}
+  .qt-item-meta{font-size:11px}
+  .modal{width:640px;max-width:95vw}
 
   /* ── CATEGORY SCREEN ── */
   .cat-grid{grid-template-columns:repeat(3,1fr);gap:12px}
@@ -332,7 +383,21 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
   .tthc-name{font-size:19px}
   .tthc-meta{font-size:14px}
 
-  /* ── CHAT ── */
+  /* ── CHAT SCREEN ── */
+  .k-body{grid-template-columns:56px 1fr}
+  .k-sidebar-toggle{width:56px;height:48px}
+  .k-body.panel-open{grid-template-columns:320px 1fr}
+  .k-sidebar-hd{height:52px}
+  .k-sidebar-body{padding:10px}
+  .k-sidebar-footer{padding:8px 10px}
+  .rp-card{padding:12px 14px}
+  .rp-card-title{font-size:12px}
+  .rp-info-row{font-size:12px}
+  .rp-cl-item,.rp-step{padding:7px 0}
+  .k-bocso-row{padding:6px 18px 12px}
+  .bocso-btn{font-size:15px;padding:12px}
+
+  /* ── CHAT MESSAGES ── */
   .k-chat-hd{padding:12px 18px}
   .k-chat-msgs{padding:16px 18px;gap:12px}
   .msg-bubble{font-size:17px;padding:10px 14px}
@@ -344,17 +409,16 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 
   /* ── INPUT AREA ── */
   .k-input-area{padding:12px 18px}
+  .k-input-chips{gap:6px}
   .k-chip{font-size:15px;padding:6px 12px}
   .k-text-input{font-size:16px;padding:11px 14px}
   .k-send-btn{font-size:16px;padding:12px 18px}
   .k-voice-btn{width:44px;height:44px}
   .k-ac-item{font-size:17px}
-  .bocso-row{padding:10px 18px}
-  .bocso-btn{font-size:16px}
 
   /* ── TICKET SCREEN ── */
   .ticket-shell{padding:20px}
-  .ticket-wrap{grid-template-columns:320px 1fr;gap:18px}
+  .ticket-wrap{grid-template-columns:300px 1fr;gap:18px}
   .ticket-card{padding:24px}
   .ticket-num{font-size:64px}
   .ticket-tthc{font-size:16px}
@@ -362,95 +426,122 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 
   /* ── MODALS & POPUPS ── */
   .legal-popup{width:90vw}
-  .modal{width:90vw}
-
-  /* ── RIGHT SIDEBAR (tablet) ── */
-  .k-body.panel-open{grid-template-columns:1fr 320px}
 }
 
 /* ══════════════════════════════
    MOBILE RESPONSIVE (≤ 640px)
 ══════════════════════════════ */
 @media (max-width:640px){
-  /* Use dynamic viewport height on mobile (avoids iOS browser-bar issue) */
   .kiosk-shell{height:100dvh}
 
   /* ── TOP BAR ── */
-  .k-top{height:auto;min-height:52px;padding:8px 12px;gap:8px;flex-wrap:wrap}
-  .k-logo-wrap{width:34px;height:34px}
-  .k-logo-wrap svg,.k-logo-wrap img{width:34px!important;height:34px!important}
-  .k-brand-txt strong{font-size:14px}
-  .k-brand-txt span{font-size:12px}
-  .k-top-right{gap:5px;flex-wrap:wrap}
+  .k-top{height:52px;padding:0 12px;gap:7px}
+  .k-logo-wrap{width:32px;height:32px}
+  .k-logo-wrap svg,.k-logo-wrap img{width:32px!important;height:32px!important}
+  /* Header: logo only — hide brand text */
+  .k-brand-txt{display:none}
+  .k-top-right{gap:6px}
   .k-time{display:none}
-  .ctrl-group{padding:3px 6px;gap:3px}
-  .ctrl-btn{width:28px;height:28px;font-size:11px}
-  .lang-pill{padding:4px 8px;font-size:11px}
-  .k-home-btn{padding:6px 10px;font-size:12px;gap:5px}
+  /* Hide ctrl-group & lang-group from topbar — moved into mobile menu */
+  .k-top .ctrl-group,.k-top .lang-group{display:none}
+  .k-mob-menu-btn{display:flex}
+  .k-home-btn{padding:6px 10px;font-size:13px;gap:4px;white-space:nowrap;align-self:stretch}
 
   /* ── CONTENT ── */
   .k-content{padding:14px 12px}
 
   /* ── IDLE SCREEN ── */
-  .idle-shell{gap:0;padding:16px 12px;justify-content:center}
-  .idle-label{font-size:12px;margin-bottom:8px;letter-spacing:.08em}
-  .idle-ai-icon{width:64px;height:64px;margin-bottom:12px}
-  .idle-ai-icon svg{width:64px;height:64px}
-  .idle-title{font-size:28px;margin-bottom:8px}
-  .idle-sub{font-size:14px;margin-bottom:18px;padding:0 8px}
-  .idle-tap-btn{padding:13px 32px;font-size:19px;border-radius:14px}
-  .idle-quick{gap:8px;margin-top:16px}
-  .idle-q-btn{font-size:14px;padding:9px 13px;border-radius:10px}
-  .idle-chat-hint{max-width:100%;padding:10px 14px;gap:8px;margin-top:14px}
-  .idle-chat-hint svg{width:22px!important;height:22px!important}
-  .idle-chat-hint-txt{font-size:13px}
+  .idle-shell{padding:20px 16px;gap:0;justify-content:center}
+  .idle-label{font-size:12px;margin-bottom:10px;letter-spacing:.08em}
+  .idle-ai-icon{width:60px;height:60px;margin-bottom:14px}
+  .idle-ai-icon svg{width:60px;height:60px}
+  .idle-title{font-size:26px;margin-bottom:6px}
+  .idle-sub{font-size:14px;margin-bottom:20px;padding:0 6px}
+  .idle-tap-btn{padding:14px 36px;font-size:20px;border-radius:14px}
+  .idle-bocso-hint{max-width:100%;padding:12px 16px;gap:10px;margin-top:14px}
+  .idle-bocso-hint svg{width:28px!important;height:28px!important;flex-shrink:0}
+  .idle-bocso-hint-txt strong{font-size:16px}
+  .idle-bocso-hint-txt span{font-size:13px}
+
+  /* ── QUICK TICKET MODAL ── */
+  .modal{width:100vw;max-width:100vw;max-height:92dvh;border-radius:20px 20px 0 0;margin-top:auto;align-self:flex-end}
+  .modal-bg{align-items:flex-end}
+  .qt-grid{grid-template-columns:1fr;gap:8px}
+  .qt-item{padding:12px 14px;gap:10px}
+  .qt-item-icon{width:40px;height:40px;font-size:22px;border-radius:10px}
+  .qt-item-name{font-size:14px}
+  .qt-item-meta{font-size:11.5px}
 
   /* ── CATEGORY SCREEN ── */
   .cat-grid{grid-template-columns:repeat(2,1fr);gap:10px}
   .cat-btn{padding:16px 10px 13px;border-radius:12px}
-  .cat-icon{font-size:40px;margin-bottom:10px}
-  .cat-name{font-size:17px}
-  .cat-count{font-size:13px}
+  .cat-icon{font-size:38px;margin-bottom:8px}
+  .cat-name{font-size:16px}
+  .cat-count{font-size:12px}
   .cat-ai-entry{padding:12px 14px;gap:10px;border-radius:12px}
   .cat-ai-orb{width:36px;height:36px}
   .cat-ai-orb svg{width:36px;height:36px}
-  .cat-ai-txt strong{font-size:16px}
-  .cat-ai-txt span{font-size:13px}
-  .cat-ai-arrow{font-size:24px}
+  .cat-ai-txt strong{font-size:15px}
+  .cat-ai-txt span{font-size:12px}
+  .cat-ai-arrow{font-size:22px}
 
   /* ── TTHC LIST ── */
   .tthc-btn{padding:11px 12px;gap:10px;border-radius:12px}
-  .tthc-icon{width:38px;height:38px;font-size:22px;border-radius:10px;flex-shrink:0}
-  .tthc-name{font-size:16px}
+  .tthc-icon{width:36px;height:36px;font-size:20px;border-radius:10px;flex-shrink:0}
+  .tthc-name{font-size:15px}
   .tthc-meta{font-size:12px}
 
-  /* ── CHAT ── */
+  /* ── CHAT SCREEN ── */
+  /* No sidebar strip on mobile — full width chat */
+  .k-body,.k-body.panel-open{grid-template-columns:1fr!important}
+  .k-sidebar{display:none}
+  /* When opened: full-screen overlay from left */
+  .k-body.panel-open .k-sidebar{
+    display:flex;position:fixed;inset:0;z-index:700;
+    width:88vw;max-width:340px;
+    box-shadow:4px 0 28px rgba(0,0,0,.2)
+  }
+  /* Dim backdrop when sidebar is open */
+  .k-body.panel-open::after{
+    content:'';position:fixed;inset:0;z-index:699;
+    background:rgba(0,0,0,.4);
+    animation:fadeIn .2s ease
+  }
+  .k-bocso-row{padding:8px 10px 12px}
+  .k-sidebar-body{padding:10px}
+  .k-sidebar-footer{padding:8px 10px}
+  .rp-card{padding:10px 12px;border-radius:10px}
+  .rp-card-title{font-size:12px;margin-bottom:8px}
+  .rp-info-row{font-size:11.5px;padding:5px 0}
+  .rp-cl-item{padding:7px 0;gap:8px}
+  .rp-cl-box{width:19px;height:19px}
+  .rp-step{padding:7px 9px;margin-bottom:5px}
+  .rp-step-num{width:22px;height:22px;font-size:10px}
+  .bocso-btn{font-size:14px;padding:11px}
+
+  /* ── CHAT MESSAGES ── */
   .k-chat-hd{padding:10px 12px}
-  .k-chat-hd-icon{width:34px;height:34px}
-  .k-chat-hd-icon svg{width:34px;height:34px}
-  .k-chat-title{font-size:14px}
+  .k-chat-title{font-size:13px}
   .k-chat-msgs{padding:12px 10px;gap:10px}
-  .msg{max-width:92%}
-  .msg-av{width:28px;height:28px}
-  .msg-av svg{width:28px;height:28px}
-  .msg-bubble{font-size:15px;padding:9px 12px}
-  .msg-actions{margin-left:34px;margin-top:4px}
+  .msg{max-width:94%}
+  .msg-av{width:26px;height:26px}
+  .msg-av svg{width:26px;height:26px}
+  .msg-bubble{font-size:14px;padding:9px 12px;border-radius:14px}
+  .msg-actions{margin-left:32px;margin-top:4px}
   .msg-act-btn{width:26px;height:26px}
   .source-box{font-size:12px}
-  .checklist-inline{margin-left:34px;padding:10px 12px}
+  .checklist-inline{margin-left:32px;padding:10px 12px}
   .cl-lbl{font-size:13px}
   .cl-box{width:20px;height:20px}
 
   /* ── INPUT AREA ── */
-  .k-input-area{padding:10px 10px}
-  .k-input-chips{gap:5px;margin-bottom:7px}
-  .k-chip{font-size:13px;padding:5px 10px;border-radius:16px}
-  .k-text-input{font-size:16px;padding:10px 12px}  /* 16px prevents iOS auto-zoom */
-  .k-send-btn{font-size:14px;padding:10px 14px;border-radius:10px}
-  .k-voice-btn{width:42px;height:42px;border-radius:10px}
-  .k-ac-item{font-size:15px;padding:9px 12px}
-  .bocso-row{padding:8px 10px}
-  .bocso-btn{font-size:15px;padding:12px}
+  .k-input-area{padding:8px 10px}
+  .k-input-chips{gap:5px;margin-bottom:7px;overflow-x:auto;flex-wrap:nowrap;padding-bottom:2px}
+  .k-chip{font-size:13px;padding:5px 11px;border-radius:16px;flex-shrink:0}
+  .k-text-input{font-size:16px;padding:10px 12px} /* 16px prevents iOS auto-zoom */
+  .k-send-btn{font-size:13px;padding:10px 12px;border-radius:10px}
+  .k-voice-btn{width:40px;height:40px;border-radius:10px}
+  .k-ac-item{font-size:14px;padding:9px 12px}
 
   /* ── TICKET SCREEN ── */
   .ticket-shell{padding:12px;align-items:flex-start;overflow-y:auto}
@@ -468,28 +559,23 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
   .t-doc-item{font-size:13px}
 
   /* ── BOTTOM BAR ── */
-  .k-bottom{height:auto;padding:6px 12px;gap:6px;flex-wrap:wrap}
-  .k-bottom-item{font-size:11px}
-  .k-bottom-brand{font-size:10px;position:static;transform:none;letter-spacing:.06em}
+  /* Footer: brand name only */
+  .k-bottom{height:36px;padding:0 12px;justify-content:center;flex-wrap:nowrap}
+  .k-bottom-item{display:none}
+  .k-bottom-brand{font-size:10px;font-weight:800;position:static;transform:none;letter-spacing:.12em;color:rgba(255,255,255,.8)}
 
   /* ── MODALS & POPUPS ── */
-  .modal{width:96vw;max-height:90vh}
   .modal-hd{padding:14px 16px 10px}
   .modal-body{padding:14px 16px;font-size:14px}
   .modal-footer{padding:10px 16px}
-  .legal-popup{width:96vw;max-height:90vh}
+  .legal-popup{width:100vw;max-width:100vw;max-height:92dvh;border-radius:20px 20px 0 0;align-self:flex-end}
+  .legal-popup-bg{align-items:flex-end}
   .legal-popup-hd{padding:14px 16px 10px}
   .legal-popup-body{padding:14px 16px}
   .legal-doc-body{font-size:13px}
 
   /* ── STEP LABELS & HEADINGS IN SCREENS 2/3 ── */
   .k-content h2,.k-content .step-label{font-size:16px}
-
-  /* ── RIGHT SIDEBAR (mobile: fixed overlay) ── */
-  .k-body,.k-body.panel-open{grid-template-columns:1fr!important}
-  .k-right{display:none;position:fixed;inset:0;z-index:600;width:100%;max-width:100%;border-left:none}
-  .k-body.panel-open .k-right{display:flex}
-  .k-panel-toggle{font-size:11px;padding:5px 9px}
 }
 
 /* ── PRINT ── */
@@ -711,6 +797,10 @@ function pwCancel(){history.length>1?history.back():window.close();}
         <button class="lang-pill" data-lang="en" onclick="setLang('en')">EN</button>
         <button class="lang-pill" data-lang="zh" onclick="setLang('zh')">中文</button>
       </div>
+      <button class="k-mob-menu-btn" onclick="toggleMobileMenu()">
+        <span class="k-mob-lang-lbl">VI</span>
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
       <div class="k-time">
         <div class="k-time-val" id="clock">08:42</div>
         <div class="k-time-date" id="clock-date">Thứ Tư, 11/03/2026</div>
@@ -751,24 +841,15 @@ function pwCancel(){history.length>1?history.back():window.close();}
     <div class="idle-title" id="idle-title">Xin chào!<br>Tôi có thể giúp gì cho bạn?</div>
     <div class="idle-sub" id="idle-sub">Hãy chạm vào màn hình để bắt đầu tra cứu thủ tục hành chính</div>
     <button class="idle-tap-btn" id="idle-tap" onclick="goScreen('s-category')">CHẠM ĐỂ BẮT ĐẦU &nbsp;→</button>
-    <div class="idle-quick">
-      <div class="idle-q-btn" onclick="goCategory('Hộ tịch')">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        <span data-vi="Hộ tịch" data-en="Civil Records" data-zh="户籍">Hộ tịch</span>
+    <!-- hidden: idle-chat-hint-txt still needed for i18n -->
+    <span id="idle-chat-hint-txt" style="display:none"></span>
+    <div class="idle-bocso-hint" onclick="openQuickTicket()">
+      <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
+      <div class="idle-bocso-hint-txt">
+        <strong id="idle-bocso-txt">Bốc số &amp; In phiếu nhanh</strong>
+        <span id="idle-bocso-sub">Biết thủ tục cần nộp — lấy số thứ tự ngay</span>
       </div>
-      <div class="idle-q-btn" onclick="goCategory('Cư trú')">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-        <span data-vi="Cư trú" data-en="Residence" data-zh="居住">Cư trú</span>
-      </div>
-      <div class="idle-q-btn" onclick="goCategory('Tư pháp')">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 8 22 16"/><line x1="18" y1="8" x2="18" y2="16"/><line x1="14" y1="11" x2="14" y2="22"/><line x1="10" y1="11" x2="10" y2="22"/><line x1="6" y1="8" x2="6" y2="22"/><path d="M2 8l10-6 10 6"/></svg>
-        <span data-vi="Tư pháp" data-en="Legal" data-zh="司法">Tư pháp</span>
-      </div>
-    </div>
-    <div class="idle-chat-hint" onclick="goScreen('s-chat');focusInput()">
-      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#C8102E" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-      <div class="idle-chat-hint-txt" id="idle-chat-hint-txt">Hoặc <strong>nhấn đây để hỏi AI trực tiếp</strong> — nói hoặc gõ câu hỏi của bạn</div>
-      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#C8102E" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
     </div>
   </div>
 
@@ -816,6 +897,10 @@ function pwCancel(){history.length>1?history.back():window.close();}
       <button class="k-home-btn" onclick="goScreen('s-idle')">
         <svg width="15" height="15"><use href="#ic-home"/></svg>
         <span id="cat-home-lbl">Màn hình chính</span>
+      </button>
+      <button class="k-mob-menu-btn" onclick="toggleMobileMenu()">
+        <span class="k-mob-lang-lbl">VI</span>
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"/></svg>
       </button>
       <div class="k-time"><div class="k-time-val" id="clock2">08:42</div></div>
     </div>
@@ -926,6 +1011,10 @@ function pwCancel(){history.length>1?history.back():window.close();}
         <button class="lang-pill" data-lang="en" onclick="setLang('en')">EN</button>
         <button class="lang-pill" data-lang="zh" onclick="setLang('zh')">中文</button>
       </div>
+      <button class="k-mob-menu-btn" onclick="toggleMobileMenu()">
+        <span class="k-mob-lang-lbl">VI</span>
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
       <div class="k-time"><div class="k-time-val">08:42</div></div>
     </div>
   </div>
@@ -939,7 +1028,7 @@ function pwCancel(){history.length>1?history.back():window.close();}
     <div class="tthc-list" id="tthc-list-items"></div>
     <div style="margin-top:12px;display:flex;gap:8px">
       <button class="k-home-btn" onclick="goScreen('s-category')">← Lĩnh vực</button>
-      <button class="k-home-btn" onclick="goScreen('s-idle')"><svg width="15" height="15"><use href="#ic-home"/></svg> Trang chủ</button>
+      <button class="k-home-btn" onclick="goScreen('s-idle')"><svg width="15" height="15"><use href="#ic-home"/></svg> Màn hình chính</button>
     </div>
   </div>
   <div class="k-bottom">
@@ -974,18 +1063,55 @@ function pwCancel(){history.length>1?history.back():window.close();}
         <button class="lang-pill" data-lang="en" onclick="setLang('en')">EN</button>
         <button class="lang-pill" data-lang="zh" onclick="setLang('zh')">中文</button>
       </div>
-      <button class="k-panel-toggle" id="panel-toggle-btn" onclick="toggleSidebar()">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-        Checklist
+      <button class="k-home-btn" onclick="goScreen('s-idle')"><svg width="15" height="15"><use href="#ic-home"/></svg> Màn hình chính</button>
+      <button class="k-mob-menu-btn" onclick="toggleMobileMenu()">
+        <span class="k-mob-lang-lbl">VI</span>
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"/></svg>
       </button>
-      <button class="k-home-btn" onclick="goScreen('s-idle')"><svg width="15" height="15"><use href="#ic-home"/></svg> Trang chủ</button>
       <div class="k-time"><div class="k-time-val">08:42</div></div>
     </div>
   </div>
 
   <div class="k-body" id="k-body">
-    <!-- LEFT: Chat messages + input -->
-    <div class="k-left">
+    <!-- LEFT: Checklist sidebar (Gemini style) -->
+    <div class="k-sidebar" id="k-sidebar">
+      <!-- Header row: always visible -->
+      <div class="k-sidebar-hd">
+        <button class="k-sidebar-toggle" onclick="toggleSidebar()" title="Hiện/Ẩn checklist">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <div class="k-sidebar-hd-meta">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          <span class="k-sidebar-hd-title">Hướng dẫn &amp; Checklist</span>
+          <span id="progress-summary" class="k-sidebar-prog"></span>
+        </div>
+      </div>
+      <!-- Icon rail: collapsed only -->
+      <div class="k-sidebar-rail">
+        <button class="k-sidebar-rail-btn" onclick="openSidebar()" title="Thông tin thủ tục">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </button>
+        <button class="k-sidebar-rail-btn" onclick="openSidebar()" title="Checklist giấy tờ">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        </button>
+        <button class="k-sidebar-rail-btn" onclick="openSidebar()" title="Quy trình các bước">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        </button>
+      </div>
+      <!-- Full content: expanded only -->
+      <div class="k-sidebar-inner">
+        <div class="k-sidebar-body" id="right-panel">
+          <div style="text-align:center;padding:32px 16px;color:var(--muted)">
+            <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="opacity:.2;margin-bottom:12px;display:block;margin-left:auto;margin-right:auto"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            <div style="font-size:14px;font-weight:700;margin-bottom:4px">Hãy hỏi AI hoặc chọn thủ tục</div>
+            <div style="font-size:12.5px">Checklist giấy tờ và quy trình sẽ hiện ở đây</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Chat messages + input -->
+    <div class="k-main">
       <div class="k-chat-msgs" id="chat-msgs"></div>
       <div class="k-input-area">
         <div class="k-input-chips" id="demo-chips">
@@ -1018,24 +1144,7 @@ function pwCancel(){history.length>1?history.back():window.close();}
           </button>
         </div>
       </div>
-    </div>
-
-    <!-- RIGHT: Checklist sidebar panel -->
-    <div class="k-right" id="k-right">
-      <div class="k-right-hd">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-        <span>Hướng dẫn &amp; Checklist</span>
-        <span id="progress-summary" style="margin-left:auto;font-size:11.5px;color:var(--muted);font-weight:600"></span>
-        <button onclick="toggleSidebar()" style="width:26px;height:26px;border-radius:7px;border:1.5px solid var(--border);background:var(--card);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:6px" title="Đóng panel">✕</button>
-      </div>
-      <div class="k-right-body" id="right-panel">
-        <div style="text-align:center;padding:32px 16px;color:var(--muted)">
-          <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="opacity:.2;margin-bottom:12px;display:block;margin-left:auto;margin-right:auto"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-          <div style="font-size:14px;font-weight:700;margin-bottom:4px">Hãy hỏi AI hoặc chọn thủ tục</div>
-          <div style="font-size:12.5px">Checklist giấy tờ và quy trình sẽ hiện ở đây</div>
-        </div>
-      </div>
-      <div class="k-right-bocso">
+      <div class="k-bocso-row">
         <button class="bocso-btn" id="bocso-btn" onclick="goTicket()" disabled>
           <svg width="18" height="18"><use href="#ic-ticket"/></svg>
           <span id="bocso-btn-label">BỐC SỐ & IN PHIẾU</span>
@@ -1080,6 +1189,10 @@ function pwCancel(){history.length>1?history.back():window.close();}
         <button class="lang-pill" data-lang="en" onclick="setLang('en')">EN</button>
         <button class="lang-pill" data-lang="zh" onclick="setLang('zh')">中文</button>
       </div>
+      <button class="k-mob-menu-btn" onclick="toggleMobileMenu()">
+        <span class="k-mob-lang-lbl">VI</span>
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
       <div class="k-time"><div class="k-time-val">08:43</div></div>
     </div>
   </div>
@@ -1141,7 +1254,7 @@ function pwCancel(){history.length>1?history.back():window.close();}
       </div>
       <div style="margin-top:12px;display:flex;gap:8px">
         <button class="k-home-btn" onclick="goScreen('s-chat')">← Quay lại</button>
-        <button class="k-home-btn" onclick="goScreen('s-idle')"><svg width="15" height="15"><use href="#ic-home"/></svg> Trang chủ</button>
+        <button class="k-home-btn" onclick="goScreen('s-idle')"><svg width="15" height="15"><use href="#ic-home"/></svg> Màn hình chính</button>
       </div>
     </div>
   </div>
@@ -1152,6 +1265,46 @@ function pwCancel(){history.length>1?history.back():window.close();}
   </div>
 </div>
 
+
+<!-- Mobile settings menu (fixed panel, appears below topbar) -->
+<div class="k-mob-menu" id="k-mob-menu">
+  <div class="k-mob-menu-inner">
+    <div class="k-mob-menu-row">
+      <span class="k-mob-menu-lbl" id="mm-lang-lbl">Ngôn ngữ</span>
+      <div style="display:flex;gap:6px">
+        <button class="lang-pill on" data-lang="vi" onclick="setLang('vi');closeMobileMenu()" style="font-size:14px;padding:7px 14px">VI</button>
+        <button class="lang-pill" data-lang="en" onclick="setLang('en');closeMobileMenu()" style="font-size:14px;padding:7px 14px">EN</button>
+        <button class="lang-pill" data-lang="zh" onclick="setLang('zh');closeMobileMenu()" style="font-size:14px;padding:7px 14px">中文</button>
+      </div>
+    </div>
+    <div class="k-mob-menu-row">
+      <span class="k-mob-menu-lbl" id="mm-font-lbl">Cỡ chữ</span>
+      <div style="display:flex;align-items:center;gap:6px;padding:3px 8px;background:var(--card);border:1px solid var(--border);border-radius:20px">
+        <button class="ctrl-btn" onclick="changeFontSize(-1)" style="display:flex">A−</button>
+        <button class="ctrl-btn" onclick="changeFontSize(1)" style="display:flex">A+</button>
+        <div class="ctrl-sep"></div>
+        <button class="ctrl-btn" onclick="toggleTTS()" title="Đọc to" style="display:flex"><svg width="16" height="16"><use href="#ic-volume"/></svg></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Quick ticket modal -->
+<div class="modal-bg" id="modal-quick-ticket" onclick="if(event.target===this)closeQuickTicket()">
+  <div class="modal" style="width:660px;max-width:96vw">
+    <div class="modal-hd">
+      <div style="width:36px;height:36px;background:#f0fdf4;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
+      </div>
+      <div class="modal-title" id="qt-modal-title">Chọn thủ tục để bốc số ngay</div>
+      <button class="modal-close" onclick="closeQuickTicket()">✕</button>
+    </div>
+    <div class="modal-body" style="padding:20px 24px">
+      <div style="font-size:14px;color:var(--muted);margin-bottom:16px" id="qt-modal-sub">Nhấn vào thủ tục bạn cần nộp hồ sơ — hệ thống sẽ in phiếu số ngay.</div>
+      <div class="qt-grid" id="qt-grid"></div>
+    </div>
+  </div>
+</div>
 
 <!-- Legal popup -->
 <div class="legal-popup-bg" id="legal-popup-bg" onclick="if(event.target===this)closeLegalPopup()">
@@ -1346,6 +1499,8 @@ const i18n={
     idle_sub:'Hãy chạm vào màn hình để bắt đầu tra cứu thủ tục hành chính',
     idle_tap:'CHẠM ĐỂ BẮT ĐẦU &nbsp;→',
     idle_chat_hint:'Hoặc <strong>nhấn đây để hỏi trực tiếp Trợ lý AI</strong> — nói hoặc gõ câu hỏi của bạn',
+    idle_bocso:'Bốc số &amp; In phiếu nhanh',idle_bocso_sub:'Biết thủ tục cần nộp — lấy số thứ tự ngay',
+    qt_title:'Chọn thủ tục để bốc số ngay',qt_sub:'Nhấn vào thủ tục bạn cần nộp hồ sơ — hệ thống sẽ in phiếu số ngay.',
     cat_heading:'Bạn cần hỗ trợ lĩnh vực nào?',
     cat_sub:'Chạm vào lĩnh vực phù hợp — hoặc hỏi AI bằng giọng nói bên dưới',
     cat_ai_strong:'Hỏi trực tiếp trợ lý AI',
@@ -1365,6 +1520,8 @@ const i18n={
     idle_sub:'Tap the screen to start looking up administrative procedures',
     idle_tap:'TAP TO START &nbsp;→',
     idle_chat_hint:'Or <strong>tap here to chat with AI directly</strong>',
+    idle_bocso:'Take Number &amp; Print',idle_bocso_sub:'Know your procedure — get a queue ticket instantly',
+    qt_title:'Select procedure to get a number',qt_sub:'Tap the procedure you need — a queue ticket will be printed immediately.',
     cat_heading:'Which service do you need?',
     cat_sub:'Tap a category — or ask AI directly below',
     cat_ai_strong:'Ask AI Directly',
@@ -1383,6 +1540,8 @@ const i18n={
     idle_sub:'请触摸屏幕开始查询行政手续',
     idle_tap:'触摸开始 &nbsp;→',
     idle_chat_hint:'或者<strong>点击此处直接与AI对话</strong>',
+    idle_bocso:'取号打印',idle_bocso_sub:'已知办理事项 — 直接取号',
+    qt_title:'选择事项取号',qt_sub:'点击您需要办理的事项 — 系统将立即打印号码。',
     cat_heading:'您需要哪方面的服务？',
     cat_sub:'请选择服务类别 — 或直接向AI提问',
     cat_ai_strong:'直接咨询AI',
@@ -1400,11 +1559,17 @@ const i18n={
 function setLang(lang){
   currentLang=lang;const t=i18n[lang];
   document.querySelectorAll('.lang-pill[data-lang]').forEach(el=>{el.className='lang-pill'+(el.dataset.lang===lang?' on':'');});
+  const lbl=lang==='vi'?'VI':lang==='en'?'EN':'中文';
+  document.querySelectorAll('.k-mob-lang-lbl').forEach(el=>el.textContent=lbl);
   document.getElementById('idle-label').textContent=t.idle_label;
   document.getElementById('idle-title').innerHTML=t.idle_title;
   document.getElementById('idle-sub').textContent=t.idle_sub;
   document.getElementById('idle-tap').innerHTML=t.idle_tap;
   document.getElementById('idle-chat-hint-txt').innerHTML=t.idle_chat_hint;
+  document.getElementById('idle-bocso-txt').innerHTML=t.idle_bocso;
+  document.getElementById('idle-bocso-sub').textContent=t.idle_bocso_sub;
+  document.getElementById('qt-modal-title').textContent=t.qt_title;
+  document.getElementById('qt-modal-sub').textContent=t.qt_sub;
   document.getElementById('cat-heading').textContent=t.cat_heading;
   document.getElementById('cat-sub').textContent=t.cat_sub;
   document.getElementById('cat-ai-strong').textContent=t.cat_ai_strong;
@@ -1511,7 +1676,7 @@ function clearChat(){
   setBocso(false);initChat();
 }
 
-function addMsg(html,isAi,sourceTxt,doSpeak=true){
+function addMsg(html,isAi,sourceTxt,doSpeak=true,tthcIdx=null){
   // html may be a string (legacy) or an object with {vi,en,zh}
   const msgs=document.getElementById('chat-msgs');
   const time=new Date().toLocaleTimeString('vi',{hour:'2-digit',minute:'2-digit'});
@@ -1534,9 +1699,10 @@ function addMsg(html,isAi,sourceTxt,doSpeak=true){
   }
 
   // Save into in-memory history so we can re-render on language change
-  chatHistory.push({id,isAi,sourceTxt,htmlByLang,time});
+  chatHistory.push({id,isAi,sourceTxt,htmlByLang,time,tthcIdx});
 
   const sourceHtml = sourceTxt && isAi ? `<div class="source-box" onclick="showLegalPopup('${sourceTxt}')" style="cursor:pointer" title="Nhấn để xem văn bản pháp lý">📖 <strong>Căn cứ:</strong> ${sourceTxt} <span style="color:var(--red);font-size:11px;margin-left:4px">→ Xem toàn văn</span></div>` : '';
+  const checklistBtnHtml = (tthcIdx !== null && isAi) ? `<button class="checklist-open-btn" onclick="event.stopPropagation();loadTTHCPanel(${tthcIdx});openSidebar()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><span>Hướng dẫn &amp; Checklist</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>` : '';
   const routeMatch = sourceTxt && sourceTxt.match(/Loại \d/);
   const routeBadge = routeMatch && isAi ? `<div class="route-badge">⚡ ${routeMatch[0]} · Đã xác minh</div>` : '';
 
@@ -1558,7 +1724,7 @@ function addMsg(html,isAi,sourceTxt,doSpeak=true){
       <div class="msg-av ${isAi?'ai-av':'usr-av'}">
   ${isAi?`<svg width="36" height="36" viewBox="0 0 88 88" aria-hidden="true"><use href="#robot-icon"/></svg>`:`<svg width="36" height="36" viewBox="0 0 88 88" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="88" height="88" rx="44" fill="#E0E7FF"/><rect width="88" height="88" rx="44" stroke="#C7D2FE" stroke-width="2"/><circle cx="44" cy="32" r="14" fill="#4F46E5"/><path d="M15 74c0-16 13-26 29-26s29 10 29 26" stroke="#4F46E5" stroke-width="5" stroke-linecap="round"/></svg>`}
       </div>
-      <div class="msg-bubble ${isAi?'ai-bubble':'user-bubble'}">${chosen}${sourceHtml}</div>
+      <div class="msg-bubble ${isAi?'ai-bubble':'user-bubble'}">${chosen}${checklistBtnHtml}${sourceHtml}</div>
     </div>
     ${routeBadge}
     ${actionsHtml}
@@ -1577,7 +1743,8 @@ function updateChatLanguage(){
     if(!bubble) continue;
     const html = (m.htmlByLang && (m.htmlByLang[currentLang] || m.htmlByLang.vi || m.htmlByLang.en || m.htmlByLang.zh)) || '';
     const sourceHtml = m.sourceTxt && m.isAi ? `<div class="source-box" onclick="showLegalPopup('${m.sourceTxt}')" style="cursor:pointer" title="Nhấn để xem văn bản pháp lý">📖 <strong>Căn cứ:</strong> ${m.sourceTxt} <span style="color:var(--red);font-size:11px;margin-left:4px">→ Xem toàn văn</span></div>` : '';
-    bubble.innerHTML = html + sourceHtml;
+    const clBtn = (m.tthcIdx != null && m.isAi) ? `<button class="checklist-open-btn" onclick="loadTTHCPanel(${m.tthcIdx});openSidebar()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><span>Hướng dẫn &amp; Checklist</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>` : '';
+    bubble.innerHTML = html + clBtn + sourceHtml;
   }
 }
 
@@ -1606,7 +1773,7 @@ function sendDemo(idx){
       const _route=loadIdx!=null?tthcData[loadIdx].route:(raw.route||'');
       const _lat=loadIdx!=null?tthcData[loadIdx].latency:(raw.latency||'');
       const _cu=loadIdx!=null?((tthcData[loadIdx].can_cu&&tthcData[loadIdx].can_cu.vi)||tthcData[loadIdx].can_cu||''):(raw.can_cu||'');
-      addMsg(raw.aiReply,true,_route?`${_route} · ${_lat}${_cu?' · '+_cu:''}`:(_cu||''));
+      addMsg(raw.aiReply,true,_route?`${_route} · ${_lat}${_cu?' · '+_cu:''}`:(_cu||''),true,typeof loadIdx==='number'?loadIdx:null);
       if(typeof loadIdx === 'number') loadTTHCPanel(loadIdx);
       if(ttsEnabled){ const ttsText = raw.aiReply && raw.aiReply[currentLang] ? raw.aiReply[currentLang] : (raw.aiReply || ''); if(ttsText) speak(ttsText); }
     },typing);
@@ -1632,7 +1799,7 @@ function sendChat(text){
         const _fi=found.idx;const _td=tthcData[_fi]||{};const _fr=raw;
         const _rt=_td.route||_fr.route||'';const _lt=_td.latency||_fr.latency||'';
         const _cu=(_td.can_cu&&_td.can_cu.vi)||_td.can_cu||_fr.can_cu||'';
-        addMsg(raw.aiReply,true,_rt?`${_rt} · ${_lt}${_cu?' · '+_cu:''}`:(_cu||''));
+        addMsg(raw.aiReply,true,_rt?`${_rt} · ${_lt}${_cu?' · '+_cu:''}`:(_cu||''),true,_td.giay_to?_fi:null);
         if(_td.giay_to)loadTTHCPanel(_fi);
       } else if(raw) {
         loadTTHC(found.idx);
@@ -1715,7 +1882,6 @@ function loadTTHCPanel(idx){
   currentTTHC=tthcData[idx];
   checkedItems=new Array(currentTTHC.giay_to.length).fill(false);
   renderRightPanel();
-  openSidebar();
   setBocso(true);
 }
 
@@ -1783,18 +1949,26 @@ function advanceStep(i){
 }
 
 function toggleSidebar(){
-  const body=document.getElementById('k-body');
-  const btn=document.getElementById('panel-toggle-btn');
-  body.classList.toggle('panel-open');
-  if(btn)btn.classList.toggle('active',body.classList.contains('panel-open'));
+  document.getElementById('k-body').classList.toggle('panel-open');
 }
 
 function openSidebar(){
-  const body=document.getElementById('k-body');
-  const btn=document.getElementById('panel-toggle-btn');
-  body.classList.add('panel-open');
-  if(btn)btn.classList.add('active');
+  document.getElementById('k-body').classList.add('panel-open');
 }
+
+// Close sidebar when tapping the dim backdrop (mobile overlay)
+document.addEventListener('DOMContentLoaded',()=>{
+  const body=document.getElementById('k-body');
+  if(body){
+    body.addEventListener('click',e=>{
+      if(!body.classList.contains('panel-open'))return;
+      const sidebar=document.getElementById('k-sidebar');
+      if(sidebar&&!sidebar.contains(e.target)){
+        body.classList.remove('panel-open');
+      }
+    });
+  }
+});
 
 function setBocso(on){
   const btn=document.getElementById('bocso-btn');
@@ -2119,6 +2293,55 @@ function showLegalPopup(ref) {
   document.getElementById('legal-popup-bg').classList.add('open');
 }
 function closeLegalPopup(){document.getElementById('legal-popup-bg').classList.remove('open');}
+
+// ── MOBILE MENU ──
+function toggleMobileMenu(){
+  const menu=document.getElementById('k-mob-menu');
+  const isOpen=menu.classList.toggle('open');
+  document.querySelectorAll('.k-mob-menu-btn').forEach(b=>b.classList.toggle('open',isOpen));
+}
+function closeMobileMenu(){
+  document.getElementById('k-mob-menu').classList.remove('open');
+  document.querySelectorAll('.k-mob-menu-btn').forEach(b=>b.classList.remove('open'));
+}
+document.addEventListener('click',e=>{
+  const menu=document.getElementById('k-mob-menu');
+  if(!menu||!menu.classList.contains('open'))return;
+  if(!menu.contains(e.target)&&!e.target.closest('.k-mob-menu-btn'))closeMobileMenu();
+});
+
+// ── QUICK TICKET ──
+function openQuickTicket(){
+  const grid=document.getElementById('qt-grid');
+  const aiLabel={vi:'Hỏi trực tiếp Trợ lý AI',en:'Ask AI directly',zh:'直接咨询AI'}[currentLang]||'Hỏi AI';
+  const aiSub={vi:'Không biết chọn thủ tục nào? Nói hoặc gõ — AI sẽ hướng dẫn',en:"Don't know which procedure? Ask AI",zh:'不知道选哪个？直接问AI'}[currentLang]||'';
+  grid.innerHTML=tthcData.map((t,i)=>`
+    <div class="qt-item" onclick="quickTicketSelect(${i})">
+      <div class="qt-item-icon" style="background:${t.color}22;color:${t.color}">${t.icon}</div>
+      <div style="flex:1;min-width:0">
+        <div class="qt-item-name">${loc(t.ten)}</div>
+        <div class="qt-item-meta">${t.route} · ${t.latency}</div>
+      </div>
+    </div>`).join('')
+  +`<div class="qt-item qt-ai-item" onclick="closeQuickTicket();goScreen('s-chat');focusInput()" style="grid-column:1/-1;border-color:var(--rb);background:var(--rl)">
+      <div class="qt-item-icon" style="background:var(--rl);color:var(--red)">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      <div style="flex:1;min-width:0">
+        <div class="qt-item-name" style="color:var(--red)">${aiLabel}</div>
+        <div class="qt-item-meta">${aiSub}</div>
+      </div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </div>`;
+  document.getElementById('modal-quick-ticket').classList.add('open');
+}
+function closeQuickTicket(){document.getElementById('modal-quick-ticket').classList.remove('open');}
+function quickTicketSelect(idx){
+  closeQuickTicket();
+  currentTTHC=tthcData[idx];
+  checkedItems=new Array(currentTTHC.giay_to.length).fill(false);
+  goTicket();
+}
 
 // ── MESSAGE ACTIONS ──
 function reactMsg(id,type){
